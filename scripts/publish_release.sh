@@ -43,7 +43,7 @@ VERSION_CODE="$($APKANALYZER manifest version-code "$SOURCE_APK")"
 TAG="v${VERSION_NAME}"
 ASSET_NAME="Cedar-TV-${VERSION_NAME}.apk"
 ASSET_URL="https://github.com/${NAME_WITH_OWNER}/releases/download/${TAG}/${ASSET_NAME}"
-SIGNER_DIGEST="$($APKSIGNER verify --verbose --print-certs "$SOURCE_APK" | sed -nE 's/.*Signer[^:]*certificate SHA-256 digest: ([0-9a-fA-F]{64}).*/\1/p' | tr '[:upper:]' '[:lower:]')"
+SIGNER_DIGEST="$($APKSIGNER verify --verbose --print-certs "$SOURCE_APK" | sed -nE 's/.*Signer.*certificate SHA-256 digest: ([0-9a-fA-F]{64}).*/\1/p' | tr '[:upper:]' '[:lower:]' | sort -u)"
 
 [[ "$VERSION_CODE" =~ '^[1-9][0-9]*$' ]] || { print -u2 "APK version code is invalid."; exit 1; }
 [[ "$SIGNER_DIGEST" =~ '^[0-9a-f]{64}$' ]] || { print -u2 "Could not determine the APK signer."; exit 1; }
