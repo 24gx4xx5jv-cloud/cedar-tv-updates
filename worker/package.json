@@ -1,0 +1,18 @@
+{
+  "name": "cedar-sync-relay",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "check": "node --check src/index.js && node --check src/protocol.js",
+    "test": "node --test test/*.test.js",
+    "test:integration": "node test/relay.integration.mjs",
+    "dev": "wrangler dev --config wrangler.example.toml",
+    "deploy": "wrangler deploy --config wrangler.toml",
+    "migrate:local": "wrangler d1 migrations apply cedar-sync --local --config wrangler.example.toml",
+    "migrate:remote": "wrangler d1 migrations apply cedar-sync --remote --config wrangler.toml"
+  },
+  "devDependencies": {
+    "wrangler": "4.126.0"
+  }
+}

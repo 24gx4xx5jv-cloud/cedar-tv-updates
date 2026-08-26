@@ -8,6 +8,16 @@ This public repository contains Cedar Android TV's public product site, update m
 
 The Cedar source code, service credentials, Android signing keystore, and OTA manifest private key do not belong in this repository.
 
+## Cedar Link and encrypted sync relay
+
+`public/link/` contains the static, phone-friendly Cedar Link surface. It is safe-by-default and
+remains disabled while `public/sync-config.json` has an empty relay URL.
+
+`worker/` contains an optional Cloudflare Worker/D1 ciphertext relay. The relay stores device-token
+hashes and encrypted envelopes; it never receives a profile encryption key or plaintext profile
+data. See [`worker/README.md`](worker/README.md) for verification and deployment steps. The complete
+rollout and conflict policy is recorded in Cedar Android's `docs/CROSS_PLATFORM_SYNC.md`.
+
 ## Release order
 
 Run `scripts/publish_release.sh` from a clean `main` checkout. It publishes the signed APK first and commits the signed manifest last. This prevents devices from seeing a manifest whose APK is not yet available.

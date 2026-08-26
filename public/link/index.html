@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#08090b">
+    <meta name="description" content="Privately link a Cedar profile to another device.">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
+    <title>Link a device — Cedar</title>
+    <link rel="icon" type="image/png" href="../assets/cedar-app-icon.png">
+    <link rel="apple-touch-icon" href="../assets/cedar-app-icon.png">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="link.css">
+  </head>
+  <body class="link-page">
+    <header class="site-header link-header">
+      <a class="brand" href="../" aria-label="Cedar home">
+        <img src="../assets/cedar-wordmark.png" alt="Cedar" width="858" height="301">
+      </a>
+      <a class="link-back" href="../">Back to Cedar</a>
+    </header>
+
+    <main class="link-shell">
+      <section class="link-intro" aria-labelledby="link-title">
+        <p class="eyebrow"><span></span>Cedar Link</p>
+        <h1 id="link-title">Your profile.<br><em>Across screens.</em></h1>
+        <p>Scan a Cedar device-link QR code with this phone. Your profile key stays in the QR link fragment, and profile data is end-to-end encrypted before it reaches the relay.</p>
+
+        <div class="privacy-points" aria-label="Privacy protections">
+          <p><span aria-hidden="true">01</span>Profile data stays encrypted</p>
+          <p><span aria-hidden="true">02</span>One-time invitation</p>
+          <p><span aria-hidden="true">03</span>Device-local key protection</p>
+        </div>
+      </section>
+
+      <section class="link-card" aria-labelledby="link-card-title">
+        <div class="link-icon" aria-hidden="true">
+          <img src="../assets/cedar-app-icon.png" alt="" width="192" height="192">
+          <span></span>
+        </div>
+        <p class="link-state-label" id="link-state-label">Waiting for invitation</p>
+        <h2 id="link-card-title">Scan the QR code shown by Cedar.</h2>
+        <p class="link-status" id="link-status" role="status" aria-live="polite">The invitation is read only after you open its link on this device.</p>
+        <button class="button button-primary link-button" id="link-button" type="button" disabled>Link this device</button>
+        <p class="link-footnote">Cedar never puts the encryption key in the web request. Clearing this browser's site data removes this browser's protected copy.</p>
+      </section>
+    </main>
+
+    <footer class="link-footer">
+      <p>Cedar Link is an optional bridge. Apple devices can continue using Cedar Household and iCloud exactly as before.</p>
+      <div class="footer-links">
+        <a href="../">Cedar home</a>
+        <a href="https://github.com/24gx4xx5jv-cloud/cedar-tv-updates">GitHub</a>
+      </div>
+    </footer>
+
+    <script src="link.js" defer></script>
+  </body>
+</html>

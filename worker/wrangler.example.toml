@@ -1,0 +1,31 @@
+name = "cedar-sync-relay"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+[vars]
+CEDAR_WEB_ORIGIN = "https://24gx4xx5jv-cloud.github.io"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cedar-sync"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[triggers]
+crons = ["17 4 * * *"]
+
+[[ratelimits]]
+name = "CREATE_SPACE_RATE_LIMITER"
+namespace_id = "17001"
+
+  [ratelimits.simple]
+  limit = 10
+  period = 60
+
+[[ratelimits]]
+name = "REQUEST_RATE_LIMITER"
+namespace_id = "17002"
+
+  [ratelimits.simple]
+  limit = 300
+  period = 60
