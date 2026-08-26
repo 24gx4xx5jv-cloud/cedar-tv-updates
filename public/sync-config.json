@@ -1,4 +1,4 @@
 {
   "schemaVersion": 1,
-  "relayBaseURL": ""
+  "relayBaseURL": "https://cedar-sync-relay.cedar-sync-relay.workers.dev"
 }
