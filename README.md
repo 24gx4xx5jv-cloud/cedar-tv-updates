@@ -1,8 +1,8 @@
 # Cedar Android TV updates
 
-This public repository contains only Cedar Android TV update metadata and release APKs:
+This public repository contains Cedar Android TV's public product site, update metadata, and release APKs:
 
-- GitHub Pages serves `update-v1.json`, Cedar's small, signed update manifest.
+- GitHub Pages serves Cedar's branded landing page and `update-v1.json`, its small, signed update manifest.
 - GitHub Releases serves versioned APK files.
 - The app verifies the manifest's ECDSA signature, the APK's SHA-256 and size, its package name and version, and its Android signing certificate before opening Android's installer.
 

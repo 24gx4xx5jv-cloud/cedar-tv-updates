@@ -3,22 +3,170 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="dark">
-    <title>Cedar Android TV Updates</title>
-    <style>
-      :root { color-scheme: dark; font-family: system-ui, sans-serif; }
-      body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #111216; color: #f5f5f7; }
-      main { width: min(42rem, calc(100% - 3rem)); }
-      h1 { letter-spacing: -0.03em; }
-      p { color: #b9bbc3; line-height: 1.6; }
-      a { color: #63b3ff; }
-    </style>
+    <meta name="theme-color" content="#08090b">
+    <meta name="description" content="Cedar is a cinematic media experience thoughtfully designed for Android TV, Google TV, and Fire TV.">
+    <meta name="robots" content="index,follow">
+    <meta name="application-name" content="Cedar">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Cedar">
+    <meta property="og:title" content="Cedar — Your media, made cinematic">
+    <meta property="og:description" content="A focused, beautiful media experience designed for the biggest screen in your home.">
+    <meta property="og:url" content="https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/">
+    <meta property="og:image" content="https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Cedar — Your media. Made cinematic.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cedar — Your media, made cinematic">
+    <meta name="twitter:description" content="A focused, beautiful media experience designed for Android TV.">
+    <meta name="twitter:image" content="https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/og.png">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
+    <title>Cedar — Your media, made cinematic</title>
+    <link rel="canonical" href="https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/">
+    <link rel="icon" type="image/png" href="assets/cedar-app-icon.png">
+    <link rel="apple-touch-icon" href="assets/cedar-app-icon.png">
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <main>
-      <h1>Cedar Android TV Updates</h1>
-      <p>This site hosts Cedar's cryptographically signed update manifest. APKs are distributed through GitHub Releases and are verified again on the TV before Android opens its installer.</p>
-      <p><a href="update-v1.json">View the current signed manifest</a></p>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Cedar home">
+        <img src="assets/cedar-wordmark.png" alt="Cedar" width="858" height="301">
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#experience">Experience</a>
+        <a href="#features">Features</a>
+        <a class="nav-download" href="#download">Download</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span>Cedar for Android TV</p>
+          <h1 id="hero-title">Your media.<br><em>Made cinematic.</em></h1>
+          <p class="hero-lede">A focused, beautiful television experience that brings movies, series, live TV, and the services you already use together on the biggest screen in your home.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" data-download-link href="https://github.com/24gx4xx5jv-cloud/cedar-tv-updates/releases/download/v1.2.41/Cedar-TV-1.2.41.apk">Download for Android TV</a>
+            <a class="button button-secondary" href="#experience">Explore Cedar <span aria-hidden="true">↓</span></a>
+          </div>
+          <p class="compatibility">Made for Android TV · Google TV · Fire TV</p>
+        </div>
+
+        <div class="hero-visual" aria-label="Cedar home screen on a television">
+          <div class="ambient-glow" aria-hidden="true"></div>
+          <div class="screen-frame">
+            <img src="assets/cedar-home.webp" alt="Cedar's cinematic home screen showing rich metadata and media artwork" width="1920" height="1080">
+          </div>
+          <div class="screen-base" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <section class="proof-strip" aria-label="Cedar highlights">
+        <p><span aria-hidden="true">01</span>Purpose-built for remotes</p>
+        <p><span aria-hidden="true">02</span>Rich, artwork-first details</p>
+        <p><span aria-hidden="true">03</span>Movies, series &amp; live TV</p>
+        <p><span aria-hidden="true">04</span>Signed direct updates</p>
+      </section>
+
+      <section class="showcase section-shell" id="experience" aria-labelledby="experience-title">
+        <div class="section-heading">
+          <p class="eyebrow"><span></span>The Cedar experience</p>
+          <h2 id="experience-title">Less searching.<br><em>More watching.</em></h2>
+          <p>Cedar gives every title room to breathe. Artwork, context, cast, episodes, sources, and playback controls are composed for a television—not stretched up from a phone.</p>
+        </div>
+
+        <div class="detail-stage">
+          <div class="detail-frame">
+            <img src="assets/cedar-detail.webp" alt="Cedar movie details with rich artwork, metadata, and playback actions" width="1920" height="1080" loading="lazy">
+          </div>
+          <div class="detail-caption">
+            <p class="caption-number">01 / Details</p>
+            <h3>Every title gets the full treatment.</h3>
+            <p>Clear artwork, localized imagery, ratings, cast, seasons, episodes, and source selection—without sacrificing the backdrop that makes television feel cinematic.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="features section-shell" id="features" aria-labelledby="features-title">
+        <div class="section-heading compact">
+          <p class="eyebrow"><span></span>Built for the living room</p>
+          <h2 id="features-title">The essentials,<br><em>thoughtfully connected.</em></h2>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card feature-card-wide feature-discovery">
+            <div>
+              <p class="feature-index">01</p>
+              <h3>A home that feels alive</h3>
+              <p>Artwork-led branches, useful metadata, continue watching, next up, and optional trailer previews make discovery feel immediate.</p>
+            </div>
+            <div class="poster-rail" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </article>
+
+          <article class="feature-card">
+            <p class="feature-index">02</p>
+            <h3>Playback that respects your choices</h3>
+            <p>System-language audio, subtitles off by default, skip markers, scrubbing thumbnails, and TV-friendly controls stay out of the way until you need them.</p>
+          </article>
+
+          <article class="feature-card feature-live">
+            <p class="feature-index">03</p>
+            <h3>Live TV, with a real guide</h3>
+            <p>Playlist order, XMLTV programme data, a focused grid guide, and an in-guide preview player keep channels fast to browse.</p>
+            <div class="guide-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+          </article>
+
+          <article class="feature-card feature-card-wide feature-sync">
+            <div>
+              <p class="feature-index">04</p>
+              <h3>Your place, across screens</h3>
+              <p>Optional Trakt and Simkl connections help keep watch progress and history with you, while Cedar profile tools make moving to a new television easier.</p>
+            </div>
+            <div class="sync-orbit" aria-hidden="true">
+              <span class="orbit-tv">TV</span><span class="orbit-dot"></span><span class="orbit-profile">C</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="download-section section-shell" id="download" aria-labelledby="download-title">
+        <div class="download-card">
+          <div class="download-mark" aria-hidden="true">
+            <img src="assets/cedar-app-icon.png" alt="" width="192" height="192">
+          </div>
+          <div class="download-copy">
+            <p class="eyebrow"><span></span>Available now</p>
+            <h2 id="download-title">Bring Cedar<br><em>to your television.</em></h2>
+            <p>Download the current signed APK and install it on a compatible Android TV, Google TV, or Fire TV device.</p>
+            <div class="release-meta" aria-live="polite">
+              <span>Version <strong data-version>1.2.41</strong></span>
+              <span data-file-size>12.8 MB</span>
+              <span>Android 6.0+</span>
+            </div>
+            <div class="hero-actions">
+              <a class="button button-primary" data-download-link href="https://github.com/24gx4xx5jv-cloud/cedar-tv-updates/releases/download/v1.2.41/Cedar-TV-1.2.41.apk">Download Cedar</a>
+              <a class="button button-secondary" data-release-link href="https://github.com/24gx4xx5jv-cloud/cedar-tv-updates/releases/tag/v1.2.41">Release notes <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </div>
+        <p class="install-note">Cedar is independently distributed. Android may ask you to allow installation from your browser or file manager. Updates are signed and verified before Cedar opens the system installer.</p>
+      </section>
     </main>
+
+    <footer>
+      <a class="footer-brand" href="#top" aria-label="Back to top">
+        <img src="assets/cedar-wordmark.png" alt="Cedar" width="858" height="301">
+      </a>
+      <p>Cedar is a media player and organizer. It does not provide, host, or sell media content. Only connect sources and services you are authorized to use.</p>
+      <div class="footer-links">
+        <a href="https://github.com/24gx4xx5jv-cloud/cedar-tv-updates/releases/latest">Releases</a>
+        <a href="update-v1.json">Update manifest</a>
+        <span>© <span data-year>2026</span> Cedar</span>
+      </div>
+    </footer>
+
+    <script src="site.js" defer></script>
   </body>
 </html>
