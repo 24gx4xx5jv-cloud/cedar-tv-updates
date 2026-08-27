@@ -9,7 +9,7 @@ import {
   sealEnvelope,
   uploadEnvelope,
   validateProfilePresentation,
-} from "./cedar-sync.mjs?v=profile-editor-1";
+} from "./cedar-sync.mjs?v=profile-editor-2";
 
 const pairing = document.querySelector("#link-pairing");
 const card = document.querySelector("#link-card");

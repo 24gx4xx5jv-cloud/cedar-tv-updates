@@ -10,6 +10,7 @@ import {
   bytesToBase64URL,
   createProfilePresentationPatchChange,
   decodeProfileSnapshot,
+  fetchLatestProfile,
   openEnvelope,
   sealEnvelope,
 } from "../public/link/cedar-sync.mjs";
@@ -59,8 +60,14 @@ const makeSnapshotBytes = ({ compressed = true, wrapped = false } = {}) => {
   return new Uint8Array(Buffer.concat([Buffer.from("CSZ1"), encoded]));
 };
 
-const makeEnvelope = async ({ key = profileKey, compressed = true, wrapped = false, envelopeChangeID = changeID } = {}) => {
-  const authorSequence = 6;
+const makeEnvelope = async ({
+  key = profileKey,
+  compressed = true,
+  wrapped = false,
+  envelopeChangeID = changeID,
+  authorSequence = 6,
+  revision = 1_777_777_777_777,
+} = {}) => {
   const createdAtEpochMilliseconds = 1_777_777_777_000;
   const change = {
     schemaVersion: 1,
@@ -68,7 +75,7 @@ const makeEnvelope = async ({ key = profileKey, compressed = true, wrapped = fal
     entityKind: "apple-profile-snapshot",
     entityID: profileID.toLowerCase(),
     operation: "upsert",
-    revision: 1_777_777_777_777,
+    revision,
     modifiedAtEpochMilliseconds: 1_777_777_777_777,
     payload: bytesToBase64(makeSnapshotBytes({ compressed, wrapped })),
   };
@@ -284,4 +291,45 @@ test("rejects a profile identity mismatch", async () => {
     decodeProfileSnapshot(opened, spaceID),
     (error) => error instanceof CedarSyncError && error.code === "profile_mismatch",
   );
+});
+
+test("paginates encrypted history below the response-size ceiling", async () => {
+  const nativeFetch = globalThis.fetch;
+  const entries = await Promise.all(Array.from({ length: 7 }, async (_, index) => ({
+    serverSequence: index + 1,
+    envelope: await makeEnvelope({
+      envelopeChangeID: randomUUID(),
+      authorSequence: index + 1,
+      revision: 20 + index,
+    }),
+  })));
+  const requests = [];
+  globalThis.fetch = async (input) => {
+    const url = new URL(input);
+    const after = Number(url.searchParams.get("after"));
+    const limit = Number(url.searchParams.get("limit"));
+    requests.push({ after, limit });
+    const changes = entries.filter((entry) => entry.serverSequence > after).slice(0, limit);
+    return new Response(JSON.stringify({ schemaVersion: 1, changes }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+
+  try {
+    const result = await fetchLatestProfile(credentials);
+    assert.equal(result.cursor, 7);
+    assert.equal(result.profile.snapshotRevision, 26);
+    assert.deepEqual(requests, [
+      { after: 0, limit: LIMITS.fetchPage },
+      { after: 5, limit: LIMITS.fetchPage },
+    ]);
+    const maximumEnvelopeJSONBytes = 4 * Math.ceil(LIMITS.sealedPayloadBytes / 3) + 2_048;
+    assert.ok(
+      LIMITS.fetchPage * maximumEnvelopeJSONBytes + 64 * 1_024 <= LIMITS.responseBytes,
+      "the worst-case relay page must stay inside the bounded reader",
+    );
+  } finally {
+    globalThis.fetch = nativeFetch;
+  }
 });

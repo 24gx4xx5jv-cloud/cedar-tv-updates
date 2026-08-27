@@ -11,6 +11,8 @@ export const LIMITS = Object.freeze({
   credentialItemCount: 128,
   presentationPatchBytes: 16 * 1_024,
   maximumFetch: 200,
+  fetchPage: 5,
+  maximumCatchUp: 2_000,
 });
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -583,7 +585,7 @@ const fetchPage = async (credentials, after) => {
   nonnegativeInteger(after);
   const relay = new URL(credentials.relayBaseURL);
   relay.pathname = `${relay.pathname.replace(/\/$/, "")}/v1/spaces/${normalizeUUID(credentials.spaceID)}/changes`;
-  relay.search = new URLSearchParams({ after: String(after), limit: String(LIMITS.maximumFetch) }).toString();
+  relay.search = new URLSearchParams({ after: String(after), limit: String(LIMITS.fetchPage) }).toString();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15_000);
   let response;
@@ -621,7 +623,7 @@ const fetchPage = async (credentials, after) => {
     "Cedar Sync returned an invalid response.",
   ));
   schemaOne(root.schemaVersion);
-  if (!Array.isArray(root.changes) || root.changes.length > LIMITS.maximumFetch) {
+  if (!Array.isArray(root.changes) || root.changes.length > LIMITS.fetchPage) {
     fail("invalid_changes", "Cedar Sync returned an invalid change list.");
   }
   return root.changes;
@@ -676,7 +678,8 @@ export const fetchLatestProfile = async (credentials, startingCursor = 0) => {
   let cursor = nonnegativeInteger(startingCursor);
   let profile = null;
   let sawChanges = false;
-  for (let page = 0; page < 10; page += 1) {
+  const maximumPages = Math.ceil(LIMITS.maximumCatchUp / LIMITS.fetchPage);
+  for (let page = 0; page < maximumPages; page += 1) {
     const values = await fetchPage(credentials, cursor);
     for (const value of values) {
       const item = record(value);
@@ -690,7 +693,7 @@ export const fetchLatestProfile = async (credentials, startingCursor = 0) => {
       cursor = serverSequence;
       sawChanges = true;
     }
-    if (values.length < LIMITS.maximumFetch) return { cursor, profile, sawChanges };
+    if (values.length < LIMITS.fetchPage) return { cursor, profile, sawChanges };
   }
   fail("too_many_changes", "Cedar Sync has too many pending changes. Refresh and try again.");
 };
