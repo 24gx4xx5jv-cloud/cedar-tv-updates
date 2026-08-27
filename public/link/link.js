@@ -9,7 +9,7 @@ import {
   sealEnvelope,
   uploadEnvelope,
   validateProfilePresentation,
-} from "./cedar-sync.mjs?v=profile-editor-3";
+} from "./cedar-sync.mjs?v=profile-editor-4";
 
 const pairing = document.querySelector("#link-pairing");
 const card = document.querySelector("#link-card");
@@ -656,7 +656,10 @@ const renderAvatars = () => {
 
 const loadBadges = async () => {
   if (badgeCatalog) return;
-  const response = await fetch("../catalogs/badges.json", { cache: "force-cache", credentials: "omit" });
+  const response = await fetch("../catalogs/badges.json?v=selectable-1", {
+    cache: "force-cache",
+    credentials: "omit",
+  });
   if (!response.ok) throw new Error("badge catalog unavailable");
   const value = await response.json();
   if (!Array.isArray(value.sets)) throw new Error("badge catalog invalid");
