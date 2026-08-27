@@ -430,10 +430,12 @@ const setAvatar = (profile, previewPath = null, previewName = null) => {
     avatarImage.src = path;
     avatarImage.hidden = false;
     avatarFallback.hidden = true;
+    profileAvatar.classList.add("has-image");
   } else {
     avatarImage.removeAttribute("src");
     avatarImage.hidden = true;
     avatarFallback.hidden = false;
+    profileAvatar.classList.remove("has-image");
   }
   profileAvatar.classList.toggle("is-preview", Boolean(previewPath));
   if (previewName) syncMessage.textContent = `${previewName} selected. Save the profile to send it to Cedar.`;

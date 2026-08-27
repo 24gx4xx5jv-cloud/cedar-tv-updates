@@ -15,7 +15,8 @@ npm run dev
 
 With the local Worker running in another terminal, `npm run test:integration` verifies space
 creation, single-use enrollment, authenticated idempotent upload/fetch, unauthorized rejection,
-and revocation.
+owner-only device listing, and owner-only revocation. The first device in a space is its owner;
+linked devices can sync normally but cannot enumerate or revoke other devices.
 
 ## Production deployment
 

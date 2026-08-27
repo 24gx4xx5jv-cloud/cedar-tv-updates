@@ -3,6 +3,7 @@ export const LIMITS = Object.freeze({
   sealedPayloadBytes: 1_064_960,
   tokenBytes: 32,
   maximumFetch: 200,
+  maximumDevices: 50,
   invitationLifetimeMs: 10 * 60 * 1000,
 });
 

@@ -56,15 +56,30 @@ const authenticateDevice = async (request, env, spaceID) => {
   const tokenHash = await hashBytes(token);
   token.fill(0);
   const device = await env.DB.prepare(
-    `SELECT device_id
-       FROM sync_devices
-      WHERE space_id = ?1 AND token_hash = ?2 AND revoked_at_ms IS NULL`,
+    `SELECT device.device_id,
+            COALESCE(
+              device.is_owner,
+              CASE WHEN device.device_id = (
+                SELECT candidate.device_id
+                  FROM sync_devices AS candidate
+                 WHERE candidate.space_id = device.space_id
+                 ORDER BY candidate.created_at_ms ASC, candidate.device_id ASC
+                 LIMIT 1
+              ) THEN 1 ELSE 0 END
+            ) AS is_owner
+       FROM sync_devices AS device
+      WHERE device.space_id = ?1
+        AND device.token_hash = ?2
+        AND device.revoked_at_ms IS NULL`,
   ).bind(spaceID, tokenHash).first();
   if (!device) throw new ProtocolError(401, "invalid_authorization");
   await env.DB.prepare(
     "UPDATE sync_devices SET last_seen_at_ms = ?1 WHERE space_id = ?2 AND device_id = ?3",
   ).bind(Date.now(), spaceID, device.device_id).run();
-  return String(device.device_id);
+  return {
+    deviceID: String(device.device_id),
+    isOwner: Number(device.is_owner) === 1,
+  };
 };
 
 const createSpace = async (request, env, origin) => {
@@ -85,8 +100,8 @@ const createSpace = async (request, env, origin) => {
       ).bind(spaceID, now),
       env.DB.prepare(
         `INSERT INTO sync_devices(
-           space_id, device_id, token_hash, created_at_ms, last_seen_at_ms
-         ) VALUES (?1, ?2, ?3, ?4, ?4)`,
+           space_id, device_id, token_hash, created_at_ms, last_seen_at_ms, is_owner
+         ) VALUES (?1, ?2, ?3, ?4, ?4, 1)`,
       ).bind(spaceID, deviceID, tokenHash, now),
     ]);
   } catch {
@@ -96,7 +111,7 @@ const createSpace = async (request, env, origin) => {
 };
 
 const createInvitation = async (request, env, origin, spaceID) => {
-  const authorDeviceID = await authenticateDevice(request, env, spaceID);
+  const author = await authenticateDevice(request, env, spaceID);
   const body = exactObject(await readJSON(request), [
     "schemaVersion", "invitationID", "enrollmentTokenHash", "expiresAtEpochMilliseconds",
   ]);
@@ -115,7 +130,7 @@ const createInvitation = async (request, env, origin, spaceID) => {
       `INSERT INTO sync_invitations(
          space_id, invitation_id, token_hash, created_by_device_id, created_at_ms, expires_at_ms
        ) VALUES (?1, ?2, ?3, ?4, ?5, ?6)`,
-    ).bind(spaceID, invitationID, tokenHash, authorDeviceID, now, expiresAt).run();
+    ).bind(spaceID, invitationID, tokenHash, author.deviceID, now, expiresAt).run();
   } catch {
     throw new ProtocolError(409, "invitation_exists");
   }
@@ -166,8 +181,8 @@ const claimInvitation = async (request, env, origin, spaceID, invitationID) => {
   try {
     await env.DB.prepare(
       `INSERT INTO sync_devices(
-         space_id, device_id, token_hash, created_at_ms, last_seen_at_ms
-       ) VALUES (?1, ?2, ?3, ?4, ?4)
+         space_id, device_id, token_hash, created_at_ms, last_seen_at_ms, is_owner
+       ) VALUES (?1, ?2, ?3, ?4, ?4, 0)
        ON CONFLICT(space_id, device_id) DO UPDATE SET
          last_seen_at_ms = excluded.last_seen_at_ms
        WHERE sync_devices.token_hash = excluded.token_hash
@@ -185,7 +200,7 @@ const claimInvitation = async (request, env, origin, spaceID, invitationID) => {
 };
 
 const uploadChange = async (request, env, origin, spaceID) => {
-  const authorDeviceID = await authenticateDevice(request, env, spaceID);
+  const author = await authenticateDevice(request, env, spaceID);
   const body = exactObject(await readJSON(request), [
     "schemaVersion", "spaceID", "deviceID", "changeID", "authorSequence",
     "createdAtEpochMilliseconds", "sealedPayload",
@@ -193,7 +208,7 @@ const uploadChange = async (request, env, origin, spaceID) => {
   schemaOne(body.schemaVersion);
   if (normalizeUUID(body.spaceID) !== spaceID) throw new ProtocolError(400, "space_mismatch");
   const deviceID = normalizeUUID(body.deviceID);
-  if (deviceID !== authorDeviceID) throw new ProtocolError(403, "author_mismatch");
+  if (deviceID !== author.deviceID) throw new ProtocolError(403, "author_mismatch");
   const changeID = normalizeUUID(body.changeID);
   const authorSequence = positiveInteger(body.authorSequence, "invalid_sequence");
   const createdAt = positiveInteger(body.createdAtEpochMilliseconds, "invalid_timestamp");
@@ -265,8 +280,38 @@ const fetchChanges = async (request, env, origin, spaceID) => {
   return jsonResponse(200, { schemaVersion: 1, changes }, origin);
 };
 
+const listDevices = async (request, env, origin, spaceID) => {
+  const author = await authenticateDevice(request, env, spaceID);
+  if (!author.isOwner) throw new ProtocolError(403, "owner_authorization_required");
+  const result = await env.DB.prepare(
+    `SELECT device_id, created_at_ms, last_seen_at_ms
+       FROM sync_devices
+      WHERE space_id = ?1 AND revoked_at_ms IS NULL
+      ORDER BY created_at_ms ASC, device_id ASC
+      LIMIT ?2`,
+  ).bind(spaceID, LIMITS.maximumDevices + 1).all();
+  const rows = result.results || [];
+  if (rows.length > LIMITS.maximumDevices) throw new ProtocolError(409, "too_many_devices");
+  const devices = rows.map((row) => ({
+    deviceID: normalizeUUID(row.device_id),
+    createdAtEpochMilliseconds: positiveInteger(
+      Number(row.created_at_ms),
+      "invalid_device_timestamp",
+    ),
+    lastSeenAtEpochMilliseconds: positiveInteger(
+      Number(row.last_seen_at_ms),
+      "invalid_device_timestamp",
+    ),
+  }));
+  return jsonResponse(200, { schemaVersion: 1, devices }, origin);
+};
+
 const revokeDevice = async (request, env, origin, spaceID, targetDeviceID) => {
-  await authenticateDevice(request, env, spaceID);
+  const author = await authenticateDevice(request, env, spaceID);
+  if (!author.isOwner) throw new ProtocolError(403, "owner_authorization_required");
+  if (author.deviceID === targetDeviceID) {
+    throw new ProtocolError(400, "cannot_revoke_current_device");
+  }
   const result = await env.DB.prepare(
     `UPDATE sync_devices SET revoked_at_ms = ?1
       WHERE space_id = ?2 AND device_id = ?3 AND revoked_at_ms IS NULL`,
@@ -298,6 +343,9 @@ const handle = async (request, env, origin) => {
     if (parts.length === 4 && parts[3] === "changes") {
       if (request.method === "POST") return uploadChange(request, env, origin, spaceID);
       if (request.method === "GET") return fetchChanges(request, env, origin, spaceID);
+    }
+    if (request.method === "GET" && parts.length === 4 && parts[3] === "devices") {
+      return listDevices(request, env, origin, spaceID);
     }
     if (
       request.method === "DELETE" && parts.length === 5 && parts[3] === "devices"

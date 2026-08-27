@@ -108,6 +108,36 @@ assert.equal(fetched.value.changes.length, 1);
 assert.equal(fetched.value.changes[0].envelope.changeID, changeID);
 assert.equal(fetched.value.changes[0].envelope.sealedPayload, envelope.sealedPayload);
 
+const ownerDevices = await request(`/v1/spaces/${spaceID}/devices`, {
+  token: firstDeviceToken,
+});
+assert.equal(ownerDevices.status, 200);
+assert.deepEqual(
+  ownerDevices.value.devices.map((device) => device.deviceID),
+  [firstDeviceID, secondDeviceID],
+);
+assert.ok(ownerDevices.value.devices.every((device) => (
+  Number.isSafeInteger(device.createdAtEpochMilliseconds)
+  && Number.isSafeInteger(device.lastSeenAtEpochMilliseconds)
+)));
+
+const linkedDeviceCannotList = await request(`/v1/spaces/${spaceID}/devices`, {
+  token: secondDeviceToken,
+});
+assert.equal(linkedDeviceCannotList.status, 403);
+
+const linkedDeviceCannotRevokeOwner = await request(
+  `/v1/spaces/${spaceID}/devices/${firstDeviceID}`,
+  { method: "DELETE", token: secondDeviceToken },
+);
+assert.equal(linkedDeviceCannotRevokeOwner.status, 403);
+
+const ownerCannotRevokeItself = await request(
+  `/v1/spaces/${spaceID}/devices/${firstDeviceID}`,
+  { method: "DELETE", token: firstDeviceToken },
+);
+assert.equal(ownerCannotRevokeItself.status, 400);
+
 const unauthorized = await request(`/v1/spaces/${spaceID}/changes?after=0`, {
   token: randomBytes(32),
 });
