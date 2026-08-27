@@ -9,6 +9,7 @@ export const LIMITS = Object.freeze({
   snapshotJSONBytes: 6 * 1_024 * 1_024,
   credentialItemBytes: 64 * 1_024,
   credentialItemCount: 128,
+  presentationPatchBytes: 16 * 1_024,
   maximumFetch: 200,
 });
 
@@ -16,6 +17,7 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3
 const STANDARD_BASE64_PATTERN = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
 const BASE64_URL_PATTERN = /^[A-Za-z0-9_-]+$/;
 const COMPRESSED_MAGIC = new Uint8Array([0x43, 0x53, 0x5a, 0x31]);
+const PROFILE_THEMES = new Set(["system", "light", "dark", "cedarDay", "cedarNight", "highContrast"]);
 const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8", { fatal: true });
 
@@ -62,6 +64,41 @@ const boundedString = (value, maximumLength, message) => {
     fail("invalid_text", message);
   }
   return value;
+};
+
+const normalizedProfileName = (value) => {
+  boundedString(value, 128, "The Cedar profile name is invalid.");
+  if (value.trim() !== value) fail("invalid_text", "The Cedar profile name is invalid.");
+  return value;
+};
+
+const avatarReference = (value) => {
+  boundedString(value, 2_048, "The Cedar profile avatar is invalid.");
+  if (value.startsWith("data:")) fail("invalid_avatar", "Embedded profile images cannot be edited in a browser.");
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" || url.username || url.password || url.hash) {
+      fail("invalid_avatar", "The Cedar profile avatar is invalid.");
+    }
+    return url.href;
+  } catch (error) {
+    if (error instanceof CedarSyncError) throw error;
+    if (value.length > 128 || !/^[A-Za-z0-9._-]+$/.test(value)) {
+      fail("invalid_avatar", "The Cedar profile avatar is invalid.");
+    }
+    return value;
+  }
+};
+
+export const validateProfilePresentation = (value) => {
+  const presentation = record(value, "The Cedar profile presentation is invalid.");
+  const theme = boundedString(presentation.theme, 32, "The Cedar profile appearance is invalid.");
+  if (!PROFILE_THEMES.has(theme)) fail("invalid_theme", "The Cedar profile appearance is invalid.");
+  return {
+    name: normalizedProfileName(presentation.name),
+    avatarSymbol: avatarReference(presentation.avatarSymbol),
+    theme,
+  };
 };
 
 const identifier = (value, maximumLength) => {
@@ -213,6 +250,17 @@ const authenticatedData = (envelope) => encoder.encode(
   `cedar-sync-v1:${envelope.spaceID}:${envelope.deviceID}:${envelope.changeID}:${envelope.authorSequence}:${envelope.createdAtEpochMilliseconds}`,
 );
 
+const wireChange = (change) => ({
+  schemaVersion: 1,
+  profileID: change.profileID,
+  entityKind: change.entityKind,
+  entityID: change.entityID,
+  operation: change.operation,
+  revision: change.revision,
+  modifiedAtEpochMilliseconds: change.modifiedAtEpochMilliseconds,
+  payload: bytesToBase64(change.payload),
+});
+
 const validateEnvelope = (value, expectedSpaceID) => {
   const envelope = record(value);
   schemaOne(envelope.schemaVersion);
@@ -288,6 +336,94 @@ export const openEnvelope = async (value, credentials) => {
   }
 };
 
+export const sealEnvelope = async (
+  value,
+  credentials,
+  authorSequence,
+  {
+    changeID = crypto.randomUUID().toLowerCase(),
+    createdAtEpochMilliseconds = Date.now(),
+    nonce = crypto.getRandomValues(new Uint8Array(12)),
+  } = {},
+) => {
+  const change = validateChange(wireChange(value));
+  const envelope = {
+    schemaVersion: 1,
+    spaceID: normalizeUUID(credentials.spaceID),
+    deviceID: normalizeUUID(credentials.deviceID),
+    changeID: normalizeUUID(changeID),
+    authorSequence: positiveInteger(authorSequence),
+    createdAtEpochMilliseconds: positiveInteger(createdAtEpochMilliseconds),
+  };
+  const profileKey = base64URLToBytes(credentials.profileKey, 32);
+  const initializationVector = new Uint8Array(nonce);
+  if (initializationVector.length !== 12) fail("invalid_nonce", "The browser encryption nonce is invalid.");
+  const clear = encoder.encode(JSON.stringify(wireChange(change)));
+  let encrypted;
+  try {
+    const key = await crypto.subtle.importKey("raw", profileKey, "AES-GCM", false, ["encrypt"]);
+    encrypted = new Uint8Array(await crypto.subtle.encrypt({
+      name: "AES-GCM",
+      iv: initializationVector,
+      additionalData: authenticatedData(envelope),
+      tagLength: 128,
+    }, key, clear));
+    const combined = new Uint8Array(initializationVector.length + encrypted.length);
+    combined.set(initializationVector);
+    combined.set(encrypted, initializationVector.length);
+    const sealedPayload = bytesToBase64(combined);
+    combined.fill(0);
+    return { ...envelope, sealedPayload };
+  } finally {
+    profileKey.fill(0);
+    initializationVector.fill(0);
+    clear.fill(0);
+    encrypted?.fill(0);
+    change.payload.fill(0);
+    value.payload?.fill?.(0);
+  }
+};
+
+export const createProfilePresentationPatchChange = (
+  profile,
+  replacementValue,
+  authorSequence,
+  createdAtEpochMilliseconds = Date.now(),
+) => {
+  const profileID = normalizeUUID(profile.profileID);
+  const baseRevision = positiveInteger(profile.snapshotRevision, "The browser needs a fresh Cedar profile before editing.");
+  const base = validateProfilePresentation(profile);
+  const replacement = validateProfilePresentation(replacementValue);
+  if (JSON.stringify(base) === JSON.stringify(replacement)) {
+    fail("no_changes", "Make a profile change before saving.");
+  }
+  const patch = {
+    schemaVersion: 1,
+    profileID,
+    baseRevision,
+    createdAtEpochMilliseconds: positiveInteger(createdAtEpochMilliseconds),
+    base,
+    replacement,
+  };
+  const payload = encoder.encode(JSON.stringify(patch));
+  if (payload.length > LIMITS.presentationPatchBytes) {
+    payload.fill(0);
+    fail("patch_too_large", "The browser profile edit is too large.");
+  }
+  const change = validateChange({
+    schemaVersion: 1,
+    profileID,
+    entityKind: "browser-profile-presentation",
+    entityID: profileID,
+    operation: "upsert",
+    revision: positiveInteger(authorSequence),
+    modifiedAtEpochMilliseconds: patch.createdAtEpochMilliseconds,
+    payload: bytesToBase64(payload),
+  });
+  payload.fill(0);
+  return change;
+};
+
 const safeArray = (value) => Array.isArray(value) ? value : [];
 
 const safeProfileSummary = (portable, snapshot) => {
@@ -299,14 +435,19 @@ const safeProfileSummary = (portable, snapshot) => {
   }
   const name = boundedString(profile.name, 128, "The Cedar profile name is invalid.");
   let avatarSymbol = "person.crop.circle.fill";
+  let avatarEditable = false;
   if (typeof profile.avatarSymbol === "string") {
     const trimmedAvatar = profile.avatarSymbol.trim();
     if (trimmedAvatar.length <= 128 && !trimmedAvatar.startsWith("data:")) {
       avatarSymbol = trimmedAvatar;
+      avatarEditable = true;
     } else if (trimmedAvatar.length <= 2_048) {
       try {
         const avatarURL = new URL(trimmedAvatar);
-        if (avatarURL.protocol === "https:") avatarSymbol = avatarURL.href;
+        if (avatarURL.protocol === "https:") {
+          avatarSymbol = avatarURL.href;
+          avatarEditable = true;
+        }
       } catch {
         // Unsupported avatar references use Cedar's local fallback.
       }
@@ -323,6 +464,7 @@ const safeProfileSummary = (portable, snapshot) => {
     profileID,
     name,
     avatarSymbol,
+    avatarEditable,
     theme,
     isKids: profile.isKids === true,
     requiresPIN: profile.requiresPIN === true,
@@ -332,6 +474,7 @@ const safeProfileSummary = (portable, snapshot) => {
     branchCount: homeBranches.length,
     enabledBranchCount: homeBranches.filter((branch) => branch?.isEnabled === true).length,
     shelfCount: homeShelves.length,
+    snapshotRevision: snapshot.snapshotRevision,
     syncedAt: snapshot.createdAtEpochMilliseconds,
   };
 };
@@ -386,6 +529,7 @@ export const decodeProfileSnapshot = async (change, expectedSpaceID) => {
       spaceID: normalizeUUID(expectedSpaceID),
       profileID,
       profileName,
+      snapshotRevision: change.revision,
       createdAtEpochMilliseconds,
     };
     return safeProfileSummary(
@@ -481,6 +625,51 @@ const fetchPage = async (credentials, after) => {
     fail("invalid_changes", "Cedar Sync returned an invalid change list.");
   }
   return root.changes;
+};
+
+export const uploadEnvelope = async (credentials, envelope) => {
+  const relay = new URL(credentials.relayBaseURL);
+  relay.pathname = `${relay.pathname.replace(/\/$/, "")}/v1/spaces/${normalizeUUID(credentials.spaceID)}/changes`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15_000);
+  let response;
+  try {
+    response = await fetch(relay, {
+      method: "POST",
+      cache: "no-store",
+      credentials: "omit",
+      redirect: "error",
+      referrerPolicy: "no-referrer",
+      signal: controller.signal,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${credentials.deviceToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(envelope),
+    });
+  } catch (error) {
+    if (error?.name === "AbortError") fail("timeout", "Cedar Sync took too long to save the edit.");
+    fail("network", "Cedar Sync could not reach the encrypted relay.");
+  } finally {
+    clearTimeout(timeout);
+  }
+  if (!response.ok) {
+    if (response.status === 401 || response.status === 403) {
+      fail("authorization", "This browser's Cedar Link access is no longer valid. Create a new link on iPhone.");
+    }
+    fail("relay_rejected", `Cedar Sync could not save this edit (HTTP ${response.status}).`);
+  }
+  const contentType = response.headers.get("Content-Type") || "";
+  if (!contentType.toLowerCase().startsWith("application/json")) {
+    fail("invalid_content_type", "Cedar Sync returned an unexpected save response.");
+  }
+  const root = record(parseJSONText(
+    await readBoundedText(response, 64 * 1_024),
+    "Cedar Sync returned an invalid save response.",
+  ));
+  schemaOne(root.schemaVersion);
+  return positiveInteger(root.serverSequence, "Cedar Sync returned an invalid save cursor.");
 };
 
 export const fetchLatestProfile = async (credentials, startingCursor = 0) => {

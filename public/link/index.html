@@ -81,10 +81,39 @@
 
           <p class="sync-message" id="sync-message" role="status" aria-live="polite">Checking Cedar Sync for your encrypted profile…</p>
 
+          <form class="profile-editor" id="profile-editor" hidden>
+            <div class="editor-heading">
+              <div>
+                <p class="profile-kicker">Edit on the web</p>
+                <h3>Profile appearance</h3>
+              </div>
+              <span>Encrypted write-back</span>
+            </div>
+            <div class="editor-fields">
+              <label>
+                <span>Profile name</span>
+                <input class="library-search" id="profile-name-input" name="profile-name" maxlength="128" autocomplete="off" required>
+              </label>
+              <label>
+                <span>Appearance</span>
+                <select class="profile-selector" id="profile-theme" name="profile-theme">
+                  <option value="system">System</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                  <option value="highContrast">High contrast</option>
+                  <option value="cedarDay">Cedar Day</option>
+                  <option value="cedarNight">Cedar Night</option>
+                </select>
+              </label>
+            </div>
+            <button class="button button-primary editor-save" id="save-profile" type="submit" disabled>Send changes to iPhone</button>
+            <p class="editor-note">Cedar on iPhone confirms the edit before it becomes current. Newer iPhone changes always win over a stale browser tab.</p>
+          </form>
+
           <details class="artwork-library" id="avatar-library">
             <summary>
-              <span>Explore avatar library</span>
-              <small>1,465 recovered avatars · preview only</small>
+              <span>Choose an avatar</span>
+              <small>1,465 recovered avatars</small>
             </summary>
             <div class="library-body">
               <label class="search-label" for="avatar-search">Find an avatar</label>
@@ -109,7 +138,7 @@
           <div class="companion-actions">
             <a class="button button-primary" href="./">Link another profile</a>
           </div>
-          <p class="link-footnote">This first companion view is read-only. Artwork selections are previews and are not sent back to Cedar yet.</p>
+          <p class="link-footnote">The editor can change only the profile name, avatar, and appearance. Sources, credentials, content limits, and account sessions remain controlled by Cedar.</p>
         </div>
       </section>
     </main>
@@ -122,6 +151,6 @@
       </div>
     </footer>
 
-    <script type="module" src="link.js?v=raw-deflate-2"></script>
+    <script type="module" src="link.js?v=profile-editor-1"></script>
   </body>
 </html>

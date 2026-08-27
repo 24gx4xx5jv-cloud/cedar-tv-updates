@@ -222,6 +222,60 @@
 .sync-message.is-success { background: rgba(120, 153, 101, 0.1); color: #b9cdb0; }
 .sync-message.is-error { background: rgba(183, 91, 72, 0.11); color: #e0ada2; }
 
+.profile-editor {
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px solid rgba(147, 177, 125, 0.24);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(122, 151, 103, 0.09), rgba(255, 255, 255, 0.02));
+}
+
+.profile-editor[hidden] { display: none; }
+.profile-editor.is-pending { border-color: rgba(207, 162, 96, 0.34); }
+.profile-editor.is-unavailable { opacity: 0.62; }
+
+.editor-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.editor-heading h3 { margin: 0; color: #f0f1f2; font-size: 1.08rem; }
+.editor-heading .profile-kicker { margin-bottom: 4px; }
+.editor-heading > span {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border: 1px solid rgba(147, 177, 125, 0.28);
+  border-radius: 999px;
+  color: #aebfa3;
+  font-size: 0.61rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.editor-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.editor-fields label > span {
+  display: block;
+  margin-bottom: 7px;
+  color: #868b92;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.editor-fields .library-search, .editor-fields .profile-selector { margin: 0; }
+.editor-save { width: 100%; margin-top: 14px; border: 0; cursor: pointer; }
+.editor-save:disabled { cursor: not-allowed; opacity: 0.42; transform: none; }
+.editor-note { margin: 12px 0 0; color: #777d84; font-size: 0.7rem; line-height: 1.5; }
+
 .artwork-library {
   margin-top: 14px;
   border: 1px solid var(--line);
@@ -266,6 +320,7 @@
 }
 
 .avatar-choice:hover, .avatar-choice.is-selected { border-color: #8fa97c; }
+.avatar-choice:disabled { cursor: not-allowed; opacity: 0.48; }
 .avatar-choice img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .library-loading { grid-column: 1 / -1; margin: 12px 0; color: #7b8087; font-size: 0.78rem; }
 .library-more { width: 100%; margin-top: 12px; border: 1px solid var(--line); background: #181b20; color: var(--text); cursor: pointer; }
@@ -306,6 +361,7 @@
   .link-card { padding: 30px 24px; border-radius: 22px; }
   .link-card.has-companion { padding: 26px 20px; }
   .artwork-library summary small { display: none; }
+  .editor-fields { grid-template-columns: 1fr; }
   .avatar-grid { grid-template-columns: repeat(4, 1fr); }
 }
 

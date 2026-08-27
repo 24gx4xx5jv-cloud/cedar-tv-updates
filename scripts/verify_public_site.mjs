@@ -39,10 +39,12 @@ if (!page.includes(`connect-src 'self' ${relay.origin}`)) {
   throw new Error("The Cedar Link CSP must allow its configured relay origin");
 }
 if (
-  !page.includes('type="module" src="link.js?v=raw-deflate-2"')
+  !page.includes('type="module" src="link.js?v=profile-editor-1"')
   || !page.includes('id="link-button"')
   || !page.includes('id="link-companion"')
   || !page.includes('id="profile-selector"')
+  || !page.includes('id="profile-editor"')
+  || !page.includes('id="save-profile"')
 ) {
   throw new Error("The Cedar Link page is missing its required script or primary action");
 }

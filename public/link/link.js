@@ -3,9 +3,13 @@ import {
   base64URLToBytes,
   bytesToBase64,
   bytesToBase64URL,
+  createProfilePresentationPatchChange,
   fetchLatestProfile,
   normalizeUUID,
-} from "./cedar-sync.mjs?v=raw-deflate-2";
+  sealEnvelope,
+  uploadEnvelope,
+  validateProfilePresentation,
+} from "./cedar-sync.mjs?v=profile-editor-1";
 
 const pairing = document.querySelector("#link-pairing");
 const card = document.querySelector("#link-card");
@@ -27,6 +31,10 @@ const branchCount = document.querySelector("#branch-count");
 const shelfCount = document.querySelector("#shelf-count");
 const syncMessage = document.querySelector("#sync-message");
 const refreshButton = document.querySelector("#refresh-profile");
+const profileEditor = document.querySelector("#profile-editor");
+const profileNameInput = document.querySelector("#profile-name-input");
+const profileTheme = document.querySelector("#profile-theme");
+const saveProfileButton = document.querySelector("#save-profile");
 const avatarLibrary = document.querySelector("#avatar-library");
 const avatarSearch = document.querySelector("#avatar-search");
 const avatarGrid = document.querySelector("#avatar-grid");
@@ -54,6 +62,10 @@ let avatarCatalog = null;
 let avatarMatches = [];
 let visibleAvatarCount = 24;
 let badgeCatalog = null;
+let draftSpaceID = "";
+let draftPresentation = null;
+let isSavingProfile = false;
+let syncInFlight = null;
 
 const setState = (label, heading, message, enabled = false) => {
   stateLabel.textContent = label;
@@ -172,6 +184,35 @@ const deleteRecord = async (recordKey) => {
   await transactionDone(transaction);
 };
 
+const reserveOutboundSequence = (recordKey) => new Promise((resolve, reject) => {
+  const transaction = database.transaction("profiles", "readwrite");
+  const store = transaction.objectStore("profiles");
+  const request = store.get(recordKey);
+  let sequence = 0;
+  let updatedRecord = null;
+  request.onsuccess = () => {
+    const current = request.result;
+    if (!current || current.schemaVersion !== 1 || current.state !== "active") {
+      transaction.abort();
+      return;
+    }
+    const previous = Number.isSafeInteger(current.outboundSequence) && current.outboundSequence >= 0
+      ? current.outboundSequence
+      : 0;
+    if (previous >= Number.MAX_SAFE_INTEGER) {
+      transaction.abort();
+      return;
+    }
+    sequence = previous + 1;
+    updatedRecord = { ...current, outboundSequence: sequence };
+    store.put(updatedRecord, recordKey);
+  };
+  request.onerror = () => reject(request.error || new Error("Browser storage failed."));
+  transaction.oncomplete = () => resolve({ sequence, record: updatedRecord });
+  transaction.onerror = () => reject(transaction.error || new Error("Browser storage failed."));
+  transaction.onabort = () => reject(transaction.error || new Error("Browser storage failed."));
+});
+
 const encryptValue = async (value) => {
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const clear = new TextEncoder().encode(JSON.stringify(value));
@@ -270,6 +311,7 @@ const activate = async (pendingKey, secrets) => {
     state: "active",
     linkedAt: Date.now(),
     cursor: 0,
+    outboundSequence: 0,
     ...encrypted,
   });
   await deleteRecord(pendingKey);
@@ -288,7 +330,12 @@ const loadActiveProfiles = async () => {
       const cachedRecord = await readRecord(`snapshot:${credentials.spaceID}`);
       const cachedProfile = cachedRecord ? await decryptValue(cachedRecord) : null;
       const profile = cachedProfile?.spaceID === credentials.spaceID ? cachedProfile : null;
-      loaded.push({ recordKey: entry.recordKey, record: entry.value, credentials, profile });
+      const pendingRecord = await readRecord(`presentation-pending:${credentials.spaceID}`);
+      const pendingPresentation = pendingRecord ? await decryptValue(pendingRecord) : null;
+      const pending = pendingPresentation?.spaceID === credentials.spaceID
+        ? pendingPresentation
+        : null;
+      loaded.push({ recordKey: entry.recordKey, record: entry.value, credentials, profile, pending });
     } catch {
       // One damaged local record must not prevent another linked profile from opening.
     }
@@ -308,6 +355,52 @@ const relativeTime = (timestamp) => {
   if (seconds < 3_600) return `Synced ${Math.round(seconds / 60)} min ago`;
   if (seconds < 86_400) return `Synced ${Math.round(seconds / 3_600)} hr ago`;
   return `Synced ${new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(timestamp)}`;
+};
+
+const presentationForProfile = (profile) => validateProfilePresentation({
+  name: profile.name,
+  avatarSymbol: profile.avatarSymbol,
+  theme: profile.theme,
+});
+
+const presentationsMatch = (left, right) => left?.name === right?.name
+  && left?.avatarSymbol === right?.avatarSymbol
+  && left?.theme === right?.theme;
+
+const resetDraft = (item) => {
+  draftSpaceID = item?.credentials.spaceID || "";
+  draftPresentation = item?.profile ? presentationForProfile(item.profile) : null;
+  profileNameInput.value = draftPresentation?.name || "";
+  profileTheme.value = draftPresentation?.theme || "system";
+};
+
+const renderEditorState = () => {
+  const item = selectedProfile();
+  const profile = item?.profile;
+  profileEditor.hidden = !profile;
+  if (!profile) return;
+  if (draftSpaceID !== item.credentials.spaceID || !draftPresentation) resetDraft(item);
+  const unavailable = profile.avatarEditable !== true || !Number.isSafeInteger(profile.snapshotRevision);
+  const pending = Boolean(item.pending);
+  const normalizedName = profileNameInput.value.trim();
+  const candidate = {
+    ...draftPresentation,
+    name: normalizedName,
+    theme: profileTheme.value,
+  };
+  const validName = normalizedName.length > 0 && [...normalizedName].length <= 128;
+  const changed = validName && !presentationsMatch(presentationForProfile(profile), candidate);
+  for (const field of profileEditor.querySelectorAll("input, select, button")) {
+    field.disabled = unavailable || pending || isSavingProfile;
+  }
+  saveProfileButton.disabled = unavailable || pending || isSavingProfile || !changed;
+  saveProfileButton.textContent = isSavingProfile
+    ? "Encrypting changes…"
+    : pending
+      ? "Waiting for iPhone confirmation"
+      : "Send changes to iPhone";
+  profileEditor.classList.toggle("is-pending", pending);
+  profileEditor.classList.toggle("is-unavailable", unavailable);
 };
 
 const localAvatarPath = (storedValue) => {
@@ -337,7 +430,7 @@ const setAvatar = (profile, previewPath = null, previewName = null) => {
     avatarFallback.hidden = false;
   }
   profileAvatar.classList.toggle("is-preview", Boolean(previewPath));
-  if (previewName) syncMessage.textContent = `Previewing ${previewName}. This preview is not sent back to Cedar.`;
+  if (previewName) syncMessage.textContent = `${previewName} selected. Save the profile to send it to Cedar.`;
 };
 
 const renderProfileSelector = () => {
@@ -369,6 +462,7 @@ const renderCompanion = () => {
     branchCount.textContent = "—";
     shelfCount.textContent = "—";
     setAvatar({ name: "Cedar" });
+    profileEditor.hidden = true;
     return;
   }
   const profile = item.profile;
@@ -378,25 +472,46 @@ const renderCompanion = () => {
   sourceCount.textContent = String(profile.enabledSourceCount ?? profile.sourceCount ?? 0);
   branchCount.textContent = String(profile.enabledBranchCount ?? profile.branchCount ?? 0);
   shelfCount.textContent = String(profile.shelfCount ?? 0);
-  setAvatar(profile);
+  const avatarPreview = draftSpaceID === item.credentials.spaceID
+    && draftPresentation?.avatarSymbol !== profile.avatarSymbol
+    ? localAvatarPath(draftPresentation.avatarSymbol)
+    : null;
+  setAvatar(profile, avatarPreview);
+  renderEditorState();
 };
 
 const persistSyncResult = async (item, result) => {
   const updatedRecord = { ...item.record, cursor: result.cursor, lastCheckedAt: Date.now() };
   const entries = [[item.recordKey, updatedRecord]];
+  let reconciliation = null;
   if (result.profile) {
     entries.push([`snapshot:${item.credentials.spaceID}`, {
       schemaVersion: 1,
       spaceID: item.credentials.spaceID,
       ...await encryptValue(result.profile),
     }]);
+    if (item.pending && result.profile.snapshotRevision > item.pending.baseRevision) {
+      reconciliation = presentationsMatch(
+        presentationForProfile(result.profile),
+        item.pending.replacement,
+      ) ? "applied" : "rejected";
+    }
   }
   await writeRecords(entries);
   item.record = updatedRecord;
   if (result.profile) item.profile = result.profile;
+  if (reconciliation) {
+    await deleteRecord(`presentation-pending:${item.credentials.spaceID}`);
+    item.pending = null;
+    resetDraft(item);
+  } else if (result.profile && !item.pending) {
+    // A newer canonical iPhone snapshot invalidates any unsaved stale browser draft.
+    resetDraft(item);
+  }
+  return reconciliation;
 };
 
-const syncSelectedProfile = async ({ poll = false } = {}) => {
+const performSelectedProfileSync = async ({ poll = false } = {}) => {
   const item = selectedProfile();
   if (!item) return;
   refreshButton.disabled = true;
@@ -410,9 +525,31 @@ const syncSelectedProfile = async ({ poll = false } = {}) => {
   try {
     for (const delay of delays) {
       if (delay) await sleep(delay);
-      const result = await fetchLatestProfile(item.credentials, item.record.cursor || 0);
-      await persistSyncResult(item, result);
+      // Profiles cached by the first read-only companion did not include a snapshot revision.
+      // Replay the encrypted log once so those existing linked browsers become safely editable.
+      const startingCursor = Number.isSafeInteger(item.profile?.snapshotRevision)
+        ? item.record.cursor || 0
+        : 0;
+      const result = await fetchLatestProfile(item.credentials, startingCursor);
+      const reconciliation = await persistSyncResult(item, result);
       renderCompanion();
+      if (reconciliation === "applied") {
+        companionState.textContent = "Cedar Link connected";
+        syncMessage.textContent = "Profile edit confirmed by Cedar on iPhone.";
+        syncMessage.classList.add("is-success");
+        return;
+      }
+      if (reconciliation === "rejected") {
+        companionState.textContent = "Cedar kept the newer profile";
+        syncMessage.textContent = "This edit was based on an older profile. Cedar kept the newer iPhone version.";
+        syncMessage.classList.add("is-error");
+        return;
+      }
+      if (item.pending) {
+        companionState.textContent = "Waiting for iPhone confirmation";
+        syncMessage.textContent = "The encrypted edit is at the relay. Return to Cedar on iPhone; it will confirm and publish the result.";
+        return;
+      }
       if (item.profile) {
         companionState.textContent = "Cedar Link connected";
         syncMessage.textContent = "Encrypted profile authenticated and ready in this browser.";
@@ -432,6 +569,14 @@ const syncSelectedProfile = async ({ poll = false } = {}) => {
     refreshButton.disabled = false;
     refreshButton.classList.remove("is-refreshing");
   }
+};
+
+const syncSelectedProfile = (options = {}) => {
+  if (syncInFlight) return syncInFlight;
+  syncInFlight = performSelectedProfileSync(options).finally(() => {
+    syncInFlight = null;
+  });
+  return syncInFlight;
 };
 
 const verifyRelay = async (baseURL) => {
@@ -473,13 +618,18 @@ const loadAvatars = async () => {
 const renderAvatars = () => {
   avatarGrid.replaceChildren();
   const fragment = document.createDocumentFragment();
+  const item = selectedProfile();
+  const avatarEditingUnavailable = item?.profile?.avatarEditable !== true;
   for (const avatar of avatarMatches.slice(0, visibleAvatarCount)) {
     const choice = document.createElement("button");
     choice.className = "avatar-choice";
     choice.type = "button";
-    choice.title = `${avatar.name} — preview only`;
+    choice.title = avatar.name;
     choice.dataset.path = `..${avatar.url}`;
     choice.dataset.name = avatar.name;
+    choice.dataset.value = new URL(`..${avatar.url}`, location.href).href;
+    choice.classList.toggle("is-selected", choice.dataset.value === draftPresentation?.avatarSymbol);
+    choice.disabled = Boolean(item?.pending || isSavingProfile || avatarEditingUnavailable);
     const image = document.createElement("img");
     image.src = `..${avatar.url}`;
     image.alt = avatar.name;
@@ -526,6 +676,65 @@ const renderBadges = () => {
     image.alt = badge.name || "Badge";
     image.loading = "lazy";
     badgePreview.append(image);
+  }
+};
+
+const saveProfilePresentation = async () => {
+  const item = selectedProfile();
+  if (!item?.profile || item.pending || isSavingProfile || !draftPresentation) return;
+  const replacement = validateProfilePresentation({
+    ...draftPresentation,
+    name: profileNameInput.value.trim(),
+    theme: profileTheme.value,
+  });
+  if (presentationsMatch(presentationForProfile(item.profile), replacement)) return;
+
+  isSavingProfile = true;
+  syncMessage.classList.remove("is-error", "is-success");
+  syncMessage.textContent = "Encrypting this profile edit for Cedar on iPhone…";
+  renderEditorState();
+  try {
+    const reservation = await reserveOutboundSequence(item.recordKey);
+    item.record = reservation.record;
+    const submittedAt = Date.now();
+    const change = createProfilePresentationPatchChange(
+      item.profile,
+      replacement,
+      reservation.sequence,
+      submittedAt,
+    );
+    const envelope = await sealEnvelope(change, item.credentials, reservation.sequence, {
+      createdAtEpochMilliseconds: submittedAt,
+    });
+    await uploadEnvelope(item.credentials, envelope);
+    const pending = {
+      schemaVersion: 1,
+      spaceID: item.credentials.spaceID,
+      profileID: item.profile.profileID,
+      baseRevision: item.profile.snapshotRevision,
+      submittedAt,
+      replacement,
+    };
+    await writeRecord(`presentation-pending:${item.credentials.spaceID}`, {
+      schemaVersion: 1,
+      spaceID: item.credentials.spaceID,
+      ...await encryptValue(pending),
+    });
+    item.pending = pending;
+    draftPresentation = replacement;
+    companionState.textContent = "Waiting for iPhone confirmation";
+    syncMessage.textContent = "Edit sent securely. Return to Cedar on iPhone; it will apply the edit and publish confirmation.";
+    syncMessage.classList.add("is-success");
+  } catch (error) {
+    companionState.textContent = "Sync needs attention";
+    syncMessage.textContent = error instanceof CedarSyncError
+      ? error.message
+      : "The encrypted profile edit could not be sent. Try again.";
+    syncMessage.classList.add("is-error");
+  } finally {
+    isSavingProfile = false;
+    renderEditorState();
+    if (avatarCatalog) renderAvatars();
   }
 };
 
@@ -600,8 +809,18 @@ button.addEventListener("click", async () => {
 
 refreshButton.addEventListener("click", () => syncSelectedProfile());
 
+profileEditor.addEventListener("submit", (event) => {
+  event.preventDefault();
+  saveProfilePresentation();
+});
+
+profileNameInput.addEventListener("input", renderEditorState);
+profileTheme.addEventListener("change", renderEditorState);
+
 profileSelector.addEventListener("change", async () => {
   selectedSpaceID = profileSelector.value;
+  draftSpaceID = "";
+  draftPresentation = null;
   renderCompanion();
   await syncSelectedProfile();
 });
@@ -628,11 +847,21 @@ avatarMore.addEventListener("click", () => {
 
 avatarGrid.addEventListener("click", (event) => {
   const choice = event.target.closest(".avatar-choice");
-  if (!choice) return;
+  const item = selectedProfile();
+  if (
+    !choice
+    || !item?.profile
+    || item.profile.avatarEditable !== true
+    || item.pending
+    || isSavingProfile
+    || !draftPresentation
+  ) return;
+  draftPresentation = { ...draftPresentation, avatarSymbol: choice.dataset.value };
   setAvatar(selectedProfile()?.profile, choice.dataset.path, choice.dataset.name);
   for (const current of avatarGrid.querySelectorAll(".avatar-choice")) {
     current.classList.toggle("is-selected", current === choice);
   }
+  renderEditorState();
 });
 
 badgeLibrary.addEventListener("toggle", () => {
@@ -645,6 +874,14 @@ badgeSelector.addEventListener("change", () => {
   renderBadges();
   const set = badgeCatalog?.[Number(badgeSelector.value) || 0];
   if (set) syncMessage.textContent = `Previewing the ${set.label} badge set. This preview is not sent back to Cedar.`;
+});
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && selectedProfile()) syncSelectedProfile();
+});
+
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted && selectedProfile()) syncSelectedProfile();
 });
 
 initialize().catch(() => {

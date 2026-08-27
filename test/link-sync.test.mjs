@@ -8,8 +8,10 @@ import {
   LIMITS,
   bytesToBase64,
   bytesToBase64URL,
+  createProfilePresentationPatchChange,
   decodeProfileSnapshot,
   openEnvelope,
+  sealEnvelope,
 } from "../public/link/cedar-sync.mjs";
 
 if (!globalThis.crypto) globalThis.crypto = webcrypto;
@@ -100,6 +102,7 @@ test("authenticates and decodes Apple's raw-DEFLATE profile snapshot", async () 
     profileID: profileID.toLowerCase(),
     name: "Living Room",
     avatarSymbol: "https://cdn.xperience-app.com/avatars/netflix/chicken-onb.webp",
+    avatarEditable: true,
     theme: "dark",
     isKids: false,
     requiresPIN: true,
@@ -109,8 +112,72 @@ test("authenticates and decodes Apple's raw-DEFLATE profile snapshot", async () 
     branchCount: 2,
     enabledBranchCount: 2,
     shelfCount: 1,
+    snapshotRevision: 1_777_777_777_777,
     syncedAt: 1_777_777_777_777,
   });
+});
+
+test("seals an allowlisted browser presentation patch for Apple Cedar", async () => {
+  const profile = {
+    profileID,
+    snapshotRevision: 12,
+    name: "Living Room",
+    avatarSymbol: "person.crop.circle.fill",
+    theme: "system",
+  };
+  const replacement = {
+    name: "Tyler",
+    avatarSymbol:
+      "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/avatars/nuvio/avatar.webp",
+    theme: "dark",
+  };
+  const change = createProfilePresentationPatchChange(
+    profile,
+    replacement,
+    3,
+    1_800_000_002_000,
+  );
+  const envelope = await sealEnvelope(change, credentials, 3, {
+    changeID: randomUUID(),
+    createdAtEpochMilliseconds: 1_800_000_002_000,
+    nonce: new Uint8Array(12).fill(0x5a),
+  });
+
+  const opened = await openEnvelope(envelope, credentials);
+  const patch = JSON.parse(new TextDecoder().decode(opened.payload));
+
+  assert.equal(opened.entityKind, "browser-profile-presentation");
+  assert.equal(opened.profileID, profileID.toLowerCase());
+  assert.equal(patch.baseRevision, 12);
+  assert.deepEqual(patch.base, {
+    name: "Living Room",
+    avatarSymbol: "person.crop.circle.fill",
+    theme: "system",
+  });
+  assert.deepEqual(patch.replacement, replacement);
+  opened.payload.fill(0);
+});
+
+test("rejects unsafe or no-op browser presentation patches", () => {
+  const profile = {
+    profileID,
+    snapshotRevision: 12,
+    name: "Living Room",
+    avatarSymbol: "person.crop.circle.fill",
+    theme: "system",
+  };
+  assert.throws(
+    () => createProfilePresentationPatchChange(profile, {
+      name: "Living Room",
+      avatarSymbol: "data:image/png;base64,AQID",
+      theme: "system",
+    }, 1),
+    CedarSyncError,
+  );
+  assert.throws(
+    () => createProfilePresentationPatchChange(profile, profile, 1),
+    (error) => error instanceof CedarSyncError && error.code === "no_changes",
+  );
 });
 
 test("keeps compatibility with zlib-wrapped profile snapshots", async () => {
