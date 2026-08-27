@@ -18,6 +18,17 @@ hashes and encrypted envelopes; it never receives a profile encryption key or pl
 data. See [`worker/README.md`](worker/README.md) for verification and deployment steps. The complete
 rollout and conflict policy is recorded in Cedar Android's `docs/CROSS_PLATFORM_SYNC.md`.
 
+## Profile avatars and badge artwork
+
+The companion's recovered Xperience artwork is stored directly in Git and served by GitHub Pages:
+
+- `public/avatars/` contains 1,465 profile avatars.
+- `public/badges/` contains 1,581 unique badge images across 33 sets.
+- `public/catalogs/avatars.json` and `public/catalogs/badges.json` expose stable, site-local URLs for future selectors.
+- `public/catalogs/xperience-assets.json` records byte sizes, source URLs, and SHA-256 checksums for every mirrored file.
+
+Run `node scripts/import-xperience-assets.mjs` to verify the local copies and regenerate the catalogs from the recovery reports. Existing valid files are reused.
+
 ## Release order
 
 Run `scripts/publish_release.sh` from a clean `main` checkout. It publishes the signed APK first and commits the signed manifest last. This prevents devices from seeing a manifest whose APK is not yet available.
