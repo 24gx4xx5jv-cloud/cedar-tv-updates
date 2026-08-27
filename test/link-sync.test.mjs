@@ -5,6 +5,7 @@ import test from "node:test";
 
 import {
   CedarSyncError,
+  LIMITS,
   bytesToBase64,
   bytesToBase64URL,
   decodeProfileSnapshot,
@@ -116,6 +117,46 @@ test("keeps compatibility with zlib-wrapped profile snapshots", async () => {
   const opened = await openEnvelope(await makeEnvelope({ wrapped: true }), credentials);
   const profile = await decodeProfileSnapshot(opened, spaceID);
   assert.equal(profile.name, "Living Room");
+});
+
+test("uses the bounded software fallback when raw DecompressionStream is unavailable", async () => {
+  const nativeDecompressionStream = globalThis.DecompressionStream;
+  globalThis.DecompressionStream = undefined;
+  try {
+    const opened = await openEnvelope(await makeEnvelope(), credentials);
+    const profile = await decodeProfileSnapshot(opened, spaceID);
+    assert.equal(profile.name, "Living Room");
+  } finally {
+    globalThis.DecompressionStream = nativeDecompressionStream;
+  }
+});
+
+test("keeps the software fallback inside Cedar's decompression limit", async () => {
+  const nativeDecompressionStream = globalThis.DecompressionStream;
+  globalThis.DecompressionStream = undefined;
+  const oversized = new Uint8Array(LIMITS.snapshotJSONBytes + 2).fill(0x41);
+  const payload = new Uint8Array(Buffer.concat([
+    Buffer.from("CSZ1"),
+    deflateRawSync(oversized),
+  ]));
+  try {
+    await assert.rejects(
+      decodeProfileSnapshot({
+        schemaVersion: 1,
+        profileID,
+        entityKind: "apple-profile-snapshot",
+        entityID: profileID.toLowerCase(),
+        operation: "upsert",
+        revision: 1,
+        modifiedAtEpochMilliseconds: 1_777_777_777_777,
+        payload,
+      }, spaceID),
+      (error) => error instanceof CedarSyncError && error.code === "expanded_too_large",
+    );
+  } finally {
+    oversized.fill(0);
+    globalThis.DecompressionStream = nativeDecompressionStream;
+  }
 });
 
 test("opens the shared Apple and Android AES-GCM wire vector", async () => {

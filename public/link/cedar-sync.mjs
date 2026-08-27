@@ -1,3 +1,5 @@
+import { inflateSync } from "./vendor/fflate-inflate.mjs?v=0.8.3";
+
 export const LIMITS = Object.freeze({
   responseBytes: 8 * 1_024 * 1_024,
   sealedPayloadBytes: 1_064_960,
@@ -184,14 +186,25 @@ const decompressFormatBounded = async (bytes, format) => {
 };
 
 const decompressBounded = async (bytes) => {
-  if (typeof DecompressionStream !== "function") {
-    fail("compression_unavailable", "This browser cannot open Cedar's compressed profile yet. Update iOS and try again.");
-  }
   // Apple's Compression framework names this COMPRESSION_ZLIB but emits an RFC 1951 raw
   // DEFLATE stream. Keep wrapped DEFLATE as a compatibility fallback for older test clients.
-  for (const format of ["deflate-raw", "deflate"]) {
-    const output = await decompressFormatBounded(bytes, format);
-    if (output) return output;
+  if (typeof DecompressionStream === "function") {
+    for (const format of ["deflate-raw", "deflate"]) {
+      const output = await decompressFormatBounded(bytes, format);
+      if (output) return output;
+    }
+  }
+  const target = new Uint8Array(LIMITS.snapshotJSONBytes + 1);
+  try {
+    const output = inflateSync(bytes.subarray(COMPRESSED_MAGIC.length), { out: target });
+    if (output.length > LIMITS.snapshotJSONBytes) {
+      target.fill(0);
+      fail("expanded_too_large", "The encrypted Cedar profile expands beyond its safe limit.");
+    }
+    if (output.length > 0) return output;
+  } catch (error) {
+    target.fill(0);
+    if (error instanceof CedarSyncError) throw error;
   }
   fail("invalid_compression", "The encrypted Cedar profile could not be decompressed.");
 };

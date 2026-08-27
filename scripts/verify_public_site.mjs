@@ -9,6 +9,8 @@ const requiredFiles = [
   "public/link/link.css",
   "public/link/link.js",
   "public/link/cedar-sync.mjs",
+  "public/link/vendor/fflate-inflate.mjs",
+  "public/link/vendor/fflate-LICENSE.txt",
   "public/catalogs/avatars.json",
   "public/catalogs/badges.json",
   "public/sync-config.json",
@@ -37,7 +39,7 @@ if (!page.includes(`connect-src 'self' ${relay.origin}`)) {
   throw new Error("The Cedar Link CSP must allow its configured relay origin");
 }
 if (
-  !page.includes('type="module" src="link.js?v=raw-deflate-1"')
+  !page.includes('type="module" src="link.js?v=raw-deflate-2"')
   || !page.includes('id="link-button"')
   || !page.includes('id="link-companion"')
   || !page.includes('id="profile-selector"')
@@ -53,7 +55,7 @@ for (const requiredPath of ["/v1/health", "/claim", "../sync-config.json", "../c
 }
 
 const protocol = await readFile("public/link/cedar-sync.mjs", "utf8");
-for (const requiredProtocol of ["cedar-sync-v1:", "/changes", "AES-GCM", "DecompressionStream"]) {
+for (const requiredProtocol of ["cedar-sync-v1:", "/changes", "AES-GCM", "DecompressionStream", "inflateSync"]) {
   if (!protocol.includes(requiredProtocol)) {
     throw new Error(`The Cedar Link protocol client is missing ${requiredProtocol}`);
   }

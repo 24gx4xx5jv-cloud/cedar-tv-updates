@@ -18,6 +18,10 @@ profile summary and device credentials remain AES-GCM protected in browser stora
 companion is read-only; avatar and badge choices are previews until write-back conflict handling is
 available on every Cedar platform.
 
+Safari versions without raw `DecompressionStream` support use the vendored, MIT-licensed
+`fflate` 0.8.3 inflate routine. Only that tree-shaken routine is shipped, and Cedar applies the
+same 6 MB decompression ceiling before parsing the authenticated snapshot.
+
 `worker/` contains an optional Cloudflare Worker/D1 ciphertext relay. The relay stores device-token
 hashes and encrypted envelopes; it never receives a profile encryption key or plaintext profile
 data. See [`worker/README.md`](worker/README.md) for verification and deployment steps. The complete

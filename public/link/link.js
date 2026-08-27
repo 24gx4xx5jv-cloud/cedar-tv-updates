@@ -5,7 +5,7 @@ import {
   bytesToBase64URL,
   fetchLatestProfile,
   normalizeUUID,
-} from "./cedar-sync.mjs?v=raw-deflate-1";
+} from "./cedar-sync.mjs?v=raw-deflate-2";
 
 const pairing = document.querySelector("#link-pairing");
 const card = document.querySelector("#link-card");
