@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - public/**
+      - test/**
       - scripts/verify_public_site.mjs
       - .github/workflows/pages.yml
   workflow_dispatch:
@@ -34,6 +35,8 @@ jobs:
       - name: Verify Cedar Link assets and configuration
         run: |
           node --check public/link/link.js
+          node --check public/link/cedar-sync.mjs
+          node --test test/link-sync.test.mjs
           node scripts/verify_public_site.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5

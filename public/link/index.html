@@ -35,17 +35,82 @@
         </div>
       </section>
 
-      <section class="link-card" aria-labelledby="link-card-title">
-        <div class="link-icon" aria-hidden="true">
-          <img src="../assets/cedar-app-icon.png" alt="" width="192" height="192">
-          <span></span>
+      <section class="link-card" id="link-card" aria-labelledby="link-card-title">
+        <div id="link-pairing">
+          <div class="link-icon" aria-hidden="true">
+            <img src="../assets/cedar-app-icon.png" alt="" width="192" height="192">
+            <span></span>
+          </div>
+          <p class="link-state-label" id="link-state-label">Waiting for invitation</p>
+          <h2 id="link-card-title">Scan the QR code shown by Cedar.</h2>
+          <p class="link-status" id="link-status" role="status" aria-live="polite">The invitation is read only after you open its link on this device.</p>
+          <button class="button button-primary link-button" id="link-button" type="button" disabled>Link this device</button>
+          <p class="link-footnote">Cedar never puts the encryption key in the web request. Clearing this browser's site data removes this browser's protected copy.</p>
+          <noscript><p class="link-noscript">JavaScript is required to protect the device key and complete Cedar Link.</p></noscript>
         </div>
-        <p class="link-state-label" id="link-state-label">Waiting for invitation</p>
-        <h2 id="link-card-title">Scan the QR code shown by Cedar.</h2>
-        <p class="link-status" id="link-status" role="status" aria-live="polite">The invitation is read only after you open its link on this device.</p>
-        <button class="button button-primary link-button" id="link-button" type="button" disabled>Link this device</button>
-        <p class="link-footnote">Cedar never puts the encryption key in the web request. Clearing this browser's site data removes this browser's protected copy.</p>
-        <noscript><p class="link-noscript">JavaScript is required to protect the device key and complete Cedar Link.</p></noscript>
+
+        <div class="companion" id="link-companion" hidden>
+          <div class="companion-topline">
+            <div>
+              <p class="link-state-label" id="companion-state">Cedar Link connected</p>
+              <p class="companion-security"><span aria-hidden="true"></span>End-to-end encrypted</p>
+            </div>
+            <button class="icon-button" id="refresh-profile" type="button" aria-label="Refresh linked profile" title="Refresh linked profile">↻</button>
+          </div>
+
+          <label class="profile-picker-label" for="profile-selector">Linked profile</label>
+          <select class="profile-selector" id="profile-selector" aria-label="Linked profile"></select>
+
+          <div class="profile-hero">
+            <div class="profile-avatar" id="profile-avatar" aria-hidden="true">
+              <img id="profile-avatar-image" alt="" hidden>
+              <span id="profile-avatar-fallback">C</span>
+            </div>
+            <div>
+              <p class="profile-kicker" id="profile-kicker">Profile received</p>
+              <h2 id="profile-name">Cedar profile</h2>
+              <p class="profile-meta" id="profile-meta">Opening encrypted profile…</p>
+            </div>
+          </div>
+
+          <div class="profile-stats" aria-label="Profile summary">
+            <div><strong id="source-count">—</strong><span>Sources</span></div>
+            <div><strong id="branch-count">—</strong><span>Home rows</span></div>
+            <div><strong id="shelf-count">—</strong><span>Shelves</span></div>
+          </div>
+
+          <p class="sync-message" id="sync-message" role="status" aria-live="polite">Checking Cedar Sync for your encrypted profile…</p>
+
+          <details class="artwork-library" id="avatar-library">
+            <summary>
+              <span>Explore avatar library</span>
+              <small>1,465 recovered avatars · preview only</small>
+            </summary>
+            <div class="library-body">
+              <label class="search-label" for="avatar-search">Find an avatar</label>
+              <input class="library-search" id="avatar-search" type="search" placeholder="Search titles or collections" autocomplete="off">
+              <div class="avatar-grid" id="avatar-grid"></div>
+              <button class="button library-more" id="avatar-more" type="button" hidden>Show more</button>
+            </div>
+          </details>
+
+          <details class="artwork-library" id="badge-library">
+            <summary>
+              <span>Explore badge sets</span>
+              <small>33 recovered sets · preview only</small>
+            </summary>
+            <div class="library-body">
+              <label class="search-label" for="badge-selector">Badge set</label>
+              <select class="profile-selector" id="badge-selector"></select>
+              <div class="badge-preview" id="badge-preview"></div>
+            </div>
+          </details>
+
+          <div class="companion-actions">
+            <a class="button button-primary" href="./">Link another profile</a>
+          </div>
+          <p class="link-footnote">This first companion view is read-only. Artwork selections are previews and are not sent back to Cedar yet.</p>
+        </div>
       </section>
     </main>
 
@@ -57,6 +122,6 @@
       </div>
     </footer>
 
-    <script src="link.js" defer></script>
+    <script type="module" src="link.js"></script>
   </body>
 </html>

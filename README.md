@@ -12,7 +12,11 @@ The Cedar source code, service credentials, Android signing keystore, and OTA ma
 
 `public/link/` contains the static, phone-friendly Cedar Link surface. It is safe-by-default,
 verifies relay health before accepting an invitation, and remains disabled while
-`public/sync-config.json` has an empty relay URL.
+`public/sync-config.json` has an empty relay URL. After a link is claimed, the browser fetches,
+authenticates, decrypts, and bounded-decompresses the Apple profile snapshot locally. The linked
+profile summary and device credentials remain AES-GCM protected in browser storage. The current
+companion is read-only; avatar and badge choices are previews until write-back conflict handling is
+available on every Cedar platform.
 
 `worker/` contains an optional Cloudflare Worker/D1 ciphertext relay. The relay stores device-token
 hashes and encrypted envelopes; it never receives a profile encryption key or plaintext profile

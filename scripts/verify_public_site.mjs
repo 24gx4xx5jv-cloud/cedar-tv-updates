@@ -8,6 +8,9 @@ const requiredFiles = [
   "public/link/index.html",
   "public/link/link.css",
   "public/link/link.js",
+  "public/link/cedar-sync.mjs",
+  "public/catalogs/avatars.json",
+  "public/catalogs/badges.json",
   "public/sync-config.json",
 ];
 
@@ -33,14 +36,26 @@ const page = await readFile("public/link/index.html", "utf8");
 if (!page.includes(`connect-src 'self' ${relay.origin}`)) {
   throw new Error("The Cedar Link CSP must allow its configured relay origin");
 }
-if (!page.includes('src="link.js"') || !page.includes('id="link-button"')) {
+if (
+  !page.includes('type="module" src="link.js"')
+  || !page.includes('id="link-button"')
+  || !page.includes('id="link-companion"')
+  || !page.includes('id="profile-selector"')
+) {
   throw new Error("The Cedar Link page is missing its required script or primary action");
 }
 
 const script = await readFile("public/link/link.js", "utf8");
-for (const requiredPath of ["/v1/health", "/claim", "../sync-config.json"]) {
+for (const requiredPath of ["/v1/health", "/claim", "../sync-config.json", "../catalogs/avatars.json", "../catalogs/badges.json"]) {
   if (!script.includes(requiredPath)) {
     throw new Error(`The Cedar Link client is missing ${requiredPath}`);
+  }
+}
+
+const protocol = await readFile("public/link/cedar-sync.mjs", "utf8");
+for (const requiredProtocol of ["cedar-sync-v1:", "/changes", "AES-GCM", "DecompressionStream"]) {
+  if (!protocol.includes(requiredProtocol)) {
+    throw new Error(`The Cedar Link protocol client is missing ${requiredProtocol}`);
   }
 }
 
