@@ -10,8 +10,9 @@ The Cedar source code, service credentials, Android signing keystore, and OTA ma
 
 ## Cedar Link and encrypted sync relay
 
-`public/link/` contains the static, phone-friendly Cedar Link surface. It is safe-by-default and
-remains disabled while `public/sync-config.json` has an empty relay URL.
+`public/link/` contains the static, phone-friendly Cedar Link surface. It is safe-by-default,
+verifies relay health before accepting an invitation, and remains disabled while
+`public/sync-config.json` has an empty relay URL.
 
 `worker/` contains an optional Cloudflare Worker/D1 ciphertext relay. The relay stores device-token
 hashes and encrypted envelopes; it never receives a profile encryption key or plaintext profile

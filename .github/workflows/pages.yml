@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - public/**
+      - scripts/verify_public_site.mjs
       - .github/workflows/pages.yml
   workflow_dispatch:
 
@@ -26,6 +27,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Verify Cedar Link assets and configuration
+        run: |
+          node --check public/link/link.js
+          node scripts/verify_public_site.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static update files

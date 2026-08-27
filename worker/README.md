@@ -28,4 +28,5 @@ and revocation.
    `connect-src` CSP before publishing Pages.
 
 Do not commit `wrangler.toml`, Cloudflare credentials, Cedar profile keys, device tokens, or
-pairing fragments. The checked-in Pages configuration intentionally leaves Cedar Link inactive.
+pairing fragments. The checked-in Pages configuration contains only the public production relay
+origin; all authorization and encryption material remains device-local or in one-time fragments.

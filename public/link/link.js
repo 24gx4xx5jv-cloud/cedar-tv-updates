@@ -2,6 +2,7 @@ const stateLabel = document.querySelector("#link-state-label");
 const title = document.querySelector("#link-card-title");
 const status = document.querySelector("#link-status");
 const button = document.querySelector("#link-button");
+const hasInvitationFragment = window.location.hash.length > 1;
 
 const setState = (label, heading, message, enabled = false) => {
   stateLabel.textContent = label;
@@ -231,6 +232,21 @@ const activate = async (database, key, pendingKey, secrets) => {
 let invitation = null;
 let relayBaseURL = "";
 
+const verifyRelay = async (baseURL) => {
+  const response = await fetch(`${baseURL}/v1/health`, {
+    cache: "no-store",
+    credentials: "omit",
+    redirect: "error",
+    referrerPolicy: "no-referrer",
+    headers: { Accept: "application/json" },
+  });
+  if (!response.ok) throw new Error("relay unavailable");
+  const result = await response.json();
+  if (result.schemaVersion !== 1 || result.status !== "ok") {
+    throw new Error("relay unavailable");
+  }
+};
+
 const initialize = async () => {
   const configResponse = await fetch("../sync-config.json", {
     cache: "no-store",
@@ -249,7 +265,15 @@ const initialize = async () => {
     );
     return;
   }
-  if (!invitation) return;
+  await verifyRelay(relayBaseURL);
+  if (!invitation) {
+    setState(
+      "Service online",
+      "Ready for a Cedar invitation.",
+      "In Cedar on iPhone or iPad, open Settings → Cedar Link and create a browser link.",
+    );
+    return;
+  }
   if (invitation.relayBaseURL !== relayBaseURL) throw new Error("invitation relay mismatch");
   setState(
     "Invitation ready",
@@ -283,19 +307,27 @@ button.addEventListener("click", async () => {
       "This browser now holds protected access to the Cedar Sync space. Profile editing will appear here only after sync is activated.",
     );
   } catch {
+    const canRetry = Boolean(invitation && invitation.expiresAt > Date.now());
+    button.textContent = canRetry ? "Try Again" : "Link this device";
     setState(
       "Could not link",
       "The invitation was not completed.",
-      "Return to Cedar, create a new QR code, and try again. No profile data was sent in plaintext.",
-      false,
+      canRetry
+        ? "Check this device's connection and try again. No profile data was sent in plaintext."
+        : "Return to Cedar, create a new browser link, and try again.",
+      canRetry,
     );
   }
 });
 
 initialize().catch(() => {
   setState(
-    "Invalid invitation",
-    "This link cannot be used.",
-    "Return to Cedar and create a new device-link QR code.",
+    hasInvitationFragment ? "Link unavailable" : "Service unavailable",
+    hasInvitationFragment
+      ? "This invitation could not be verified."
+      : "Cedar Link is temporarily unavailable.",
+    hasInvitationFragment
+      ? "Return to Cedar and create a new browser link, then try again."
+      : "Your Cedar profile and local device data are unaffected. Try again in a moment.",
   );
 });

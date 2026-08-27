@@ -88,6 +88,7 @@
 .link-button:disabled { cursor: not-allowed; opacity: 0.38; transform: none; }
 .link-button[data-complete="true"] { color: #eaf5e5; background: #3f5e3e; }
 .link-footnote { margin: 22px 0 0; color: #6f737a; font-size: 0.75rem; line-height: 1.55; }
+.link-noscript { margin: 18px 0 0; color: #e2a99b; font-size: 0.82rem; line-height: 1.55; }
 
 .link-footer { padding-top: 28px; }
 .link-footer > p { max-width: 720px; }
