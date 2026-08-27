@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { randomBytes, randomUUID, webcrypto } from "node:crypto";
-import { deflateSync } from "node:zlib";
+import { deflateRawSync, deflateSync } from "node:zlib";
 import test from "node:test";
 
 import {
@@ -42,7 +42,7 @@ const portableProfile = {
   homeShelves: [{ isEnabled: true }],
 };
 
-const makeSnapshotBytes = ({ compressed = true } = {}) => {
+const makeSnapshotBytes = ({ compressed = true, wrapped = false } = {}) => {
   const snapshot = textEncoder.encode(JSON.stringify({
     schemaVersion: 1,
     profileID,
@@ -52,10 +52,11 @@ const makeSnapshotBytes = ({ compressed = true } = {}) => {
     items: [{ reference: `cedar.profile.${profileID}.source`, data: bytesToBase64(randomBytes(32)) }],
   }));
   if (!compressed) return snapshot;
-  return new Uint8Array(Buffer.concat([Buffer.from("CSZ1"), deflateSync(snapshot)]));
+  const encoded = wrapped ? deflateSync(snapshot) : deflateRawSync(snapshot);
+  return new Uint8Array(Buffer.concat([Buffer.from("CSZ1"), encoded]));
 };
 
-const makeEnvelope = async ({ key = profileKey, compressed = true, envelopeChangeID = changeID } = {}) => {
+const makeEnvelope = async ({ key = profileKey, compressed = true, wrapped = false, envelopeChangeID = changeID } = {}) => {
   const authorSequence = 6;
   const createdAtEpochMilliseconds = 1_777_777_777_000;
   const change = {
@@ -66,7 +67,7 @@ const makeEnvelope = async ({ key = profileKey, compressed = true, envelopeChang
     operation: "upsert",
     revision: 1_777_777_777_777,
     modifiedAtEpochMilliseconds: 1_777_777_777_777,
-    payload: bytesToBase64(makeSnapshotBytes({ compressed })),
+    payload: bytesToBase64(makeSnapshotBytes({ compressed, wrapped })),
   };
   const nonce = randomBytes(12);
   const aad = textEncoder.encode(
@@ -89,7 +90,7 @@ const makeEnvelope = async ({ key = profileKey, compressed = true, envelopeChang
   };
 };
 
-test("authenticates and decodes a compressed Apple profile snapshot", async () => {
+test("authenticates and decodes Apple's raw-DEFLATE profile snapshot", async () => {
   const opened = await openEnvelope(await makeEnvelope(), credentials);
   const profile = await decodeProfileSnapshot(opened, spaceID);
   assert.deepEqual(profile, {
@@ -109,6 +110,12 @@ test("authenticates and decodes a compressed Apple profile snapshot", async () =
     shelfCount: 1,
     syncedAt: 1_777_777_777_777,
   });
+});
+
+test("keeps compatibility with zlib-wrapped profile snapshots", async () => {
+  const opened = await openEnvelope(await makeEnvelope({ wrapped: true }), credentials);
+  const profile = await decodeProfileSnapshot(opened, spaceID);
+  assert.equal(profile.name, "Living Room");
 });
 
 test("opens the shared Apple and Android AES-GCM wire vector", async () => {

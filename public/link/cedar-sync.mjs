@@ -146,17 +146,14 @@ const parseJSONText = (text, message) => {
 const hasCompressedMagic = (bytes) => bytes.length >= COMPRESSED_MAGIC.length
   && COMPRESSED_MAGIC.every((byte, index) => bytes[index] === byte);
 
-const decompressBounded = async (bytes) => {
-  if (typeof DecompressionStream !== "function") {
-    fail("compression_unavailable", "This browser cannot open Cedar's compressed profile yet. Update iOS and try again.");
-  }
+const decompressFormatBounded = async (bytes, format) => {
   let stream;
   try {
     stream = new Blob([bytes.subarray(COMPRESSED_MAGIC.length)])
       .stream()
-      .pipeThrough(new DecompressionStream("deflate"));
+      .pipeThrough(new DecompressionStream(format));
   } catch {
-    fail("invalid_compression", "The encrypted Cedar profile could not be decompressed.");
+    return null;
   }
   const reader = stream.getReader();
   const chunks = [];
@@ -174,9 +171,9 @@ const decompressBounded = async (bytes) => {
     }
   } catch (error) {
     if (error instanceof CedarSyncError) throw error;
-    fail("invalid_compression", "The encrypted Cedar profile could not be decompressed.");
+    return null;
   }
-  if (total === 0) fail("invalid_compression", "The encrypted Cedar profile is empty.");
+  if (total === 0) return null;
   const output = new Uint8Array(total);
   let offset = 0;
   for (const chunk of chunks) {
@@ -184,6 +181,19 @@ const decompressBounded = async (bytes) => {
     offset += chunk.byteLength;
   }
   return output;
+};
+
+const decompressBounded = async (bytes) => {
+  if (typeof DecompressionStream !== "function") {
+    fail("compression_unavailable", "This browser cannot open Cedar's compressed profile yet. Update iOS and try again.");
+  }
+  // Apple's Compression framework names this COMPRESSION_ZLIB but emits an RFC 1951 raw
+  // DEFLATE stream. Keep wrapped DEFLATE as a compatibility fallback for older test clients.
+  for (const format of ["deflate-raw", "deflate"]) {
+    const output = await decompressFormatBounded(bytes, format);
+    if (output) return output;
+  }
+  fail("invalid_compression", "The encrypted Cedar profile could not be decompressed.");
 };
 
 const authenticatedData = (envelope) => encoder.encode(
