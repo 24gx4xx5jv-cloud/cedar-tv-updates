@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#08090b">
-    <meta name="description" content="Privately link a Cedar profile to another device.">
+    <meta name="description" content="Privately configure and control linked Cedar devices.">
     <meta name="robots" content="noindex,nofollow">
     <meta name="referrer" content="no-referrer">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self' https://cedar-sync-relay.cedar-sync-relay.workers.dev; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" href="../assets/cedar-app-icon.png">
     <link rel="apple-touch-icon" href="../assets/cedar-app-icon.png">
     <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="link.css?v=circular-avatars-1">
+    <link rel="stylesheet" href="link.css?v=companion-1">
   </head>
   <body class="link-page">
     <header class="site-header link-header">
@@ -25,8 +25,8 @@
     <main class="link-shell">
       <section class="link-intro" aria-labelledby="link-title">
         <p class="eyebrow"><span></span>Cedar Link</p>
-        <h1 id="link-title">Your profile.<br><em>Across screens.</em></h1>
-        <p>Create a browser invitation in Cedar on iPhone or iPad, then open it here or scan its QR code on another device. Your profile key stays in the link fragment, and profile data is end-to-end encrypted before it reaches the relay.</p>
+        <h1 id="link-title">Your Cedar.<br><em>Within reach.</em></h1>
+        <p>Cedar Link is a private configuration and remote-control companion for devices you already own. It can edit linked profiles and send transport commands, but it never displays catalogs, guide data, artwork, titles, streams, or live content.</p>
 
         <div class="privacy-points" aria-label="Privacy protections">
           <p><span aria-hidden="true">01</span>Profile data stays encrypted</p>
@@ -74,12 +74,22 @@
           </div>
 
           <div class="profile-stats" aria-label="Profile summary">
-            <div><strong id="source-count">—</strong><span>Sources</span></div>
+            <div><strong id="source-count">—</strong><span>Devices</span></div>
             <div><strong id="branch-count">—</strong><span>Home rows</span></div>
-            <div><strong id="shelf-count">—</strong><span>Shelves</span></div>
+            <div><strong id="shelf-count">—</strong><span>Remotes</span></div>
           </div>
 
           <p class="sync-message" id="sync-message" role="status" aria-live="polite">Checking Cedar Sync for your encrypted profile…</p>
+
+          <nav class="companion-tabs" aria-label="Cedar Link sections">
+            <button type="button" data-panel="profile" aria-selected="true">Profile</button>
+            <button type="button" data-panel="settings" aria-selected="false">Settings</button>
+            <button type="button" data-panel="branches" aria-selected="false">Home</button>
+            <button type="button" data-panel="devices" aria-selected="false">Devices</button>
+            <button type="button" data-panel="remote" aria-selected="false">Remote</button>
+          </nav>
+
+          <section class="companion-panel is-active" id="panel-profile" data-companion-panel="profile">
 
           <form class="profile-editor" id="profile-editor" hidden>
             <div class="editor-heading">
@@ -106,8 +116,8 @@
                 </select>
               </label>
             </div>
-            <button class="button button-primary editor-save" id="save-profile" type="submit" disabled>Send changes to iPhone</button>
-            <p class="editor-note">Cedar on iPhone confirms the edit before it becomes current. Newer iPhone changes always win over a stale browser tab.</p>
+            <button class="button button-primary editor-save" id="save-profile" type="submit" disabled>Send changes to Cedar</button>
+            <p class="editor-note">The owning Cedar app confirms the edit before it becomes current. Newer native changes always win over a stale browser tab.</p>
           </form>
 
           <details class="artwork-library" id="avatar-library">
@@ -129,17 +139,89 @@
               <small>33 recovered sets · encrypted write-back</small>
             </summary>
             <div class="library-body">
-              <p class="badge-status" id="badge-status">Checking the badge set currently installed on your iPhone…</p>
+              <p class="badge-status" id="badge-status">Checking the badge set currently installed in Cedar…</p>
               <label class="search-label" for="badge-selector">Badge set</label>
               <select class="profile-selector" id="badge-selector" disabled></select>
               <div class="badge-preview" id="badge-preview"></div>
             </div>
           </details>
 
+          </section>
+
+          <section class="companion-panel" id="panel-settings" data-companion-panel="settings" hidden>
+            <form class="companion-form" id="settings-editor">
+              <div class="editor-heading">
+                <div><p class="profile-kicker">Linked configuration</p><h3>Playback and discovery</h3></div>
+                <span>Encrypted write-back</span>
+              </div>
+              <label class="stacked-field"><span>Metadata language</span><input class="library-search" id="metadata-language" maxlength="35" autocomplete="off" required></label>
+              <label class="stacked-field"><span>Top shelf</span><select class="profile-selector" id="top-shelf-presentation"><option value="automatic">Automatic</option><option value="continue-watching">Continue Watching</option><option value="featured">Featured</option></select></label>
+              <div class="toggle-list">
+                <label><input type="checkbox" id="automatically-play-best"><span><strong>Automatically play best source</strong><small>Start the best available source without another prompt.</small></span></label>
+                <label><input type="checkbox" id="automatically-try-next"><span><strong>Try next best source</strong><small>Move to the next source if playback fails.</small></span></label>
+                <label><input type="checkbox" id="quick-play-posters"><span><strong>Quick Play from posters</strong><small>Let poster actions begin playback on Cedar devices.</small></span></label>
+                <label><input type="checkbox" id="hide-unreleased"><span><strong>Hide unreleased titles</strong><small>Keep future releases out of discovery surfaces.</small></span></label>
+                <label><input type="checkbox" id="poster-ratings"><span><strong>Show poster ratings</strong><small>Display ratings on Cedar poster cards.</small></span></label>
+                <label><input type="checkbox" id="top-shelf-activity"><span><strong>Show viewing activity on top shelf</strong><small>Allow the native Cedar top shelf to reflect activity.</small></span></label>
+                <label><input type="checkbox" id="clean-live-names"><span><strong>Clean up Live TV names</strong><small>Simplify channel labels on native Cedar devices.</small></span></label>
+              </div>
+              <button class="button button-primary editor-save" type="submit">Send settings to Cedar</button>
+            </form>
+          </section>
+
+          <section class="companion-panel" id="panel-branches" data-companion-panel="branches" hidden>
+            <form class="companion-form" id="branches-editor">
+              <div class="editor-heading">
+                <div><p class="profile-kicker">Home configuration</p><h3>Branches and order</h3></div>
+                <span>No catalog preview</span>
+              </div>
+              <p class="editor-note">Rename, hide, or reorder rows shown by Cedar. Link configures these rows but never loads their content.</p>
+              <ol class="branch-editor-list" id="branch-editor-list"></ol>
+              <div class="branch-add">
+                <label class="stacked-field" for="branch-preset"><span>Add a preset row</span><select class="profile-selector" id="branch-preset"><option value="continue-watching">Continue Watching</option><option value="favorites">Favorites</option><option value="watchlist">Watchlist</option><option value="trending">Trending</option><option value="popular">Popular</option><option value="top-rated">Top Rated</option><option value="coming-soon">Coming Soon</option></select></label>
+                <button class="button library-more" id="add-branch" type="button">Add row</button>
+              </div>
+              <button class="button button-primary editor-save" type="submit">Send Home changes to Cedar</button>
+            </form>
+          </section>
+
+          <section class="companion-panel" id="panel-devices" data-companion-panel="devices" hidden>
+            <div class="companion-form">
+              <div class="editor-heading"><div><p class="profile-kicker">Linked access</p><h3>Devices and recovery</h3></div><span>Owner enforced</span></div>
+              <ul class="device-list" id="device-list"></ul>
+              <div class="access-actions">
+                <button class="button button-primary" id="create-invitation" type="button">Create one-use link</button>
+                <button class="button library-more danger-button" id="forget-browser" type="button">Forget this browser</button>
+              </div>
+              <div class="invitation-result" id="invitation-result" hidden>
+                <label class="stacked-field" for="invitation-url"><span>Expires in 10 minutes</span><input class="library-search" id="invitation-url" readonly></label>
+                <button class="button library-more" id="copy-invitation" type="button">Copy link</button>
+              </div>
+              <p class="editor-note">A revoke request is encrypted and completed only by the owning Cedar app. “Forget this browser” removes this browser's local protected key immediately.</p>
+            </div>
+          </section>
+
+          <section class="companion-panel" id="panel-remote" data-companion-panel="remote" hidden>
+            <div class="companion-form">
+              <div class="editor-heading"><div><p class="profile-kicker">Transport only</p><h3>Remote control</h3></div><span>No web player</span></div>
+              <label class="stacked-field" for="remote-device"><span>Cedar device</span><select class="profile-selector" id="remote-device"></select></label>
+              <p class="remote-state" id="remote-state">Choose an online Cedar device.</p>
+              <div class="remote-controls" id="remote-controls">
+                <button type="button" data-command="skip-backward" aria-label="Skip backward">−10</button>
+                <button type="button" class="remote-primary" data-command="toggle-playback" aria-label="Play or pause">Play / Pause</button>
+                <button type="button" data-command="skip-forward" aria-label="Skip forward">+10</button>
+                <button type="button" data-command="skip-intro">Skip Intro</button>
+                <button type="button" data-command="next-episode">Next Episode</button>
+                <button type="button" data-command="jump-to-live">Jump to Live</button>
+              </div>
+              <p class="editor-note">Commands are encrypted, expire after one minute, and are executed by the selected Cedar device. This page never receives or renders the program itself.</p>
+            </div>
+          </section>
+
           <div class="companion-actions">
-            <a class="button button-primary" href="./">Link another profile</a>
+            <button class="button library-more" id="refresh-bottom" type="button">Refresh companion state</button>
           </div>
-          <p class="link-footnote">The editor can change the profile name, avatar, appearance, and stream badge set. Sources, credentials, content limits, and account sessions remain controlled by Cedar.</p>
+          <p class="link-footnote">Cedar Link only configures and controls native Cedar installations. Sources, credentials, parental controls, account sessions, catalogs, guide data, and playback stay inside Cedar.</p>
         </div>
       </section>
     </main>
@@ -152,6 +234,6 @@
       </div>
     </footer>
 
-    <script type="module" src="link.js?v=profile-editor-5"></script>
+    <script type="module" src="link.js?v=companion-1"></script>
   </body>
 </html>

@@ -39,14 +39,21 @@ if (!page.includes(`connect-src 'self' ${relay.origin}`)) {
   throw new Error("The Cedar Link CSP must allow its configured relay origin");
 }
 if (
-  !page.includes('type="module" src="link.js?v=profile-editor-5"')
+  !page.includes('type="module" src="link.js?v=companion-1"')
   || !page.includes('id="link-button"')
   || !page.includes('id="link-companion"')
   || !page.includes('id="profile-selector"')
   || !page.includes('id="profile-editor"')
   || !page.includes('id="save-profile"')
+  || !page.includes('id="settings-editor"')
+  || !page.includes('id="branches-editor"')
+  || !page.includes('id="device-list"')
+  || !page.includes('id="remote-controls"')
 ) {
   throw new Error("The Cedar Link page is missing its required script or primary action");
+}
+if (/<(?:video|audio|iframe|canvas)\b/i.test(page)) {
+  throw new Error("Cedar Link must remain a configuration and remote-control companion, not a player");
 }
 
 const script = await readFile("public/link/link.js", "utf8");
@@ -77,7 +84,18 @@ for (const set of badges.sets) {
 }
 
 const protocol = await readFile("public/link/cedar-sync.mjs", "utf8");
-for (const requiredProtocol of ["cedar-sync-v1:", "/changes", "AES-GCM", "DecompressionStream", "inflateSync"]) {
+for (const requiredProtocol of [
+  "cedar-sync-v1:",
+  "/changes",
+  "/invitations",
+  "AES-GCM",
+  "DecompressionStream",
+  "inflateSync",
+  "cedar-companion-snapshot",
+  "browser-companion-configuration",
+  "browser-remote-command",
+  "browser-device-action",
+]) {
   if (!protocol.includes(requiredProtocol)) {
     throw new Error(`The Cedar Link protocol client is missing ${requiredProtocol}`);
   }

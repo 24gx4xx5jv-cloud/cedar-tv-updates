@@ -3,13 +3,18 @@ import {
   base64URLToBytes,
   bytesToBase64,
   bytesToBase64URL,
+  createCompanionConfigurationPatchChange,
+  createDeviceRequestChange,
   createProfilePresentationPatchChange,
+  createRemoteCommandChange,
+  createWebInvitation,
   fetchLatestProfile,
   normalizeUUID,
   sealEnvelope,
   uploadEnvelope,
   validateProfilePresentation,
-} from "./cedar-sync.mjs?v=profile-editor-4";
+  validateCompanionConfiguration,
+} from "./cedar-sync.mjs?v=companion-1";
 
 const pairing = document.querySelector("#link-pairing");
 const card = document.querySelector("#link-card");
@@ -43,6 +48,31 @@ const badgeLibrary = document.querySelector("#badge-library");
 const badgeSelector = document.querySelector("#badge-selector");
 const badgeStatus = document.querySelector("#badge-status");
 const badgePreview = document.querySelector("#badge-preview");
+const companionTabs = document.querySelector(".companion-tabs");
+const settingsEditor = document.querySelector("#settings-editor");
+const metadataLanguage = document.querySelector("#metadata-language");
+const topShelfPresentation = document.querySelector("#top-shelf-presentation");
+const automaticallyPlayBest = document.querySelector("#automatically-play-best");
+const automaticallyTryNext = document.querySelector("#automatically-try-next");
+const quickPlayPosters = document.querySelector("#quick-play-posters");
+const hideUnreleased = document.querySelector("#hide-unreleased");
+const posterRatings = document.querySelector("#poster-ratings");
+const topShelfActivity = document.querySelector("#top-shelf-activity");
+const cleanLiveNames = document.querySelector("#clean-live-names");
+const branchesEditor = document.querySelector("#branches-editor");
+const branchEditorList = document.querySelector("#branch-editor-list");
+const branchPreset = document.querySelector("#branch-preset");
+const addBranchButton = document.querySelector("#add-branch");
+const deviceList = document.querySelector("#device-list");
+const createInvitationButton = document.querySelector("#create-invitation");
+const forgetBrowserButton = document.querySelector("#forget-browser");
+const invitationResult = document.querySelector("#invitation-result");
+const invitationURL = document.querySelector("#invitation-url");
+const copyInvitationButton = document.querySelector("#copy-invitation");
+const remoteDevice = document.querySelector("#remote-device");
+const remoteState = document.querySelector("#remote-state");
+const remoteControls = document.querySelector("#remote-controls");
+const refreshBottom = document.querySelector("#refresh-bottom");
 const hasInvitationFragment = window.location.hash.length > 1;
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -67,6 +97,10 @@ let badgeCatalog = null;
 let draftSpaceID = "";
 let draftPresentation = null;
 let isSavingProfile = false;
+let isSavingCompanion = false;
+let companionDraftSpaceID = "";
+let companionDraftRevision = 0;
+let companionDraft = null;
 let syncInFlight = null;
 
 const setState = (label, heading, message, enabled = false) => {
@@ -332,12 +366,32 @@ const loadActiveProfiles = async () => {
       const cachedRecord = await readRecord(`snapshot:${credentials.spaceID}`);
       const cachedProfile = cachedRecord ? await decryptValue(cachedRecord) : null;
       const profile = cachedProfile?.spaceID === credentials.spaceID ? cachedProfile : null;
+      const companionRecord = await readRecord(`companion:${credentials.spaceID}`);
+      const cachedCompanion = companionRecord ? await decryptValue(companionRecord) : null;
+      const linkedCompanion = cachedCompanion?.spaceID === credentials.spaceID
+        ? cachedCompanion
+        : null;
       const pendingRecord = await readRecord(`presentation-pending:${credentials.spaceID}`);
       const pendingPresentation = pendingRecord ? await decryptValue(pendingRecord) : null;
       const pending = pendingPresentation?.spaceID === credentials.spaceID
         ? pendingPresentation
         : null;
-      loaded.push({ recordKey: entry.recordKey, record: entry.value, credentials, profile, pending });
+      const configurationPendingRecord = await readRecord(`configuration-pending:${credentials.spaceID}`);
+      const cachedConfigurationPending = configurationPendingRecord
+        ? await decryptValue(configurationPendingRecord)
+        : null;
+      const configurationPending = cachedConfigurationPending?.spaceID === credentials.spaceID
+        ? cachedConfigurationPending
+        : null;
+      loaded.push({
+        recordKey: entry.recordKey,
+        record: entry.value,
+        credentials,
+        profile,
+        companion: linkedCompanion,
+        pending,
+        configurationPending,
+      });
     } catch {
       // One damaged local record must not prevent another linked profile from opening.
     }
@@ -349,6 +403,21 @@ const loadActiveProfiles = async () => {
 };
 
 const selectedProfile = () => activeProfiles.find((item) => item.credentials.spaceID === selectedSpaceID);
+
+const profileForItem = (item) => {
+  if (item?.companion) {
+    const presentation = item.companion.configuration.presentation;
+    return {
+      ...presentation,
+      profileID: item.companion.profileID,
+      snapshotRevision: item.companion.revision,
+      syncedAt: item.companion.publishedAtEpochMilliseconds,
+      avatarEditable: true,
+      isKids: false,
+    };
+  }
+  return item?.profile || null;
+};
 
 const relativeTime = (timestamp) => {
   if (!Number.isSafeInteger(timestamp)) return "Sync time unavailable";
@@ -371,9 +440,25 @@ const presentationsMatch = (left, right) => left?.name === right?.name
   && left?.theme === right?.theme
   && left?.badgeSelection === right?.badgeSelection;
 
+const companionConfigurationsMatch = (left, right) => {
+  if (!left || !right
+    || !presentationsMatch(left.presentation, right.presentation)
+    || JSON.stringify(left.settings) !== JSON.stringify(right.settings)
+    || left.branches.length !== right.branches.length) return false;
+  return left.branches.every((branch, index) => {
+    const candidate = right.branches[index];
+    return branch.id === candidate?.id
+      && branch.title === candidate.title
+      && branch.position === candidate.position
+      && branch.isEnabled === candidate.isEnabled
+      && branch.preset === candidate.preset;
+  });
+};
+
 const resetDraft = (item) => {
   draftSpaceID = item?.credentials.spaceID || "";
-  draftPresentation = item?.profile ? presentationForProfile(item.profile) : null;
+  const profile = profileForItem(item);
+  draftPresentation = profile ? presentationForProfile(profile) : null;
   profileNameInput.value = draftPresentation?.name || "";
   profileTheme.value = draftPresentation?.theme || "system";
   if (badgeCatalog) renderBadges();
@@ -381,12 +466,12 @@ const resetDraft = (item) => {
 
 const renderEditorState = () => {
   const item = selectedProfile();
-  const profile = item?.profile;
+  const profile = profileForItem(item);
   profileEditor.hidden = !profile;
   if (!profile) return;
   if (draftSpaceID !== item.credentials.spaceID || !draftPresentation) resetDraft(item);
   const unavailable = profile.avatarEditable !== true || !Number.isSafeInteger(profile.snapshotRevision);
-  const pending = Boolean(item.pending);
+  const pending = Boolean(item.pending || item.configurationPending);
   const normalizedName = profileNameInput.value.trim();
   const candidate = {
     ...draftPresentation,
@@ -396,15 +481,15 @@ const renderEditorState = () => {
   const validName = normalizedName.length > 0 && [...normalizedName].length <= 128;
   const changed = validName && !presentationsMatch(presentationForProfile(profile), candidate);
   for (const field of profileEditor.querySelectorAll("input, select, button")) {
-    field.disabled = unavailable || pending || isSavingProfile;
+    field.disabled = unavailable || pending || isSavingProfile || isSavingCompanion;
   }
-  badgeSelector.disabled = unavailable || pending || isSavingProfile || !badgeCatalog;
-  saveProfileButton.disabled = unavailable || pending || isSavingProfile || !changed;
-  saveProfileButton.textContent = isSavingProfile
+  badgeSelector.disabled = unavailable || pending || isSavingProfile || isSavingCompanion || !badgeCatalog;
+  saveProfileButton.disabled = unavailable || pending || isSavingProfile || isSavingCompanion || !changed;
+  saveProfileButton.textContent = isSavingProfile || isSavingCompanion
     ? "Encrypting changes…"
     : pending
-      ? "Waiting for iPhone confirmation"
-      : "Send changes to iPhone";
+      ? "Waiting for Cedar confirmation"
+      : "Send changes to Cedar";
   profileEditor.classList.toggle("is-pending", pending);
   profileEditor.classList.toggle("is-unavailable", unavailable);
 };
@@ -446,7 +531,7 @@ const renderProfileSelector = () => {
   for (const item of activeProfiles) {
     const option = document.createElement("option");
     option.value = item.credentials.spaceID;
-    option.textContent = item.profile?.name || "Waiting for profile";
+    option.textContent = profileForItem(item)?.name || "Waiting for profile";
     option.selected = option.value === selectedSpaceID;
     profileSelector.append(option);
   }
@@ -462,36 +547,209 @@ const renderCompanion = () => {
   card.classList.add("has-companion");
   card.setAttribute("aria-labelledby", "profile-name");
   renderProfileSelector();
-  if (!item.profile) {
+  const currentProfile = profileForItem(item);
+  if (!currentProfile) {
     profileName.textContent = "Waiting for your profile";
     profileKicker.textContent = "Browser linked";
-    profileMeta.textContent = "Keep Cedar open on iPhone for a moment";
+    profileMeta.textContent = "Keep the owning Cedar app open for a moment";
     sourceCount.textContent = "—";
     branchCount.textContent = "—";
     shelfCount.textContent = "—";
     setAvatar({ name: "Cedar" });
     profileEditor.hidden = true;
+    renderCompanionPanels(item);
     return;
   }
-  const profile = item.profile;
+  const profile = currentProfile;
   profileName.textContent = profile.name;
   profileKicker.textContent = profile.isKids ? "Kids profile" : "Profile received";
   profileMeta.textContent = `${relativeTime(profile.syncedAt)} · ${profile.theme === "system" ? "System appearance" : `${profile.theme} appearance`}`;
-  sourceCount.textContent = String(profile.enabledSourceCount ?? profile.sourceCount ?? 0);
-  branchCount.textContent = String(profile.enabledBranchCount ?? profile.branchCount ?? 0);
-  shelfCount.textContent = String(profile.shelfCount ?? 0);
+  sourceCount.textContent = String(item.companion?.devices.length ?? 0);
+  branchCount.textContent = String(
+    item.companion?.configuration.branches.filter((branch) => branch.isEnabled).length
+      ?? profile.enabledBranchCount
+      ?? profile.branchCount
+      ?? 0,
+  );
+  shelfCount.textContent = String(
+    item.companion?.devices.filter((device) => device.supportsRemoteControl).length ?? 0,
+  );
   const avatarPreview = draftSpaceID === item.credentials.spaceID
     && draftPresentation?.avatarSymbol !== profile.avatarSymbol
     ? localAvatarPath(draftPresentation.avatarSymbol)
     : null;
   setAvatar(profile, avatarPreview);
   renderEditorState();
+  renderCompanionPanels(item);
+};
+
+const resetCompanionDraft = (item) => {
+  companionDraftSpaceID = item?.credentials.spaceID || "";
+  companionDraftRevision = item?.companion?.revision || 0;
+  companionDraft = item?.companion
+    ? structuredClone(item.companion.configuration)
+    : null;
+};
+
+const ensureCompanionDraft = (item) => {
+  if (!item?.companion) {
+    resetCompanionDraft(item);
+    return;
+  }
+  if (companionDraftSpaceID !== item.credentials.spaceID
+    || companionDraftRevision !== item.companion.revision
+    || !companionDraft) {
+    resetCompanionDraft(item);
+  }
+};
+
+const renderSettings = (item) => {
+  ensureCompanionDraft(item);
+  const settings = companionDraft?.settings;
+  const unavailable = !settings || Boolean(item?.configurationPending) || isSavingCompanion;
+  for (const field of settingsEditor.elements) field.disabled = unavailable;
+  if (!settings) return;
+  metadataLanguage.value = settings.metadataLanguageCode;
+  topShelfPresentation.value = settings.topShelfPresentation;
+  automaticallyPlayBest.checked = settings.automaticallyPlayBestSource;
+  automaticallyTryNext.checked = settings.automaticallyTryNextBestSource;
+  quickPlayPosters.checked = settings.quickPlayFromPosters;
+  hideUnreleased.checked = settings.hideUnreleasedTitles;
+  posterRatings.checked = settings.showsPosterCardRatings;
+  topShelfActivity.checked = settings.showsTopShelfViewingActivity;
+  cleanLiveNames.checked = settings.cleansUpLiveChannelNames;
+};
+
+const renderBranches = (item) => {
+  ensureCompanionDraft(item);
+  branchEditorList.replaceChildren();
+  const unavailable = !companionDraft || Boolean(item?.configurationPending) || isSavingCompanion;
+  addBranchButton.disabled = unavailable || (companionDraft?.branches.length ?? 50) >= 50;
+  branchPreset.disabled = unavailable;
+  branchesEditor.querySelector('button[type="submit"]').disabled = unavailable;
+  if (!companionDraft) {
+    const empty = document.createElement("li");
+    empty.className = "library-loading";
+    empty.textContent = "Waiting for a content-free companion snapshot from Cedar.";
+    branchEditorList.append(empty);
+    return;
+  }
+  companionDraft.branches.forEach((branch, index) => {
+    const row = document.createElement("li");
+    row.className = "branch-row";
+    row.dataset.index = String(index);
+    const grab = document.createElement("span");
+    grab.className = "branch-grab";
+    grab.textContent = "⋮⋮";
+    grab.setAttribute("aria-hidden", "true");
+    const titleInput = document.createElement("input");
+    titleInput.type = "text";
+    titleInput.className = "library-search";
+    titleInput.maxLength = 80;
+    titleInput.value = branch.title;
+    titleInput.disabled = unavailable;
+    titleInput.setAttribute("aria-label", `Name for Home row ${index + 1}`);
+    const buttons = document.createElement("span");
+    buttons.className = "branch-buttons";
+    for (const [action, label] of [["up", "Move up"], ["down", "Move down"]]) {
+      const move = document.createElement("button");
+      move.type = "button";
+      move.dataset.action = action;
+      move.textContent = action === "up" ? "↑" : "↓";
+      move.setAttribute("aria-label", `${label}: ${branch.title}`);
+      move.disabled = unavailable || (action === "up" ? index === 0 : index === companionDraft.branches.length - 1);
+      buttons.append(move);
+    }
+    const enabled = document.createElement("label");
+    enabled.className = "branch-enabled";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = branch.isEnabled;
+    checkbox.disabled = unavailable;
+    checkbox.dataset.action = "enabled";
+    enabled.append(checkbox, document.createTextNode("Show this row on Cedar devices"));
+    row.append(grab, titleInput, buttons, enabled);
+    branchEditorList.append(row);
+  });
+};
+
+const devicePlatformLabel = (platform) => ({ apple: "Apple", android: "Android", browser: "Browser" })[platform] || "Cedar";
+
+const renderDevices = (item) => {
+  deviceList.replaceChildren();
+  const devices = item?.companion?.devices || [];
+  if (devices.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "library-loading";
+    empty.textContent = "Waiting for the owning Cedar app to publish linked devices.";
+    deviceList.append(empty);
+    return;
+  }
+  for (const device of devices) {
+    const row = document.createElement("li");
+    row.className = "device-row";
+    const details = document.createElement("span");
+    const name = document.createElement("strong");
+    name.textContent = device.displayName;
+    const meta = document.createElement("small");
+    meta.textContent = `${devicePlatformLabel(device.platform)} · ${device.isCurrent ? "Owner device" : relativeTime(device.lastSeenAtEpochMilliseconds).replace("Synced", "Seen")}`;
+    details.append(name, meta);
+    const actions = document.createElement("span");
+    actions.className = "device-actions";
+    const rename = document.createElement("button");
+    rename.type = "button";
+    rename.dataset.action = "rename";
+    rename.dataset.deviceID = device.id;
+    rename.textContent = "Rename";
+    rename.disabled = Boolean(item.configurationPending || isSavingCompanion);
+    const revoke = document.createElement("button");
+    revoke.type = "button";
+    revoke.className = "danger-button";
+    revoke.dataset.action = "revoke";
+    revoke.dataset.deviceID = device.id;
+    revoke.textContent = "Revoke";
+    revoke.disabled = device.id === item.credentials.deviceID || device.isCurrent || Boolean(item.configurationPending || isSavingCompanion);
+    actions.append(rename, revoke);
+    row.append(details, actions);
+    deviceList.append(row);
+  }
+};
+
+const renderRemote = (item) => {
+  const previous = remoteDevice.value;
+  remoteDevice.replaceChildren();
+  const devices = (item?.companion?.devices || []).filter((device) => device.supportsRemoteControl);
+  for (const device of devices) {
+    const option = document.createElement("option");
+    option.value = device.id;
+    option.textContent = device.displayName;
+    remoteDevice.append(option);
+  }
+  if (devices.some((device) => device.id === previous)) remoteDevice.value = previous;
+  const statusValue = item?.companion?.remoteStatuses.find((status) => status.deviceID === remoteDevice.value);
+  remoteDevice.disabled = devices.length === 0 || isSavingCompanion;
+  if (!statusValue) remoteState.textContent = devices.length ? "Waiting for transport status from this Cedar device." : "No remote-capable Cedar device is linked yet.";
+  else if (!statusValue.isOnline) remoteState.textContent = "Offline · Open Cedar on this device to receive commands.";
+  else remoteState.textContent = `${statusValue.isPlaying ? "Playing" : "Paused"}${statusValue.isLive ? " · Live mode" : ""} · No content details shared`;
+  for (const control of remoteControls.querySelectorAll("button")) {
+    control.disabled = !statusValue?.isOnline
+      || !statusValue.supportedCommands.includes(control.dataset.command)
+      || isSavingCompanion;
+  }
+};
+
+const renderCompanionPanels = (item) => {
+  renderSettings(item);
+  renderBranches(item);
+  renderDevices(item);
+  renderRemote(item);
 };
 
 const persistSyncResult = async (item, result) => {
   const updatedRecord = { ...item.record, cursor: result.cursor, lastCheckedAt: Date.now() };
   const entries = [[item.recordKey, updatedRecord]];
   let reconciliation = null;
+  let companionReconciliation = null;
   if (result.profile) {
     entries.push([`snapshot:${item.credentials.spaceID}`, {
       schemaVersion: 1,
@@ -505,18 +763,43 @@ const persistSyncResult = async (item, result) => {
       ) ? "applied" : "rejected";
     }
   }
+  if (result.companion) {
+    entries.push([`companion:${item.credentials.spaceID}`, {
+      schemaVersion: 1,
+      spaceID: item.credentials.spaceID,
+      ...await encryptValue(result.companion),
+    }]);
+    if (item.configurationPending && result.companion.revision > item.configurationPending.baseRevision) {
+      companionReconciliation = companionConfigurationsMatch(
+        result.companion.configuration,
+        item.configurationPending.replacement,
+      )
+        ? "applied"
+        : "rejected";
+    }
+  }
   await writeRecords(entries);
   item.record = updatedRecord;
   if (result.profile) item.profile = result.profile;
+  if (result.companion) item.companion = result.companion;
   if (reconciliation) {
     await deleteRecord(`presentation-pending:${item.credentials.spaceID}`);
     item.pending = null;
     resetDraft(item);
   } else if (result.profile && !item.pending) {
-    // A newer canonical iPhone snapshot invalidates any unsaved stale browser draft.
+    // A newer canonical native snapshot invalidates any unsaved stale browser draft.
     resetDraft(item);
   }
-  return reconciliation;
+  if (companionReconciliation) {
+    await deleteRecord(`configuration-pending:${item.credentials.spaceID}`);
+    item.configurationPending = null;
+    resetCompanionDraft(item);
+    resetDraft(item);
+  } else if (result.companion && !item.configurationPending) {
+    resetCompanionDraft(item);
+    resetDraft(item);
+  }
+  return companionReconciliation || reconciliation;
 };
 
 const performSelectedProfileSync = async ({ poll = false } = {}) => {
@@ -526,16 +809,16 @@ const performSelectedProfileSync = async ({ poll = false } = {}) => {
   refreshButton.classList.add("is-refreshing");
   companionState.textContent = "Checking Cedar Sync";
   syncMessage.classList.remove("is-error", "is-success");
-  syncMessage.textContent = item.profile
-    ? "Checking for a newer encrypted profile…"
-    : "Waiting for the first encrypted upload from Cedar on iPhone…";
+  syncMessage.textContent = profileForItem(item)
+    ? "Checking for newer encrypted companion state…"
+    : "Waiting for the first encrypted upload from a Cedar device…";
   const delays = poll ? [0, 1_800, 3_000, 5_000, 8_000, 12_000] : [0];
   try {
     for (const delay of delays) {
       if (delay) await sleep(delay);
       // Profiles cached by the first read-only companion did not include a snapshot revision.
       // Replay the encrypted log once so those existing linked browsers become safely editable.
-      const startingCursor = Number.isSafeInteger(item.profile?.snapshotRevision)
+      const startingCursor = Number.isSafeInteger(item.companion?.revision ?? item.profile?.snapshotRevision)
         ? item.record.cursor || 0
         : 0;
       const result = await fetchLatestProfile(item.credentials, startingCursor);
@@ -543,30 +826,32 @@ const performSelectedProfileSync = async ({ poll = false } = {}) => {
       renderCompanion();
       if (reconciliation === "applied") {
         companionState.textContent = "Cedar Link connected";
-        syncMessage.textContent = "Profile edit confirmed by Cedar on iPhone.";
+        syncMessage.textContent = "Profile edit confirmed by the owning Cedar app.";
         syncMessage.classList.add("is-success");
         return;
       }
       if (reconciliation === "rejected") {
         companionState.textContent = "Cedar kept the newer profile";
-        syncMessage.textContent = "This edit was based on an older profile. Cedar kept the newer iPhone version.";
+        syncMessage.textContent = "This edit was based on an older profile. Cedar kept the newer native version.";
         syncMessage.classList.add("is-error");
         return;
       }
-      if (item.pending) {
-        companionState.textContent = "Waiting for iPhone confirmation";
-        syncMessage.textContent = "The encrypted edit is at the relay. Return to Cedar on iPhone; it will confirm and publish the result.";
+      if (item.pending || item.configurationPending) {
+        companionState.textContent = "Waiting for Cedar confirmation";
+        syncMessage.textContent = "The encrypted edit is at the relay. Open the owning Cedar app; it will validate, apply, and publish the result.";
         return;
       }
-      if (item.profile) {
+      if (profileForItem(item)) {
         companionState.textContent = "Cedar Link connected";
-        syncMessage.textContent = "Encrypted profile authenticated and ready in this browser.";
+        syncMessage.textContent = item.companion
+          ? "Encrypted companion state authenticated. Cedar Link remains configuration and control only."
+          : "Encrypted profile authenticated. Waiting for Cedar's companion update.";
         syncMessage.classList.add("is-success");
         return;
       }
     }
     companionState.textContent = "Browser linked";
-    syncMessage.textContent = "No profile upload has arrived yet. Keep Cedar open on iPhone, then tap refresh.";
+    syncMessage.textContent = "No companion upload has arrived yet. Keep the owning Cedar app open, then tap refresh.";
   } catch (error) {
     companionState.textContent = "Sync needs attention";
     syncMessage.textContent = error instanceof CedarSyncError
@@ -627,7 +912,7 @@ const renderAvatars = () => {
   avatarGrid.replaceChildren();
   const fragment = document.createDocumentFragment();
   const item = selectedProfile();
-  const avatarEditingUnavailable = item?.profile?.avatarEditable !== true;
+  const avatarEditingUnavailable = profileForItem(item)?.avatarEditable !== true;
   for (const avatar of avatarMatches.slice(0, visibleAvatarCount)) {
     const choice = document.createElement("button");
     choice.className = "avatar-choice";
@@ -637,7 +922,7 @@ const renderAvatars = () => {
     choice.dataset.name = avatar.name;
     choice.dataset.value = new URL(`..${avatar.url}`, location.href).href;
     choice.classList.toggle("is-selected", choice.dataset.value === draftPresentation?.avatarSymbol);
-    choice.disabled = Boolean(item?.pending || isSavingProfile || avatarEditingUnavailable);
+    choice.disabled = Boolean(item?.pending || item?.configurationPending || isSavingProfile || isSavingCompanion || avatarEditingUnavailable);
     const image = document.createElement("img");
     image.src = `..${avatar.url}`;
     image.alt = avatar.name;
@@ -688,7 +973,7 @@ const addBadgeOption = (parent, value, label, { current = false, installed = fal
 
 const renderBadges = () => {
   const item = selectedProfile();
-  const profile = item?.profile;
+  const profile = profileForItem(item);
   const installed = Array.isArray(profile?.installedBadgePacks) ? profile.installedBadgePacks : [];
   const currentSelection = profile?.badgeSelection || "builtIn";
   const selected = draftPresentation?.badgeSelection || currentSelection;
@@ -706,7 +991,7 @@ const renderBadges = () => {
   const otherInstalled = installed.filter((pack) => !catalogSources.has(pack.sourceURL));
   if (otherInstalled.length > 0) {
     const installedOptions = document.createElement("optgroup");
-    installedOptions.label = "Installed on iPhone";
+    installedOptions.label = "Installed in Cedar";
     for (const pack of otherInstalled) {
       addBadgeOption(installedOptions, pack.sourceURL, pack.name, {
         current: currentSelection === pack.sourceURL,
@@ -729,7 +1014,7 @@ const renderBadges = () => {
   if (badgeSelector.value !== selected) badgeSelector.value = currentSelection;
   badgeSelector.disabled = !profile
     || profile.avatarEditable !== true
-    || Boolean(item?.pending || isSavingProfile);
+    || Boolean(item?.pending || item?.configurationPending || isSavingProfile || isSavingCompanion);
 
   const currentSet = badgeCatalog?.find((set) => set.sourceURL === currentSelection);
   const currentInstalled = installed.find((pack) => pack.sourceURL === currentSelection);
@@ -739,8 +1024,8 @@ const renderBadges = () => {
       ? "Cedar built-in badges"
       : currentSet?.label || currentInstalled?.name || "Custom badge set";
   badgeStatus.textContent = installed.length > 0
-    ? `Current on iPhone: ${currentLabel} · ${installed.length} custom ${installed.length === 1 ? "set" : "sets"} installed`
-    : `Current on iPhone: ${currentLabel} · No custom sets installed`;
+    ? `Current in Cedar: ${currentLabel} · ${installed.length} custom ${installed.length === 1 ? "set" : "sets"} installed`
+    : `Current in Cedar: ${currentLabel} · No custom sets installed`;
 
   const set = badgeCatalog?.find((value) => value.sourceURL === badgeSelector.value);
   badgePreview.replaceChildren();
@@ -748,10 +1033,10 @@ const renderBadges = () => {
     const note = document.createElement("p");
     note.className = "library-loading";
     note.textContent = badgeSelector.value === "none"
-      ? "Technical stream badges will be hidden."
+      ? "Technical badges will be hidden."
       : badgeSelector.value === "builtIn"
         ? "Cedar's built-in technical badges will be used."
-        : "This installed badge pack is available on the iPhone.";
+        : "This installed badge pack is available in Cedar.";
     badgePreview.append(note);
     return;
   }
@@ -765,26 +1050,144 @@ const renderBadges = () => {
   }
 };
 
+const uploadCompanionChange = async (item, makeChange) => {
+  const reservation = await reserveOutboundSequence(item.recordKey);
+  item.record = reservation.record;
+  const submittedAt = Date.now();
+  const change = makeChange(reservation.sequence, submittedAt);
+  const envelope = await sealEnvelope(change, item.credentials, reservation.sequence, {
+    createdAtEpochMilliseconds: submittedAt,
+  });
+  await uploadEnvelope(item.credentials, envelope);
+  return submittedAt;
+};
+
+const saveCompanionConfiguration = async (replacementValue, successMessage) => {
+  const item = selectedProfile();
+  if (!item?.companion || item.configurationPending || isSavingCompanion) return;
+  const replacement = validateCompanionConfiguration(replacementValue);
+  isSavingCompanion = true;
+  syncMessage.classList.remove("is-error", "is-success");
+  syncMessage.textContent = "Encrypting this configuration update for Cedar…";
+  renderCompanion();
+  try {
+    const submittedAt = await uploadCompanionChange(item, (sequence, createdAt) => (
+      createCompanionConfigurationPatchChange(item.companion, replacement, sequence, createdAt)
+    ));
+    const pending = {
+      schemaVersion: 1,
+      spaceID: item.credentials.spaceID,
+      profileID: item.companion.profileID,
+      baseRevision: item.companion.revision,
+      submittedAt,
+      replacement,
+    };
+    await writeRecord(`configuration-pending:${item.credentials.spaceID}`, {
+      schemaVersion: 1,
+      spaceID: item.credentials.spaceID,
+      ...await encryptValue(pending),
+    });
+    item.configurationPending = pending;
+    companionDraft = structuredClone(replacement);
+    companionState.textContent = "Waiting for Cedar confirmation";
+    syncMessage.textContent = successMessage;
+    syncMessage.classList.add("is-success");
+  } catch (error) {
+    companionState.textContent = "Sync needs attention";
+    syncMessage.textContent = error instanceof CedarSyncError
+      ? error.message
+      : "The encrypted companion update could not be sent. Try again.";
+    syncMessage.classList.add("is-error");
+  } finally {
+    isSavingCompanion = false;
+    renderCompanion();
+  }
+};
+
+const sendDeviceAction = async (targetDeviceID, action, displayName = null) => {
+  const item = selectedProfile();
+  if (!item?.companion || isSavingCompanion) return;
+  isSavingCompanion = true;
+  renderCompanionPanels(item);
+  try {
+    await uploadCompanionChange(item, (sequence, createdAtEpochMilliseconds) => (
+      createDeviceRequestChange(item.companion, targetDeviceID, action, sequence, {
+        displayName,
+        createdAtEpochMilliseconds,
+      })
+    ));
+    companionState.textContent = "Owner action requested";
+    syncMessage.textContent = action === "revoke"
+      ? "Encrypted revoke request sent. The owning Cedar app will validate and complete it."
+      : "Encrypted rename request sent. The owning Cedar app will validate and publish it.";
+    syncMessage.classList.add("is-success");
+    await syncSelectedProfile({ poll: true });
+  } catch (error) {
+    syncMessage.textContent = error instanceof CedarSyncError ? error.message : "The device request could not be sent.";
+    syncMessage.classList.add("is-error");
+  } finally {
+    isSavingCompanion = false;
+    renderCompanionPanels(item);
+  }
+};
+
+const sendRemoteCommand = async (command) => {
+  const item = selectedProfile();
+  if (!item?.companion || !remoteDevice.value || isSavingCompanion) return;
+  isSavingCompanion = true;
+  renderRemote(item);
+  try {
+    await uploadCompanionChange(item, (sequence, createdAtEpochMilliseconds) => (
+      createRemoteCommandChange(
+        item.companion,
+        remoteDevice.value,
+        command,
+        sequence,
+        createdAtEpochMilliseconds,
+      )
+    ));
+    companionState.textContent = "Remote command sent";
+    syncMessage.textContent = "The encrypted transport command was sent to Cedar. No media was sent to this browser.";
+    syncMessage.classList.add("is-success");
+    await syncSelectedProfile({ poll: true });
+  } catch (error) {
+    syncMessage.textContent = error instanceof CedarSyncError ? error.message : "The remote command could not be sent.";
+    syncMessage.classList.add("is-error");
+  } finally {
+    isSavingCompanion = false;
+    renderRemote(item);
+  }
+};
+
 const saveProfilePresentation = async () => {
   const item = selectedProfile();
-  if (!item?.profile || item.pending || isSavingProfile || !draftPresentation) return;
+  const profile = profileForItem(item);
+  if (!profile || item.pending || item.configurationPending || isSavingProfile || !draftPresentation) return;
   const replacement = validateProfilePresentation({
     ...draftPresentation,
     name: profileNameInput.value.trim(),
     theme: profileTheme.value,
   });
-  if (presentationsMatch(presentationForProfile(item.profile), replacement)) return;
+  if (presentationsMatch(presentationForProfile(profile), replacement)) return;
+
+  if (item.companion) {
+    await saveCompanionConfiguration({
+      ...item.companion.configuration,
+      presentation: replacement,
+    }, "Profile update sent securely. Open the owning Cedar app to validate and publish it.");
+    return;
+  }
 
   isSavingProfile = true;
   syncMessage.classList.remove("is-error", "is-success");
-  syncMessage.textContent = "Encrypting this profile edit for Cedar on iPhone…";
+  syncMessage.textContent = "Encrypting this profile edit for the owning Cedar app…";
   renderEditorState();
   try {
     const reservation = await reserveOutboundSequence(item.recordKey);
     item.record = reservation.record;
     const submittedAt = Date.now();
     const change = createProfilePresentationPatchChange(
-      item.profile,
+      profile,
       replacement,
       reservation.sequence,
       submittedAt,
@@ -796,8 +1199,8 @@ const saveProfilePresentation = async () => {
     const pending = {
       schemaVersion: 1,
       spaceID: item.credentials.spaceID,
-      profileID: item.profile.profileID,
-      baseRevision: item.profile.snapshotRevision,
+      profileID: profile.profileID,
+      baseRevision: profile.snapshotRevision,
       submittedAt,
       replacement,
     };
@@ -808,8 +1211,8 @@ const saveProfilePresentation = async () => {
     });
     item.pending = pending;
     draftPresentation = replacement;
-    companionState.textContent = "Waiting for iPhone confirmation";
-    syncMessage.textContent = "Edit sent securely. Return to Cedar on iPhone; it will apply the edit and publish confirmation.";
+    companionState.textContent = "Waiting for Cedar confirmation";
+    syncMessage.textContent = "Edit sent securely. Open the owning Cedar app; it will apply the edit and publish confirmation.";
     syncMessage.classList.add("is-success");
   } catch (error) {
     companionState.textContent = "Sync needs attention";
@@ -895,6 +1298,18 @@ button.addEventListener("click", async () => {
 });
 
 refreshButton.addEventListener("click", () => syncSelectedProfile());
+refreshBottom.addEventListener("click", () => syncSelectedProfile());
+
+companionTabs.addEventListener("click", (event) => {
+  const tab = event.target.closest("button[data-panel]");
+  if (!tab) return;
+  for (const buttonValue of companionTabs.querySelectorAll("button[data-panel]")) {
+    buttonValue.setAttribute("aria-selected", String(buttonValue === tab));
+  }
+  for (const panel of companion.querySelectorAll("[data-companion-panel]")) {
+    panel.hidden = panel.dataset.companionPanel !== tab.dataset.panel;
+  }
+});
 
 profileEditor.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -908,8 +1323,166 @@ profileSelector.addEventListener("change", async () => {
   selectedSpaceID = profileSelector.value;
   draftSpaceID = "";
   draftPresentation = null;
+  companionDraftSpaceID = "";
+  companionDraftRevision = 0;
+  companionDraft = null;
   renderCompanion();
   await syncSelectedProfile();
+});
+
+settingsEditor.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const item = selectedProfile();
+  if (!item?.companion) return;
+  const replacement = structuredClone(item.companion.configuration);
+  replacement.settings = {
+    metadataLanguageCode: metadataLanguage.value.trim(),
+    automaticallyPlayBestSource: automaticallyPlayBest.checked,
+    automaticallyTryNextBestSource: automaticallyTryNext.checked,
+    quickPlayFromPosters: quickPlayPosters.checked,
+    hideUnreleasedTitles: hideUnreleased.checked,
+    showsPosterCardRatings: posterRatings.checked,
+    topShelfPresentation: topShelfPresentation.value,
+    showsTopShelfViewingActivity: topShelfActivity.checked,
+    cleansUpLiveChannelNames: cleanLiveNames.checked,
+  };
+  saveCompanionConfiguration(
+    replacement,
+    "Settings sent securely. Open the owning Cedar app to validate and publish them.",
+  );
+});
+
+branchEditorList.addEventListener("input", (event) => {
+  const row = event.target.closest(".branch-row");
+  if (!row || !companionDraft) return;
+  const index = Number(row.dataset.index);
+  if (!Number.isInteger(index) || !companionDraft.branches[index]) return;
+  if (event.target.matches('input[type="text"]')) companionDraft.branches[index].title = event.target.value;
+  if (event.target.matches('input[data-action="enabled"]')) companionDraft.branches[index].isEnabled = event.target.checked;
+});
+
+branchEditorList.addEventListener("click", (event) => {
+  const buttonValue = event.target.closest("button[data-action]");
+  const row = event.target.closest(".branch-row");
+  if (!buttonValue || !row || !companionDraft) return;
+  const index = Number(row.dataset.index);
+  const destination = buttonValue.dataset.action === "up" ? index - 1 : index + 1;
+  if (destination < 0 || destination >= companionDraft.branches.length) return;
+  [companionDraft.branches[index], companionDraft.branches[destination]] = [
+    companionDraft.branches[destination],
+    companionDraft.branches[index],
+  ];
+  companionDraft.branches.forEach((branch, branchIndex) => { branch.position = branchIndex; });
+  renderBranches(selectedProfile());
+});
+
+addBranchButton.addEventListener("click", () => {
+  const item = selectedProfile();
+  ensureCompanionDraft(item);
+  if (!companionDraft || companionDraft.branches.length >= 50) return;
+  const preset = branchPreset.value;
+  const labels = {
+    "continue-watching": "Continue Watching",
+    favorites: "Favorites",
+    watchlist: "Watchlist",
+    trending: "Trending",
+    popular: "Popular",
+    "top-rated": "Top Rated",
+    "coming-soon": "Coming Soon",
+  };
+  companionDraft.branches.push({
+    id: crypto.randomUUID().toLowerCase(),
+    title: labels[preset] || "Cedar Row",
+    position: companionDraft.branches.length,
+    isEnabled: true,
+    preset,
+    sourceKind: "catalog",
+    presentationKind: "row",
+  });
+  renderBranches(item);
+});
+
+branchesEditor.addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (!companionDraft) return;
+  saveCompanionConfiguration(
+    companionDraft,
+    "Home changes sent securely. Cedar will configure the rows without sending their content here.",
+  );
+});
+
+deviceList.addEventListener("click", (event) => {
+  const actionButton = event.target.closest("button[data-action][data-device-id]");
+  if (!actionButton) return;
+  const item = selectedProfile();
+  const device = item?.companion?.devices.find((value) => value.id === actionButton.dataset.deviceId);
+  if (!device) return;
+  if (actionButton.dataset.action === "rename") {
+    const displayName = window.prompt("Name this linked Cedar device", device.displayName)?.trim();
+    if (displayName && displayName !== device.displayName) sendDeviceAction(device.id, "rename", displayName);
+    return;
+  }
+  if (window.confirm(`Revoke Cedar Link access for “${device.displayName}”? The owning Cedar app must complete this request.`)) {
+    sendDeviceAction(device.id, "revoke");
+  }
+});
+
+createInvitationButton.addEventListener("click", async () => {
+  const item = selectedProfile();
+  if (!item || createInvitationButton.disabled) return;
+  createInvitationButton.disabled = true;
+  createInvitationButton.textContent = "Creating encrypted link…";
+  try {
+    const result = await createWebInvitation(item.credentials, window.location.href);
+    invitationURL.value = result.url;
+    invitationResult.hidden = false;
+    syncMessage.textContent = "One-use invitation created. It expires in 10 minutes; share it only with a device you trust.";
+    syncMessage.classList.add("is-success");
+  } catch (error) {
+    syncMessage.textContent = error instanceof CedarSyncError ? error.message : "The one-use invitation could not be created.";
+    syncMessage.classList.add("is-error");
+  } finally {
+    createInvitationButton.disabled = false;
+    createInvitationButton.textContent = "Create one-use link";
+  }
+});
+
+copyInvitationButton.addEventListener("click", async () => {
+  if (!invitationURL.value) return;
+  try {
+    await navigator.clipboard.writeText(invitationURL.value);
+    copyInvitationButton.textContent = "Copied";
+    setTimeout(() => { copyInvitationButton.textContent = "Copy link"; }, 2_000);
+  } catch {
+    invitationURL.select();
+    syncMessage.textContent = "Copy is unavailable in this browser. The invitation link is selected.";
+  }
+});
+
+forgetBrowserButton.addEventListener("click", async () => {
+  const item = selectedProfile();
+  if (!item || !window.confirm("Forget this Cedar Link profile in this browser? This removes its protected local key and cannot be undone here.")) return;
+  for (const recordKey of [
+    item.recordKey,
+    `snapshot:${item.credentials.spaceID}`,
+    `companion:${item.credentials.spaceID}`,
+    `presentation-pending:${item.credentials.spaceID}`,
+    `configuration-pending:${item.credentials.spaceID}`,
+  ]) await deleteRecord(recordKey);
+  activeProfiles = activeProfiles.filter((value) => value !== item);
+  selectedSpaceID = activeProfiles[0]?.credentials.spaceID || "";
+  if (activeProfiles.length) {
+    renderCompanion();
+    await syncSelectedProfile();
+  } else {
+    window.location.reload();
+  }
+});
+
+remoteDevice.addEventListener("change", () => renderRemote(selectedProfile()));
+remoteControls.addEventListener("click", (event) => {
+  const commandButton = event.target.closest("button[data-command]");
+  if (commandButton && !commandButton.disabled) sendRemoteCommand(commandButton.dataset.command);
 });
 
 avatarLibrary.addEventListener("toggle", () => {
@@ -935,16 +1508,18 @@ avatarMore.addEventListener("click", () => {
 avatarGrid.addEventListener("click", (event) => {
   const choice = event.target.closest(".avatar-choice");
   const item = selectedProfile();
+  const currentProfile = profileForItem(item);
   if (
     !choice
-    || !item?.profile
-    || item.profile.avatarEditable !== true
+    || !currentProfile
+    || currentProfile.avatarEditable !== true
     || item.pending
+    || item.configurationPending
     || isSavingProfile
     || !draftPresentation
   ) return;
   draftPresentation = { ...draftPresentation, avatarSymbol: choice.dataset.value };
-  setAvatar(selectedProfile()?.profile, choice.dataset.path, choice.dataset.name);
+  setAvatar(currentProfile, choice.dataset.path, choice.dataset.name);
   for (const current of avatarGrid.querySelectorAll(".avatar-choice")) {
     current.classList.toggle("is-selected", current === choice);
   }
@@ -959,7 +1534,7 @@ badgeLibrary.addEventListener("toggle", () => {
 
 badgeSelector.addEventListener("change", () => {
   const item = selectedProfile();
-  if (!item?.profile || item.pending || isSavingProfile || !draftPresentation) return;
+  if (!profileForItem(item) || item.pending || item.configurationPending || isSavingProfile || !draftPresentation) return;
   draftPresentation = { ...draftPresentation, badgeSelection: badgeSelector.value };
   renderBadges();
   renderEditorState();

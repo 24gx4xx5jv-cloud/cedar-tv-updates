@@ -8,7 +8,12 @@ import {
   LIMITS,
   bytesToBase64,
   bytesToBase64URL,
+  createCompanionConfigurationPatchChange,
+  createDeviceRequestChange,
   createProfilePresentationPatchChange,
+  createRemoteCommandChange,
+  createWebInvitation,
+  decodeCompanionSnapshot,
   decodeProfileSnapshot,
   fetchLatestProfile,
   openEnvelope,
@@ -31,6 +36,60 @@ const credentials = {
   deviceID: randomUUID(),
   deviceToken: randomBytes(32).toString("base64url"),
   profileKey: profileKey.toString("base64url"),
+};
+
+const companionConfiguration = {
+  presentation: {
+    name: "Living Room",
+    avatarSymbol: "person.crop.circle.fill",
+    theme: "system",
+    badgeSelection: "builtIn",
+  },
+  settings: {
+    metadataLanguageCode: "en-CA",
+    automaticallyPlayBestSource: true,
+    automaticallyTryNextBestSource: true,
+    quickPlayFromPosters: false,
+    hideUnreleasedTitles: true,
+    showsPosterCardRatings: true,
+    topShelfPresentation: "automatic",
+    showsTopShelfViewingActivity: true,
+    cleansUpLiveChannelNames: true,
+  },
+  branches: [{
+    id: "continue-watching",
+    title: "Continue Watching",
+    position: 0,
+    isEnabled: true,
+    preset: "continue-watching",
+    sourceKind: "catalog",
+    presentationKind: "row",
+  }],
+};
+
+const companionSnapshot = {
+  schemaVersion: 1,
+  profileID,
+  revision: 42,
+  publishedAtEpochMilliseconds: 1_800_000_000_000,
+  configuration: companionConfiguration,
+  devices: [{
+    id: deviceID,
+    displayName: "Living Room TV",
+    platform: "apple",
+    linkedAtEpochMilliseconds: 1_799_000_000_000,
+    lastSeenAtEpochMilliseconds: 1_800_000_000_000,
+    isCurrent: true,
+    supportsRemoteControl: true,
+  }],
+  remoteStatuses: [{
+    deviceID,
+    isOnline: true,
+    isPlaying: false,
+    isLive: false,
+    supportedCommands: ["status", "toggle-playback", "skip-backward", "skip-forward"],
+    updatedAtEpochMilliseconds: 1_800_000_000_000,
+  }],
 };
 
 const portableProfile = {
@@ -188,6 +247,126 @@ test("seals an allowlisted browser presentation patch for Apple Cedar", async ()
   });
   assert.deepEqual(patch.replacement, replacement);
   opened.payload.fill(0);
+});
+
+test("decodes a content-free Cedar Link companion snapshot", () => {
+  const payload = textEncoder.encode(JSON.stringify(companionSnapshot));
+  const decoded = decodeCompanionSnapshot({
+    schemaVersion: 1,
+    profileID,
+    entityKind: "cedar-companion-snapshot",
+    entityID: profileID,
+    operation: "upsert",
+    revision: 42,
+    modifiedAtEpochMilliseconds: 1_800_000_000_000,
+    payload,
+  }, spaceID);
+
+  assert.equal(decoded.configuration.presentation.name, "Living Room");
+  assert.equal(decoded.devices[0].displayName, "Living Room TV");
+  assert.deepEqual(Object.keys(decoded.remoteStatuses[0]).sort(), [
+    "deviceID", "isLive", "isOnline", "isPlaying", "supportedCommands", "updatedAtEpochMilliseconds",
+  ]);
+  assert.equal(new TextDecoder().decode(payload), "\0".repeat(payload.length));
+});
+
+test("creates bounded configuration, remote, and owner device requests", async () => {
+  const companion = { profileID, revision: 42, configuration: companionConfiguration };
+  const replacement = structuredClone(companionConfiguration);
+  replacement.settings.metadataLanguageCode = "fr-CA";
+  replacement.branches.push({
+    id: "popular",
+    title: "Popular",
+    position: 1,
+    isEnabled: true,
+    preset: "popular",
+    sourceKind: "catalog",
+    presentationKind: "row",
+  });
+  const configChange = createCompanionConfigurationPatchChange(
+    companion,
+    replacement,
+    3,
+    1_800_000_001_000,
+  );
+  const configPatch = JSON.parse(new TextDecoder().decode(configChange.payload));
+  assert.equal(configChange.entityKind, "browser-companion-configuration");
+  assert.equal(configPatch.baseRevision, 42);
+  assert.equal(configPatch.replacement.branches[1].preset, "popular");
+  configChange.payload.fill(0);
+
+  const remote = createRemoteCommandChange(
+    companion,
+    deviceID,
+    "toggle-playback",
+    4,
+    1_800_000_002_000,
+  );
+  const remoteRequest = JSON.parse(new TextDecoder().decode(remote.payload));
+  assert.equal(remoteRequest.command, "toggle-playback");
+  assert.equal(remoteRequest.expiresAtEpochMilliseconds, 1_800_000_062_000);
+  assert.equal("mediaID" in remoteRequest, false);
+  remote.payload.fill(0);
+
+  const revoke = createDeviceRequestChange(
+    companion,
+    deviceID,
+    "revoke",
+    5,
+    { createdAtEpochMilliseconds: 1_800_000_003_000 },
+  );
+  assert.equal(JSON.parse(new TextDecoder().decode(revoke.payload)).action, "revoke");
+  revoke.payload.fill(0);
+});
+
+test("does not permit branch deletion or arbitrary provider queries", () => {
+  const companion = { profileID, revision: 42, configuration: companionConfiguration };
+  const removed = structuredClone(companionConfiguration);
+  removed.branches = [];
+  assert.throws(
+    () => createCompanionConfigurationPatchChange(companion, removed, 1),
+    (error) => error instanceof CedarSyncError && error.code === "branch_removal",
+  );
+  const arbitrary = structuredClone(companionConfiguration);
+  arbitrary.branches.push({
+    id: "private-provider-query",
+    title: "Private",
+    position: 1,
+    isEnabled: true,
+    preset: "provider-query",
+    sourceKind: "catalog",
+    presentationKind: "row",
+  });
+  assert.throws(
+    () => createCompanionConfigurationPatchChange(companion, arbitrary, 1),
+    CedarSyncError,
+  );
+});
+
+test("creates a one-use browser invitation with secrets only in the fragment", async () => {
+  const nativeFetch = globalThis.fetch;
+  let request;
+  globalThis.fetch = async (input, init) => {
+    request = { url: String(input), init };
+    return new Response("{}", { status: 200, headers: { "Content-Type": "application/json" } });
+  };
+  try {
+    const invitation = await createWebInvitation(
+      credentials,
+      "https://cedar.example/link/?discarded=yes#discarded",
+      1_800_000_000_000,
+    );
+    const url = new URL(invitation.url);
+    const body = JSON.parse(request.init.body);
+    assert.equal(url.search, "");
+    assert.match(url.hash, /enrollment=/);
+    assert.match(url.hash, /key=/);
+    assert.doesNotMatch(request.url, /enrollment|key=/);
+    assert.equal(body.enrollmentTokenHash.length, 44);
+    assert.doesNotMatch(request.init.body, /profileKey|deviceToken/);
+  } finally {
+    globalThis.fetch = nativeFetch;
+  }
 });
 
 test("rejects unsafe or no-op browser presentation patches", () => {

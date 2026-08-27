@@ -12,11 +12,20 @@ The Cedar source code, service credentials, Android signing keystore, and OTA ma
 
 `public/link/` contains the static, phone-friendly Cedar Link surface. It is safe-by-default,
 verifies relay health before accepting an invitation, and remains disabled while
-`public/sync-config.json` has an empty relay URL. After a link is claimed, the browser fetches,
-authenticates, decrypts, and bounded-decompresses the Apple profile snapshot locally. The linked
-profile summary and device credentials remain AES-GCM protected in browser storage. The companion
-can write back the allowlisted profile name, avatar, appearance, and stream-badge selection with an
-optimistic revision check; Cedar on iPhone remains authoritative and publishes the confirmation.
+`public/sync-config.json` has an empty relay URL. After a link is claimed, the browser fetches and
+authenticates Cedar's encrypted, content-free companion snapshot locally. The linked configuration
+and device credentials remain AES-GCM protected in browser storage.
+
+The companion can edit allowlisted profile presentation, playback/discovery settings, and Home
+branch configuration with optimistic revision checks. It can also create one-use recovery links,
+forget its own protected key, request owner-enforced device actions, and send expiring transport
+commands to linked Apple and Android Cedar devices. Cedar Link is deliberately not a player: it has
+no media element and never receives catalogs, guide rows, channel/program names, media titles,
+artwork, stream URLs, source candidates, or playback payloads. Its remote status contains only
+online, playing/paused, live-mode, and supported-command booleans.
+
+Legacy linked browsers can still bounded-decompress the Apple profile snapshot to migrate their
+existing presentation cache. New companion features use only the smaller explicit projection.
 
 Safari versions without raw `DecompressionStream` support use the vendored, MIT-licensed
 `fflate` 0.8.3 inflate routine. Only that tree-shaken routine is shipped, and Cedar applies the

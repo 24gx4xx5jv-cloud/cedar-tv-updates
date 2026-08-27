@@ -10,6 +10,8 @@ export const LIMITS = Object.freeze({
   credentialItemBytes: 64 * 1_024,
   credentialItemCount: 128,
   presentationPatchBytes: 16 * 1_024,
+  companionDocumentBytes: 256 * 1_024,
+  companionCommandBytes: 8 * 1_024,
   maximumFetch: 200,
   fetchPage: 5,
   maximumCatchUp: 2_000,
@@ -20,6 +22,14 @@ const STANDARD_BASE64_PATTERN = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-
 const BASE64_URL_PATTERN = /^[A-Za-z0-9_-]+$/;
 const COMPRESSED_MAGIC = new Uint8Array([0x43, 0x53, 0x5a, 0x31]);
 const PROFILE_THEMES = new Set(["system", "light", "dark", "cedarDay", "cedarNight", "highContrast"]);
+const TOP_SHELF_PRESENTATIONS = new Set(["automatic", "continue-watching", "featured"]);
+const BRANCH_PRESETS = new Set([
+  "continue-watching", "favorites", "watchlist", "trending", "popular", "top-rated", "coming-soon",
+]);
+const COMPANION_PLATFORMS = new Set(["apple", "android", "browser"]);
+const REMOTE_COMMANDS = new Set([
+  "status", "toggle-playback", "skip-backward", "skip-forward", "skip-intro", "next-episode", "jump-to-live",
+]);
 const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8", { fatal: true });
 
@@ -442,6 +452,272 @@ export const createProfilePresentationPatchChange = (
   return change;
 };
 
+const booleanValue = (value, message) => {
+  if (typeof value !== "boolean") fail("invalid_boolean", message);
+  return value;
+};
+
+export const validateCompanionSettings = (value) => {
+  const settings = record(value, "The Cedar companion settings are invalid.");
+  const metadataLanguageCode = boundedString(
+    settings.metadataLanguageCode,
+    35,
+    "The metadata language is invalid.",
+  );
+  if (!/^[A-Za-z0-9]{2,8}(?:-[A-Za-z0-9]{2,8})*$/.test(metadataLanguageCode)) {
+    fail("invalid_language", "The metadata language is invalid.");
+  }
+  const topShelfPresentation = boundedString(
+    settings.topShelfPresentation,
+    32,
+    "The top shelf presentation is invalid.",
+  );
+  if (!TOP_SHELF_PRESENTATIONS.has(topShelfPresentation)) {
+    fail("invalid_top_shelf", "The top shelf presentation is invalid.");
+  }
+  return {
+    metadataLanguageCode,
+    automaticallyPlayBestSource: booleanValue(settings.automaticallyPlayBestSource, "The source preference is invalid."),
+    automaticallyTryNextBestSource: booleanValue(settings.automaticallyTryNextBestSource, "The source preference is invalid."),
+    quickPlayFromPosters: booleanValue(settings.quickPlayFromPosters, "The source preference is invalid."),
+    hideUnreleasedTitles: booleanValue(settings.hideUnreleasedTitles, "The discovery preference is invalid."),
+    showsPosterCardRatings: booleanValue(settings.showsPosterCardRatings, "The poster preference is invalid."),
+    topShelfPresentation,
+    showsTopShelfViewingActivity: booleanValue(settings.showsTopShelfViewingActivity, "The top shelf preference is invalid."),
+    cleansUpLiveChannelNames: booleanValue(settings.cleansUpLiveChannelNames, "The Live TV preference is invalid."),
+  };
+};
+
+const validateCompanionBranch = (value, expectedPosition) => {
+  const branch = record(value, "A Cedar Home branch is invalid.");
+  const title = boundedString(branch.title, 80, "A Cedar Home branch title is invalid.");
+  if (title.trim() !== title) fail("invalid_branch", "A Cedar Home branch title is invalid.");
+  if (branch.position !== expectedPosition) fail("invalid_branch_order", "The Cedar Home branch order is invalid.");
+  const preset = branch.preset == null
+    ? null
+    : boundedString(branch.preset, 32, "The Cedar Home branch preset is invalid.");
+  if (preset !== null && !BRANCH_PRESETS.has(preset)) {
+    fail("invalid_branch_preset", "The Cedar Home branch preset is invalid.");
+  }
+  return {
+    id: identifier(branch.id, 128),
+    title,
+    position: expectedPosition,
+    isEnabled: booleanValue(branch.isEnabled, "The Cedar Home branch state is invalid."),
+    preset,
+    sourceKind: identifier(branch.sourceKind ?? "catalog", 64),
+    presentationKind: identifier(branch.presentationKind ?? "row", 64),
+  };
+};
+
+export const validateCompanionConfiguration = (value) => {
+  const configuration = record(value, "The Cedar companion configuration is invalid.");
+  const rawBranches = Array.isArray(configuration.branches)
+    ? configuration.branches
+    : fail("invalid_branches", "The Cedar Home branch list is invalid.");
+  if (rawBranches.length > 50) fail("too_many_branches", "The Cedar profile has too many Home branches.");
+  const branches = rawBranches.map(validateCompanionBranch);
+  if (new Set(branches.map((branch) => branch.id)).size !== branches.length) {
+    fail("duplicate_branches", "The Cedar profile contains duplicate Home branches.");
+  }
+  return {
+    presentation: validateProfilePresentation(configuration.presentation),
+    settings: validateCompanionSettings(configuration.settings),
+    branches,
+  };
+};
+
+const validateCompanionDevice = (value) => {
+  const device = record(value, "A linked Cedar device is invalid.");
+  const platform = boundedString(device.platform, 16, "A linked Cedar platform is invalid.");
+  if (!COMPANION_PLATFORMS.has(platform)) fail("invalid_platform", "A linked Cedar platform is invalid.");
+  const linkedAtEpochMilliseconds = positiveInteger(device.linkedAtEpochMilliseconds);
+  const lastSeenAtEpochMilliseconds = positiveInteger(device.lastSeenAtEpochMilliseconds);
+  if (lastSeenAtEpochMilliseconds < linkedAtEpochMilliseconds) {
+    fail("invalid_device_time", "A linked Cedar device timestamp is invalid.");
+  }
+  const displayName = boundedString(device.displayName, 80, "A linked Cedar device name is invalid.");
+  if (displayName.trim() !== displayName) fail("invalid_device_name", "A linked Cedar device name is invalid.");
+  return {
+    id: normalizeUUID(device.id),
+    displayName,
+    platform,
+    linkedAtEpochMilliseconds,
+    lastSeenAtEpochMilliseconds,
+    isCurrent: booleanValue(device.isCurrent, "A linked Cedar device state is invalid."),
+    supportsRemoteControl: booleanValue(device.supportsRemoteControl, "A linked Cedar device state is invalid."),
+  };
+};
+
+const validateRemoteStatus = (value) => {
+  const status = record(value, "A Cedar remote status is invalid.");
+  if (!Array.isArray(status.supportedCommands) || status.supportedCommands.length === 0) {
+    fail("invalid_remote_commands", "A Cedar remote status is invalid.");
+  }
+  const supportedCommands = status.supportedCommands.map((command) => {
+    if (!REMOTE_COMMANDS.has(command)) fail("invalid_remote_command", "A Cedar remote command is invalid.");
+    return command;
+  });
+  if (new Set(supportedCommands).size !== supportedCommands.length) {
+    fail("duplicate_remote_commands", "A Cedar remote status is invalid.");
+  }
+  return {
+    deviceID: normalizeUUID(status.deviceID),
+    isOnline: booleanValue(status.isOnline, "A Cedar remote status is invalid."),
+    isPlaying: booleanValue(status.isPlaying, "A Cedar remote status is invalid."),
+    isLive: booleanValue(status.isLive, "A Cedar remote status is invalid."),
+    supportedCommands,
+    updatedAtEpochMilliseconds: positiveInteger(status.updatedAtEpochMilliseconds),
+  };
+};
+
+export const decodeCompanionSnapshot = (change, expectedSpaceID) => {
+  if (change.entityKind !== "cedar-companion-snapshot") return null;
+  if (change.entityID.toLowerCase() !== change.profileID) {
+    fail("profile_mismatch", "The encrypted Cedar companion identity changed.");
+  }
+  if (change.operation === "tombstone") return { removed: true, profileID: change.profileID };
+  if (change.payload.length < 1 || change.payload.length > LIMITS.companionDocumentBytes) {
+    fail("companion_too_large", "The encrypted Cedar companion document is outside its safe size limit.");
+  }
+  try {
+    const raw = record(parseJSONBytes(change.payload, "The encrypted Cedar companion document is invalid."));
+    schemaOne(raw.schemaVersion);
+    const profileID = normalizeUUID(raw.profileID);
+    if (profileID !== change.profileID) fail("profile_mismatch", "The encrypted Cedar companion identity changed.");
+    const revision = positiveInteger(raw.revision);
+    if (revision !== change.revision) fail("revision_mismatch", "The encrypted Cedar companion revision changed.");
+    const devices = Array.isArray(raw.devices) ? raw.devices.map(validateCompanionDevice) : fail(
+      "invalid_devices",
+      "The linked Cedar device list is invalid.",
+    );
+    if (devices.length > 50 || new Set(devices.map((device) => device.id)).size !== devices.length) {
+      fail("invalid_devices", "The linked Cedar device list is invalid.");
+    }
+    const remoteStatuses = Array.isArray(raw.remoteStatuses)
+      ? raw.remoteStatuses.map(validateRemoteStatus)
+      : fail("invalid_remote_statuses", "The Cedar remote state is invalid.");
+    const deviceIDs = new Set(devices.map((device) => device.id));
+    if (new Set(remoteStatuses.map((status) => status.deviceID)).size !== remoteStatuses.length
+      || remoteStatuses.some((status) => !deviceIDs.has(status.deviceID))) {
+      fail("invalid_remote_statuses", "The Cedar remote state is invalid.");
+    }
+    return {
+      schemaVersion: 1,
+      spaceID: normalizeUUID(expectedSpaceID),
+      profileID,
+      revision,
+      publishedAtEpochMilliseconds: positiveInteger(raw.publishedAtEpochMilliseconds),
+      configuration: validateCompanionConfiguration(raw.configuration),
+      devices,
+      remoteStatuses,
+    };
+  } finally {
+    change.payload.fill(0);
+  }
+};
+
+const createCompanionChange = (profileIDValue, entityKind, entityID, document, authorSequence, maximumBytes) => {
+  const profileID = normalizeUUID(profileIDValue);
+  const createdAtEpochMilliseconds = positiveInteger(document.createdAtEpochMilliseconds);
+  const payload = encoder.encode(JSON.stringify(document));
+  if (payload.length > maximumBytes) {
+    payload.fill(0);
+    fail("command_too_large", "The Cedar Link request is too large.");
+  }
+  const change = validateChange({
+    schemaVersion: 1,
+    profileID,
+    entityKind,
+    entityID,
+    operation: "upsert",
+    revision: positiveInteger(authorSequence),
+    modifiedAtEpochMilliseconds: createdAtEpochMilliseconds,
+    payload: bytesToBase64(payload),
+  });
+  payload.fill(0);
+  return change;
+};
+
+export const createCompanionConfigurationPatchChange = (
+  companion,
+  replacementValue,
+  authorSequence,
+  createdAtEpochMilliseconds = Date.now(),
+) => {
+  const profileID = normalizeUUID(companion.profileID);
+  const baseRevision = positiveInteger(companion.revision, "Refresh Cedar Link before editing this profile.");
+  const base = validateCompanionConfiguration(companion.configuration);
+  const replacement = validateCompanionConfiguration(replacementValue);
+  if (JSON.stringify(base) === JSON.stringify(replacement)) {
+    fail("no_changes", "Make a configuration change before saving.");
+  }
+  // Removing branches remotely is intentionally not supported. Disable a row instead.
+  const replacementIDs = new Set(replacement.branches.map((branch) => branch.id));
+  if (base.branches.some((branch) => !replacementIDs.has(branch.id))) {
+    fail("branch_removal", "Cedar Link can hide a Home branch but cannot delete it.");
+  }
+  const baseIDs = new Set(base.branches.map((branch) => branch.id));
+  for (const branch of replacement.branches) {
+    if (!baseIDs.has(branch.id) && !BRANCH_PRESETS.has(branch.preset)) {
+      fail("invalid_branch_preset", "New Home branches must use a Cedar preset.");
+    }
+  }
+  return createCompanionChange(profileID, "browser-companion-configuration", profileID, {
+    schemaVersion: 1,
+    profileID,
+    baseRevision,
+    createdAtEpochMilliseconds: positiveInteger(createdAtEpochMilliseconds),
+    base,
+    replacement,
+  }, authorSequence, LIMITS.companionDocumentBytes);
+};
+
+export const createRemoteCommandChange = (
+  companion,
+  targetDeviceID,
+  command,
+  authorSequence,
+  createdAtEpochMilliseconds = Date.now(),
+) => {
+  if (!REMOTE_COMMANDS.has(command)) fail("invalid_remote_command", "That Cedar remote command is not supported.");
+  const requestID = crypto.randomUUID().toLowerCase();
+  return createCompanionChange(companion.profileID, "browser-remote-command", requestID, {
+    schemaVersion: 1,
+    requestID,
+    profileID: normalizeUUID(companion.profileID),
+    targetDeviceID: normalizeUUID(targetDeviceID),
+    command,
+    createdAtEpochMilliseconds: positiveInteger(createdAtEpochMilliseconds),
+    expiresAtEpochMilliseconds: createdAtEpochMilliseconds + 60_000,
+  }, authorSequence, LIMITS.companionCommandBytes);
+};
+
+export const createDeviceRequestChange = (
+  companion,
+  targetDeviceID,
+  action,
+  authorSequence,
+  { displayName = null, createdAtEpochMilliseconds = Date.now() } = {},
+) => {
+  if (action !== "rename" && action !== "revoke") fail("invalid_device_action", "That device action is not supported.");
+  if ((action === "rename") !== (displayName !== null)) fail("invalid_device_name", "A new device name is required.");
+  if (displayName !== null && (displayName.trim() !== displayName || !displayName || [...displayName].length > 80)) {
+    fail("invalid_device_name", "The linked Cedar device name is invalid.");
+  }
+  const requestID = crypto.randomUUID().toLowerCase();
+  return createCompanionChange(companion.profileID, "browser-device-action", requestID, {
+    schemaVersion: 1,
+    requestID,
+    profileID: normalizeUUID(companion.profileID),
+    targetDeviceID: normalizeUUID(targetDeviceID),
+    action,
+    displayName,
+    createdAtEpochMilliseconds: positiveInteger(createdAtEpochMilliseconds),
+    expiresAtEpochMilliseconds: createdAtEpochMilliseconds + 10 * 60_000,
+  }, authorSequence, LIMITS.companionCommandBytes);
+};
+
 const safeArray = (value) => Array.isArray(value) ? value : [];
 
 const decodedConfigurationPayload = (configuration, key) => {
@@ -741,9 +1017,74 @@ export const uploadEnvelope = async (credentials, envelope) => {
   return positiveInteger(root.serverSequence, "Cedar Sync returned an invalid save cursor.");
 };
 
+export const createWebInvitation = async (
+  credentials,
+  linkPageURL = window.location.href,
+  createdAtEpochMilliseconds = Date.now(),
+) => {
+  const invitationID = crypto.randomUUID().toLowerCase();
+  const enrollmentToken = crypto.getRandomValues(new Uint8Array(32));
+  const profileKey = base64URLToBytes(credentials.profileKey, 32);
+  const expiresAtEpochMilliseconds = positiveInteger(createdAtEpochMilliseconds) + 10 * 60_000;
+  const relay = new URL(credentials.relayBaseURL);
+  relay.pathname = `${relay.pathname.replace(/\/$/, "")}/v1/spaces/${normalizeUUID(credentials.spaceID)}/invitations`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15_000);
+  try {
+    const enrollmentTokenHash = new Uint8Array(await crypto.subtle.digest("SHA-256", enrollmentToken));
+    const response = await fetch(relay, {
+      method: "POST",
+      cache: "no-store",
+      credentials: "omit",
+      redirect: "error",
+      referrerPolicy: "no-referrer",
+      signal: controller.signal,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${credentials.deviceToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        schemaVersion: 1,
+        invitationID,
+        enrollmentTokenHash: bytesToBase64(enrollmentTokenHash),
+        expiresAtEpochMilliseconds,
+      }),
+    });
+    enrollmentTokenHash.fill(0);
+    if (!response.ok) {
+      if (response.status === 401 || response.status === 403) {
+        fail("authorization", "This browser can no longer create Cedar Link invitations.");
+      }
+      fail("relay_rejected", `Cedar Sync could not create the invitation (HTTP ${response.status}).`);
+    }
+    const target = new URL(linkPageURL);
+    target.search = "";
+    target.hash = new URLSearchParams({
+      v: "1",
+      relay: credentials.relayBaseURL,
+      space: normalizeUUID(credentials.spaceID),
+      invitation: invitationID,
+      enrollment: bytesToBase64URL(enrollmentToken),
+      key: bytesToBase64URL(profileKey),
+      expires: String(expiresAtEpochMilliseconds),
+    }).toString();
+    return { url: target.href, expiresAtEpochMilliseconds };
+  } catch (error) {
+    if (error instanceof CedarSyncError) throw error;
+    if (error?.name === "AbortError") fail("timeout", "Cedar Sync took too long to create the invitation.");
+    fail("network", "Cedar Sync could not create the invitation.");
+  } finally {
+    clearTimeout(timeout);
+    enrollmentToken.fill(0);
+    profileKey.fill(0);
+  }
+};
+
 export const fetchLatestProfile = async (credentials, startingCursor = 0) => {
   let cursor = nonnegativeInteger(startingCursor);
   let profile = null;
+  let companion = null;
   let sawChanges = false;
   const maximumPages = Math.ceil(LIMITS.maximumCatchUp / LIMITS.fetchPage);
   for (let page = 0; page < maximumPages; page += 1) {
@@ -753,14 +1094,19 @@ export const fetchLatestProfile = async (credentials, startingCursor = 0) => {
       const serverSequence = positiveInteger(item.serverSequence, "Cedar Sync returned an invalid cursor.");
       if (serverSequence <= cursor) fail("cursor_backwards", "The Cedar Sync cursor moved backwards.");
       const change = await openEnvelope(item.envelope, credentials);
-      const decoded = await decodeProfileSnapshot(change, credentials.spaceID);
-      if (decoded?.removed) profile = null;
-      else if (decoded) profile = decoded;
-      else change.payload.fill(0);
+      const decodedCompanion = decodeCompanionSnapshot(change, credentials.spaceID);
+      if (decodedCompanion?.removed) companion = null;
+      else if (decodedCompanion) companion = decodedCompanion;
+      else {
+        const decoded = await decodeProfileSnapshot(change, credentials.spaceID);
+        if (decoded?.removed) profile = null;
+        else if (decoded) profile = decoded;
+        else change.payload.fill(0);
+      }
       cursor = serverSequence;
       sawChanges = true;
     }
-    if (values.length < LIMITS.fetchPage) return { cursor, profile, sawChanges };
+    if (values.length < LIMITS.fetchPage) return { cursor, profile, companion, sawChanges };
   }
   fail("too_many_changes", "Cedar Sync has too many pending changes. Refresh and try again.");
 };
