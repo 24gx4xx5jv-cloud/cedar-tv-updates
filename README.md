@@ -14,9 +14,9 @@ The Cedar source code, service credentials, Android signing keystore, and OTA ma
 verifies relay health before accepting an invitation, and remains disabled while
 `public/sync-config.json` has an empty relay URL. After a link is claimed, the browser fetches,
 authenticates, decrypts, and bounded-decompresses the Apple profile snapshot locally. The linked
-profile summary and device credentials remain AES-GCM protected in browser storage. The current
-companion is read-only; avatar and badge choices are previews until write-back conflict handling is
-available on every Cedar platform.
+profile summary and device credentials remain AES-GCM protected in browser storage. The companion
+can write back the allowlisted profile name, avatar, appearance, and stream-badge selection with an
+optimistic revision check; Cedar on iPhone remains authoritative and publishes the confirmation.
 
 Safari versions without raw `DecompressionStream` support use the vendored, MIT-licensed
 `fflate` 0.8.3 inflate routine. Only that tree-shaken routine is shipped, and Cedar applies the
@@ -33,7 +33,8 @@ The companion's recovered Xperience artwork is stored directly in Git and served
 
 - `public/avatars/` contains 1,465 profile avatars.
 - `public/badges/` contains 1,581 unique badge images across 33 sets.
-- `public/catalogs/avatars.json` and `public/catalogs/badges.json` expose stable, site-local URLs for future selectors.
+- `public/catalogs/avatars.json` and `public/catalogs/badges.json` power the Cedar Link selectors.
+- `public/badge-packs/` contains 33 bounded Cedar-compatible manifests whose images stay on GitHub Pages.
 - `public/catalogs/xperience-assets.json` records byte sizes, source URLs, and SHA-256 checksums for every mirrored file.
 
 Run `node scripts/import-xperience-assets.mjs` to verify the local copies and regenerate the catalogs from the recovery reports. Existing valid files are reused.

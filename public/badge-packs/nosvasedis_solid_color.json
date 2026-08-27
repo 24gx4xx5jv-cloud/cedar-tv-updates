@@ -1,0 +1,812 @@
+{
+  "name": "Solid Color",
+  "groups": [
+    {
+      "id": "other",
+      "name": "Other",
+      "isExpanded": true
+    }
+  ],
+  "filters": [
+    {
+      "id": "nosvasedis_solid_color-1",
+      "name": "SEADEX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])SEADEX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/1.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-2",
+      "name": "DIR CUT",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DIR[ ._-]*CUT(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/2.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-3",
+      "name": "EXTENDED",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])EXTENDED(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/3.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-4",
+      "name": "TRUE-HUE",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])TRUE-HUE(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/4.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-5",
+      "name": "B&W",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])B&W(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/5.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-6",
+      "name": "NETFLIX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])NETFLIX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/6.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-7",
+      "name": "PRIME",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])PRIME(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/7.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-8",
+      "name": "APPLE TV+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])APPLE[ ._-]*TV\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/8.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-9",
+      "name": "DISNEY+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DISNEY\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/9.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-10",
+      "name": "MAX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])MAX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/10.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-11",
+      "name": "HULU",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HULU(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/11.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-12",
+      "name": "PEACOCK",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])PEACOCK(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/12.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-13",
+      "name": "PARAMOUNT+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])PARAMOUNT\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/13.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-14",
+      "name": "CRUNCHYROLL",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])CRUNCHYROLL(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/14.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-15",
+      "name": "WEB Unranked",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*Unranked(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/15.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-16",
+      "name": "WEB 6",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*6(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/16.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-17",
+      "name": "WEB 5",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*5(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/17.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-18",
+      "name": "WEB 4",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*4(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/18.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-19",
+      "name": "WEB 3",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*3(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/19.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-20",
+      "name": "WEB 2",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*2(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/20.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-21",
+      "name": "WEB 1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/21.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-22",
+      "name": "BLU-RAY Unranked",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*Unranked(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/22.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-23",
+      "name": "BLU-RAY 8",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*8(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/23.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-24",
+      "name": "BLU-RAY 7",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*7(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/24.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-25",
+      "name": "BLU-RAY 6",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*6(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/25.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-26",
+      "name": "BLU-RAY 5",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*5(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/26.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-27",
+      "name": "BLU-RAY 4",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*4(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/27.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-28",
+      "name": "BLU-RAY 3",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*3(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/28.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-29",
+      "name": "BLU-RAY 2",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*2(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/29.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-30",
+      "name": "BLU-RAY 1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/30.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-31",
+      "name": "REMUX Unranked",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*Unranked(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/31.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-32",
+      "name": "REMUX 3",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*3(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/32.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-33",
+      "name": "REMUX 2",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*2(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/33.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-34",
+      "name": "REMUX 1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/34.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-35",
+      "name": "Best Remux",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Best[ ._-]*Remux(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/35.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-36",
+      "name": "Best BluRay",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Best[ ._-]*BluRay(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/36.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-37",
+      "name": "Best WebDL",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Best[ ._-]*WebDL(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/37.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-38",
+      "name": "Good Remux",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Good[ ._-]*Remux(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/38.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-39",
+      "name": "Good BluRay",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Good[ ._-]*BluRay(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/39.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-40",
+      "name": "Good WebDL",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Good[ ._-]*WebDL(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/40.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-41",
+      "name": "OK Remux",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])OK[ ._-]*Remux(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/41.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-42",
+      "name": "OK BluRay",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])OK[ ._-]*BluRay(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/42.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-43",
+      "name": "OK WebDL",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])OK[ ._-]*WebDL(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/43.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-44",
+      "name": "Remux",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Remux(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/44.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-45",
+      "name": "BluRay",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BluRay(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/45.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-46",
+      "name": "WebDL",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WebDL(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/46.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-47",
+      "name": "WebRip",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WebRip(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/47.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-48",
+      "name": "4K",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:2160p|\\b4k\\b))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/48.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-49",
+      "name": "1080p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])1080p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/49.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-50",
+      "name": "720p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])720p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/50.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-51",
+      "name": "HDR10+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:hdr10\\+|hdr10plus))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/51.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-52",
+      "name": "HDR10",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR10(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/52.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-53",
+      "name": "HDR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/53.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-54",
+      "name": "IMAX Enhanced",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX[ ._-]*Enhanced(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/54.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-55",
+      "name": "IMAX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/55.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-56",
+      "name": "Atmos+DV",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Atmos\\+DV(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/56.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-57",
+      "name": "TrueHD+DV",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])TrueHD\\+DV(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/57.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-58",
+      "name": "DD++DV",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DD\\+\\+DV(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/58.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-59",
+      "name": "DD+DV",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DD\\+DV(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/59.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-60",
+      "name": "DV",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DV(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/60.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-61",
+      "name": "SDR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])SDR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/61.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-62",
+      "name": "3D",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])3D(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/62.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-63",
+      "name": "DTS:X",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?x)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/63.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-64",
+      "name": "DTS-HD MA",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?hd[ ._-]?ma)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/64.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-65",
+      "name": "DTS-HD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-HD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/65.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-66",
+      "name": "DTS",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/66.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-67",
+      "name": "Atmos",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Atmos(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/67.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-68",
+      "name": "TrueHD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:true[ ._-]?hd)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/68.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-69",
+      "name": "DD+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:dd\\+|ddp|eac3|e-ac-3))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/69.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-70",
+      "name": "DD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/70.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-71",
+      "name": "AAC",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])AAC(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/71.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-72",
+      "name": "FLAC",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])FLAC(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/72.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-73",
+      "name": "OPUS",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])OPUS(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/73.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-74",
+      "name": "MP3",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])MP3(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/74.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-75",
+      "name": "PCM",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])PCM(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/75.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-76",
+      "name": "7.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])7\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/76.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-77",
+      "name": "6.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])6\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/77.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-78",
+      "name": "5.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])5\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/78.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-79",
+      "name": "2.0",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])2\\.0(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/79.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-80",
+      "name": "English",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])English(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/80.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-81",
+      "name": "Spanish",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Spanish(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/81.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-82",
+      "name": "French",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])French(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/82.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-83",
+      "name": "German",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])German(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/83.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-84",
+      "name": "Italian",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Italian(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/84.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-85",
+      "name": "Portuguese (BR)",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Portuguese[ ._-]*\\(BR\\)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/85.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-86",
+      "name": "Portuguese (PT)",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Portuguese[ ._-]*\\(PT\\)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/86.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-87",
+      "name": "Turkish",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Turkish(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/87.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-88",
+      "name": "Polish",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Polish(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/88.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-89",
+      "name": "Ukrainian",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Ukrainian(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/89.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-90",
+      "name": "Indonesian",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Indonesian(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/90.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-91",
+      "name": "Thai",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Thai(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/91.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-92",
+      "name": "Vietnamese",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Vietnamese(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/92.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-93",
+      "name": "Japanese",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Japanese(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/93.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-94",
+      "name": "Korean",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Korean(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/94.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-95",
+      "name": "Chinese",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Chinese(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/95.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-96",
+      "name": "Hindi",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Hindi(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/96.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-97",
+      "name": "Arabic",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Arabic(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/97.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-98",
+      "name": "Russian",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Russian(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/98.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-99",
+      "name": "Greek",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Greek(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/99.webp"
+    },
+    {
+      "id": "nosvasedis_solid_color-100",
+      "name": "Multi",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Multi(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nosvasedis_solid/100.webp"
+    }
+  ]
+}

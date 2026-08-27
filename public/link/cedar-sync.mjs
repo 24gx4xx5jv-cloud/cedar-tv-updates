@@ -92,6 +92,21 @@ const avatarReference = (value) => {
   }
 };
 
+const badgeSelectionReference = (value) => {
+  if (value === "none" || value === "builtIn") return value;
+  boundedString(value, 2_048, "The Cedar badge selection is invalid.");
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" || url.username || url.password || url.hash) {
+      fail("invalid_badges", "The Cedar badge selection is invalid.");
+    }
+    return url.href;
+  } catch (error) {
+    if (error instanceof CedarSyncError) throw error;
+    fail("invalid_badges", "The Cedar badge selection is invalid.");
+  }
+};
+
 export const validateProfilePresentation = (value) => {
   const presentation = record(value, "The Cedar profile presentation is invalid.");
   const theme = boundedString(presentation.theme, 32, "The Cedar profile appearance is invalid.");
@@ -100,6 +115,7 @@ export const validateProfilePresentation = (value) => {
     name: normalizedProfileName(presentation.name),
     avatarSymbol: avatarReference(presentation.avatarSymbol),
     theme,
+    badgeSelection: badgeSelectionReference(presentation.badgeSelection ?? "builtIn"),
   };
 };
 
@@ -428,6 +444,55 @@ export const createProfilePresentationPatchChange = (
 
 const safeArray = (value) => Array.isArray(value) ? value : [];
 
+const decodedConfigurationPayload = (configuration, key) => {
+  const entry = safeArray(configuration).find((value) => value?.key === key);
+  if (typeof entry?.payload !== "string") return null;
+  let bytes;
+  try {
+    bytes = standardBase64ToBytes(entry.payload, 1, 2 * 1_024 * 1_024);
+    return parseJSONBytes(bytes, "The Cedar profile configuration is invalid.");
+  } catch {
+    return null;
+  } finally {
+    bytes?.fill(0);
+  }
+};
+
+const safeBadgeState = (configuration) => {
+  const rawPacks = decodedConfigurationPayload(configuration, "addons.badgePacks");
+  const installedBadgePacks = [];
+  for (const value of safeArray(rawPacks).slice(0, 10)) {
+    try {
+      const id = normalizeUUID(value?.id);
+      const sourceURL = badgeSelectionReference(value?.sourceURL);
+      if (sourceURL === "none" || sourceURL === "builtIn") continue;
+      const packName = typeof value?.pack?.name === "string"
+        && value.pack.name.trim()
+        && [...value.pack.name.trim()].length <= 128
+        ? value.pack.name.trim()
+        : new URL(sourceURL).hostname;
+      installedBadgePacks.push({ id, name: packName, sourceURL });
+    } catch {
+      // One invalid installed pack must not hide the rest of the linked profile.
+    }
+  }
+
+  const storedSelection = decodedConfigurationPayload(configuration, "addons.badgeSelection");
+  let badgeSelection = "builtIn";
+  if (storedSelection === "none" || storedSelection === "builtIn") {
+    badgeSelection = storedSelection;
+  } else if (typeof storedSelection === "string" && storedSelection.startsWith("custom:")) {
+    try {
+      const selectedID = normalizeUUID(storedSelection.slice("custom:".length));
+      badgeSelection = installedBadgePacks.find((pack) => pack.id === selectedID)?.sourceURL
+        ?? "builtIn";
+    } catch {
+      // Cedar itself falls back to the built-in pack when the stored custom pack is missing.
+    }
+  }
+  return { badgeSelection, installedBadgePacks };
+};
+
 const safeProfileSummary = (portable, snapshot) => {
   const root = record(portable, "The Cedar profile document is invalid.");
   const profile = record(root.profile, "The Cedar profile document is missing its profile.");
@@ -460,6 +525,7 @@ const safeProfileSummary = (portable, snapshot) => {
   const sources = safeArray(root.sources);
   const homeBranches = safeArray(root.homeBranches);
   const homeShelves = safeArray(root.homeShelves);
+  const badgeState = safeBadgeState(root.configuration);
   return {
     schemaVersion: 1,
     spaceID: snapshot.spaceID,
@@ -468,6 +534,7 @@ const safeProfileSummary = (portable, snapshot) => {
     avatarSymbol,
     avatarEditable,
     theme,
+    ...badgeState,
     isKids: profile.isKids === true,
     requiresPIN: profile.requiresPIN === true,
     ratingLimit: Number.isSafeInteger(profile.ratingLimit) ? profile.ratingLimit : null,

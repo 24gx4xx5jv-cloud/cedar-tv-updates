@@ -1,0 +1,204 @@
+{
+  "name": "Black & White",
+  "groups": [
+    {
+      "id": "other",
+      "name": "Other",
+      "isExpanded": true
+    }
+  ],
+  "filters": [
+    {
+      "id": "bringerofrainx1_black_white-1",
+      "name": "Remux",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Remux(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/4.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-2",
+      "name": "BluRay",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BluRay(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/5.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-3",
+      "name": "WEB-DL",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:web[ ._-]?dl)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/6.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-4",
+      "name": "WEBRip",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEBRip(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/7.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-5",
+      "name": "SeaDex",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])SeaDex(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/8.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-6",
+      "name": "IMAX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/9.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-7",
+      "name": "DV",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DV(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/10.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-8",
+      "name": "HDR10+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:hdr10\\+|hdr10plus))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/11.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-9",
+      "name": "HDR10",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR10(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/12.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-10",
+      "name": "HDR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/13.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-11",
+      "name": "4K",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:2160p|\\b4k\\b))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/1.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-12",
+      "name": "1080p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])1080p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/2.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-13",
+      "name": "720p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])720p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/3.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-14",
+      "name": "TrueHD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:true[ ._-]?hd)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/14.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-15",
+      "name": "Atmos",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Atmos(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/15.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-16",
+      "name": "DTS:X",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?x)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/16.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-17",
+      "name": "DTS-HD MA",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?hd[ ._-]?ma)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/17.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-18",
+      "name": "DTS-HD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-HD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/18.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-19",
+      "name": "DTS",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/19.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-20",
+      "name": "DD+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:dd\\+|ddp|eac3|e-ac-3))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/20.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-21",
+      "name": "DD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/21.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-22",
+      "name": "7.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])7\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/22.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-23",
+      "name": "6.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])6\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/23.webp"
+    },
+    {
+      "id": "bringerofrainx1_black_white-24",
+      "name": "5.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])5\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/black_white/24.webp"
+    }
+  ]
+}

@@ -325,6 +325,17 @@
 .library-loading { grid-column: 1 / -1; margin: 12px 0; color: #7b8087; font-size: 0.78rem; }
 .library-more { width: 100%; margin-top: 12px; border: 1px solid var(--line); background: #181b20; color: var(--text); cursor: pointer; }
 
+.badge-status {
+  margin: 14px 0 0;
+  padding: 11px 12px;
+  border: 1px solid rgba(147, 177, 125, 0.2);
+  border-radius: 10px;
+  background: rgba(120, 153, 101, 0.07);
+  color: #aebfa6;
+  font-size: 0.73rem;
+  line-height: 1.45;
+}
+
 .badge-preview {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

@@ -9,7 +9,7 @@ import {
   sealEnvelope,
   uploadEnvelope,
   validateProfilePresentation,
-} from "./cedar-sync.mjs?v=profile-editor-2";
+} from "./cedar-sync.mjs?v=profile-editor-3";
 
 const pairing = document.querySelector("#link-pairing");
 const card = document.querySelector("#link-card");
@@ -41,6 +41,7 @@ const avatarGrid = document.querySelector("#avatar-grid");
 const avatarMore = document.querySelector("#avatar-more");
 const badgeLibrary = document.querySelector("#badge-library");
 const badgeSelector = document.querySelector("#badge-selector");
+const badgeStatus = document.querySelector("#badge-status");
 const badgePreview = document.querySelector("#badge-preview");
 const hasInvitationFragment = window.location.hash.length > 1;
 
@@ -48,6 +49,7 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3
 const KEY_PATTERN = /^[A-Za-z0-9_-]{43}$/;
 const AVATAR_PATH_PATTERN = /^\/avatars\/[a-z0-9_-]+\/[a-z0-9_-]+\.webp$/i;
 const BADGE_PATH_PATTERN = /^\/badges\/[a-z0-9_-]+\/[a-z0-9_-]+\.webp$/i;
+const BADGE_PACK_PATH_PATTERN = /^\/cedar-tv-updates\/badge-packs\/[a-z0-9_-]+\.json$/i;
 const databaseName = "cedar-link-v1";
 const wrappingKeyName = "profile-wrapping-key-v1";
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -361,17 +363,20 @@ const presentationForProfile = (profile) => validateProfilePresentation({
   name: profile.name,
   avatarSymbol: profile.avatarSymbol,
   theme: profile.theme,
+  badgeSelection: profile.badgeSelection,
 });
 
 const presentationsMatch = (left, right) => left?.name === right?.name
   && left?.avatarSymbol === right?.avatarSymbol
-  && left?.theme === right?.theme;
+  && left?.theme === right?.theme
+  && left?.badgeSelection === right?.badgeSelection;
 
 const resetDraft = (item) => {
   draftSpaceID = item?.credentials.spaceID || "";
   draftPresentation = item?.profile ? presentationForProfile(item.profile) : null;
   profileNameInput.value = draftPresentation?.name || "";
   profileTheme.value = draftPresentation?.theme || "system";
+  if (badgeCatalog) renderBadges();
 };
 
 const renderEditorState = () => {
@@ -393,6 +398,7 @@ const renderEditorState = () => {
   for (const field of profileEditor.querySelectorAll("input, select, button")) {
     field.disabled = unavailable || pending || isSavingProfile;
   }
+  badgeSelector.disabled = unavailable || pending || isSavingProfile || !badgeCatalog;
   saveProfileButton.disabled = unavailable || pending || isSavingProfile || !changed;
   saveProfileButton.textContent = isSavingProfile
     ? "Encrypting changes…"
@@ -654,21 +660,96 @@ const loadBadges = async () => {
   if (!response.ok) throw new Error("badge catalog unavailable");
   const value = await response.json();
   if (!Array.isArray(value.sets)) throw new Error("badge catalog invalid");
-  badgeCatalog = value.sets.filter((set) => Array.isArray(set?.badges) && typeof set?.label === "string");
-  badgeSelector.replaceChildren();
-  for (const [index, set] of badgeCatalog.entries()) {
-    const option = document.createElement("option");
-    option.value = String(index);
-    option.textContent = `${set.label} · ${set.creator || "Community"}`;
-    badgeSelector.append(option);
-  }
+  badgeCatalog = value.sets.filter((set) => {
+    if (!Array.isArray(set?.badges) || typeof set?.label !== "string" || typeof set?.sourceURL !== "string") return false;
+    try {
+      const source = new URL(set.sourceURL);
+      return source.protocol === "https:"
+        && source.origin === "https://24gx4xx5jv-cloud.github.io"
+        && BADGE_PACK_PATH_PATTERN.test(source.pathname);
+    } catch {
+      return false;
+    }
+  });
   renderBadges();
 };
 
+const addBadgeOption = (parent, value, label, { current = false, installed = false } = {}) => {
+  const option = document.createElement("option");
+  option.value = value;
+  option.textContent = `${label}${current ? " · Current" : installed ? " · Installed" : ""}`;
+  parent.append(option);
+};
+
 const renderBadges = () => {
-  const set = badgeCatalog?.[Number(badgeSelector.value) || 0];
+  const item = selectedProfile();
+  const profile = item?.profile;
+  const installed = Array.isArray(profile?.installedBadgePacks) ? profile.installedBadgePacks : [];
+  const currentSelection = profile?.badgeSelection || "builtIn";
+  const selected = draftPresentation?.badgeSelection || currentSelection;
+
+  badgeSelector.replaceChildren();
+  const cedarOptions = document.createElement("optgroup");
+  cedarOptions.label = "Cedar";
+  addBadgeOption(cedarOptions, "builtIn", "Cedar built-in badges", {
+    current: currentSelection === "builtIn",
+  });
+  addBadgeOption(cedarOptions, "none", "Badges off", { current: currentSelection === "none" });
+  badgeSelector.append(cedarOptions);
+
+  const catalogSources = new Set(badgeCatalog?.map((set) => set.sourceURL) || []);
+  const otherInstalled = installed.filter((pack) => !catalogSources.has(pack.sourceURL));
+  if (otherInstalled.length > 0) {
+    const installedOptions = document.createElement("optgroup");
+    installedOptions.label = "Installed on iPhone";
+    for (const pack of otherInstalled) {
+      addBadgeOption(installedOptions, pack.sourceURL, pack.name, {
+        current: currentSelection === pack.sourceURL,
+        installed: true,
+      });
+    }
+    badgeSelector.append(installedOptions);
+  }
+
+  const libraryOptions = document.createElement("optgroup");
+  libraryOptions.label = "Cedar badge library";
+  for (const set of badgeCatalog || []) {
+    addBadgeOption(libraryOptions, set.sourceURL, `${set.label} · ${set.creator || "Community"}`, {
+      current: currentSelection === set.sourceURL,
+      installed: installed.some((pack) => pack.sourceURL === set.sourceURL),
+    });
+  }
+  badgeSelector.append(libraryOptions);
+  badgeSelector.value = selected;
+  if (badgeSelector.value !== selected) badgeSelector.value = currentSelection;
+  badgeSelector.disabled = !profile
+    || profile.avatarEditable !== true
+    || Boolean(item?.pending || isSavingProfile);
+
+  const currentSet = badgeCatalog?.find((set) => set.sourceURL === currentSelection);
+  const currentInstalled = installed.find((pack) => pack.sourceURL === currentSelection);
+  const currentLabel = currentSelection === "none"
+    ? "Badges off"
+    : currentSelection === "builtIn"
+      ? "Cedar built-in badges"
+      : currentSet?.label || currentInstalled?.name || "Custom badge set";
+  badgeStatus.textContent = installed.length > 0
+    ? `Current on iPhone: ${currentLabel} · ${installed.length} custom ${installed.length === 1 ? "set" : "sets"} installed`
+    : `Current on iPhone: ${currentLabel} · No custom sets installed`;
+
+  const set = badgeCatalog?.find((value) => value.sourceURL === badgeSelector.value);
   badgePreview.replaceChildren();
-  if (!set) return;
+  if (!set) {
+    const note = document.createElement("p");
+    note.className = "library-loading";
+    note.textContent = badgeSelector.value === "none"
+      ? "Technical stream badges will be hidden."
+      : badgeSelector.value === "builtIn"
+        ? "Cedar's built-in technical badges will be used."
+        : "This installed badge pack is available on the iPhone.";
+    badgePreview.append(note);
+    return;
+  }
   for (const badge of set.badges.filter((item) => item?.enabled !== false).slice(0, 8)) {
     if (typeof badge.imageURL !== "string" || !BADGE_PATH_PATTERN.test(badge.imageURL)) continue;
     const image = document.createElement("img");
@@ -735,6 +816,7 @@ const saveProfilePresentation = async () => {
     isSavingProfile = false;
     renderEditorState();
     if (avatarCatalog) renderAvatars();
+    if (badgeCatalog) renderBadges();
   }
 };
 
@@ -871,9 +953,19 @@ badgeLibrary.addEventListener("toggle", () => {
 });
 
 badgeSelector.addEventListener("change", () => {
+  const item = selectedProfile();
+  if (!item?.profile || item.pending || isSavingProfile || !draftPresentation) return;
+  draftPresentation = { ...draftPresentation, badgeSelection: badgeSelector.value };
   renderBadges();
-  const set = badgeCatalog?.[Number(badgeSelector.value) || 0];
-  if (set) syncMessage.textContent = `Previewing the ${set.label} badge set. This preview is not sent back to Cedar.`;
+  renderEditorState();
+  const set = badgeCatalog?.find((value) => value.sourceURL === badgeSelector.value);
+  const label = badgeSelector.value === "none"
+    ? "Badges off"
+    : badgeSelector.value === "builtIn"
+      ? "Cedar built-in badges"
+      : set?.label || "Installed badge set";
+  syncMessage.classList.remove("is-error", "is-success");
+  syncMessage.textContent = `${label} selected. Save the profile to send it to Cedar.`;
 });
 
 document.addEventListener("visibilitychange", () => {

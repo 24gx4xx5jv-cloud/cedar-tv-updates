@@ -125,12 +125,13 @@
 
           <details class="artwork-library" id="badge-library">
             <summary>
-              <span>Explore badge sets</span>
-              <small>33 recovered sets · preview only</small>
+              <span>Choose a badge set</span>
+              <small>33 recovered sets · encrypted write-back</small>
             </summary>
             <div class="library-body">
+              <p class="badge-status" id="badge-status">Checking the badge set currently installed on your iPhone…</p>
               <label class="search-label" for="badge-selector">Badge set</label>
-              <select class="profile-selector" id="badge-selector"></select>
+              <select class="profile-selector" id="badge-selector" disabled></select>
               <div class="badge-preview" id="badge-preview"></div>
             </div>
           </details>
@@ -138,7 +139,7 @@
           <div class="companion-actions">
             <a class="button button-primary" href="./">Link another profile</a>
           </div>
-          <p class="link-footnote">The editor can change only the profile name, avatar, and appearance. Sources, credentials, content limits, and account sessions remain controlled by Cedar.</p>
+          <p class="link-footnote">The editor can change the profile name, avatar, appearance, and stream badge set. Sources, credentials, content limits, and account sessions remain controlled by Cedar.</p>
         </div>
       </section>
     </main>
@@ -151,6 +152,6 @@
       </div>
     </footer>
 
-    <script type="module" src="link.js?v=profile-editor-2"></script>
+    <script type="module" src="link.js?v=profile-editor-3"></script>
   </body>
 </html>

@@ -22,6 +22,8 @@ const spaceID = randomUUID();
 const deviceID = randomUUID();
 const changeID = randomUUID();
 const profileID = randomUUID();
+const installedBadgePackID = randomUUID();
+const installedBadgePackURL = "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/xp_aurora.json";
 const profileKey = randomBytes(32);
 const credentials = {
   relayBaseURL: "https://relay.example",
@@ -44,6 +46,20 @@ const portableProfile = {
   sources: [{ isEnabled: true }, { isEnabled: false }],
   homeBranches: [{ isEnabled: true }, { isEnabled: true }],
   homeShelves: [{ isEnabled: true }],
+  configuration: [
+    {
+      key: "addons.badgePacks",
+      payload: bytesToBase64(textEncoder.encode(JSON.stringify([{
+        id: installedBadgePackID,
+        sourceURL: installedBadgePackURL,
+        pack: { name: "Aurora" },
+      }]))),
+    },
+    {
+      key: "addons.badgeSelection",
+      payload: bytesToBase64(textEncoder.encode(JSON.stringify(`custom:${installedBadgePackID}`))),
+    },
+  ],
 };
 
 const makeSnapshotBytes = ({ compressed = true, wrapped = false } = {}) => {
@@ -111,6 +127,12 @@ test("authenticates and decodes Apple's raw-DEFLATE profile snapshot", async () 
     avatarSymbol: "https://cdn.xperience-app.com/avatars/netflix/chicken-onb.webp",
     avatarEditable: true,
     theme: "dark",
+    badgeSelection: installedBadgePackURL,
+    installedBadgePacks: [{
+      id: installedBadgePackID.toLowerCase(),
+      name: "Aurora",
+      sourceURL: installedBadgePackURL,
+    }],
     isKids: false,
     requiresPIN: true,
     ratingLimit: 18,
@@ -131,12 +153,14 @@ test("seals an allowlisted browser presentation patch for Apple Cedar", async ()
     name: "Living Room",
     avatarSymbol: "person.crop.circle.fill",
     theme: "system",
+    badgeSelection: "builtIn",
   };
   const replacement = {
     name: "Tyler",
     avatarSymbol:
       "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/avatars/nuvio/avatar.webp",
     theme: "dark",
+    badgeSelection: installedBadgePackURL,
   };
   const change = createProfilePresentationPatchChange(
     profile,
@@ -160,6 +184,7 @@ test("seals an allowlisted browser presentation patch for Apple Cedar", async ()
     name: "Living Room",
     avatarSymbol: "person.crop.circle.fill",
     theme: "system",
+    badgeSelection: "builtIn",
   });
   assert.deepEqual(patch.replacement, replacement);
   opened.payload.fill(0);
@@ -178,6 +203,14 @@ test("rejects unsafe or no-op browser presentation patches", () => {
       name: "Living Room",
       avatarSymbol: "data:image/png;base64,AQID",
       theme: "system",
+      badgeSelection: "builtIn",
+    }, 1),
+    CedarSyncError,
+  );
+  assert.throws(
+    () => createProfilePresentationPatchChange(profile, {
+      ...profile,
+      badgeSelection: "http://example.com/unsafe-badges.json",
     }, 1),
     CedarSyncError,
   );

@@ -266,7 +266,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/xp_aurora/p-crunchyroll.webp?v=13"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "xp_aurora",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/xp_aurora.json"
     },
     {
       "index": 1,
@@ -524,7 +526,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/xp_pulse/p-crunchyroll.webp?v=13"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "xp_pulse",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/xp_pulse.json"
     },
     {
       "index": 2,
@@ -782,7 +786,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/xp_prism/p-crunchyroll.webp?v=13"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "xp_prism",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/xp_prism.json"
     },
     {
       "index": 3,
@@ -1040,7 +1046,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/xp_white/crunchyroll.webp?v=7"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "xp_spectrum",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/xp_spectrum.json"
     },
     {
       "index": 4,
@@ -1298,7 +1306,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/xp_white/crunchyroll.webp?v=7"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "xp_onyx",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/xp_onyx.json"
     },
     {
       "index": 5,
@@ -1556,7 +1566,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/xp_white/crunchyroll.webp?v=7"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "xp_wire",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/xp_wire.json"
     },
     {
       "index": 6,
@@ -1814,7 +1826,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/xp_white/crunchyroll.webp?v=7"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "xp_ghost",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/xp_ghost.json"
     },
     {
       "index": 7,
@@ -2060,7 +2074,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/voidxo_starter/crunchyroll.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "voidxo_studio_starter",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/voidxo_studio_starter.json"
     },
     {
       "index": 8,
@@ -2258,7 +2274,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/elite/31.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "leonevz_mono_logos",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/leonevz_mono_logos.json"
     },
     {
       "index": 9,
@@ -2450,7 +2468,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/ngreyx1/30.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "ngreyx1_dark_logos",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/ngreyx1_dark_logos.json"
     },
     {
       "index": 10,
@@ -2618,7 +2638,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/ngreyx1_updated/26.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "ngreyx1_dark_logos_v2",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/ngreyx1_dark_logos_v2.json"
     },
     {
       "index": 11,
@@ -3230,7 +3252,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/nosvasedis_solid/100.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "nosvasedis_solid_color",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/nosvasedis_solid_color.json"
     },
     {
       "index": 12,
@@ -3842,7 +3866,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/nosvasedis_mono/100.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "nosvasedis_mono",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/nosvasedis_mono.json"
     },
     {
       "index": 13,
@@ -4454,7 +4480,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/nosvasedis_transparent/100.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "nosvasedis_transparent",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/nosvasedis_transparent.json"
     },
     {
       "index": 14,
@@ -4970,7 +4998,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/nosvasedis_3d/84.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "nosvasedis_3d",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/nosvasedis_3d.json"
     },
     {
       "index": 15,
@@ -5180,7 +5210,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/mousaa_colored/33.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "9mousaa_colored_combo",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/9mousaa_colored_combo.json"
     },
     {
       "index": 16,
@@ -5390,7 +5422,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/mousaa_mono/33.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "9mousaa_mono_combo",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/9mousaa_mono_combo.json"
     },
     {
       "index": 17,
@@ -5606,7 +5640,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/eibyx/34.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "eibyx_logo_pack",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/eibyx_logo_pack.json"
     },
     {
       "index": 18,
@@ -5822,7 +5858,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/colorful_concise/s-h264.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "sterzeck_colorful_concise",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/sterzeck_colorful_concise.json"
     },
     {
       "index": 19,
@@ -6044,7 +6082,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/minimalist_v2/35.svg"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "starkles_minimalist_v2",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/starkles_minimalist_v2.json"
     },
     {
       "index": 20,
@@ -6548,7 +6588,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/golden_animated/82.webp?v=2"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "haz_golden_animated",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/haz_golden_animated.json"
     },
     {
       "index": 21,
@@ -6818,7 +6860,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/ume_standard/25.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "nobnobz_ume_standard",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/nobnobz_ume_standard.json"
     },
     {
       "index": 22,
@@ -7088,7 +7132,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/ume_colored/25.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "nobnobz_ume_colored",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/nobnobz_ume_colored.json"
     },
     {
       "index": 23,
@@ -7358,7 +7404,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/ume_minimal/25.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "nobnobz_ume_minimal",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/nobnobz_ume_minimal.json"
     },
     {
       "index": 24,
@@ -7754,7 +7802,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/gold/LANG ZH.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "k45sle_gold",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/k45sle_gold.json"
     },
     {
       "index": 25,
@@ -7910,7 +7960,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/black_white/24.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "bringerofrainx1_black_white",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/bringerofrainx1_black_white.json"
     },
     {
       "index": 26,
@@ -8156,7 +8208,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/voidxo_tinted/37.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "voidxo_tinted",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/voidxo_tinted.json"
     },
     {
       "index": 27,
@@ -8804,7 +8858,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/nardbadges/multi.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "vowl313_nardbadges",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/vowl313_nardbadges.json"
     },
     {
       "index": 28,
@@ -9416,7 +9472,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/kingsize/streaming/crunchyroll.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "kingsizew_kingsize_colored",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/kingsizew_kingsize_colored.json"
     },
     {
       "index": 29,
@@ -10028,7 +10086,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/kingsize/streaming/crunchyroll-orange.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "kingsizew_kingsize_outline",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/kingsizew_kingsize_outline.json"
     },
     {
       "index": 30,
@@ -10640,7 +10700,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/kingsize/streaming/crunchyroll-black.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "kingsizew_kingsize_solid",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/kingsizew_kingsize_solid.json"
     },
     {
       "index": 31,
@@ -11252,7 +11314,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/kingsize/streaming/crunchyroll-black.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "kingsizew_kingsize_mono_white",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/kingsizew_kingsize_mono_white.json"
     },
     {
       "index": 32,
@@ -11864,7 +11928,9 @@
           "originalImageURL": "https://cdn.xperience-app.com/badges/kingsize/streaming/crunchyroll.webp"
         }
       ],
-      "verified": true
+      "verified": true,
+      "id": "kingsizew_kingsize_white",
+      "sourceURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/kingsizew_kingsize_white.json"
     }
   ]
 }

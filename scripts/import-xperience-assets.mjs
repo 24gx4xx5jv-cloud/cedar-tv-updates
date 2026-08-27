@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(scriptDirectory, "..");
 const publicRoot = path.join(repositoryRoot, "public");
-const defaultReportsRoot = path.resolve(repositoryRoot, "../../Cedar/Reports");
+const defaultReportsRoot = path.resolve(repositoryRoot, "../Cedar/Reports");
 
 const avatarCatalogPath = path.resolve(
   process.argv[2] ??
@@ -169,6 +169,57 @@ function json(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
+const publishedBaseURL = "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates";
+const badgeGroupNames = new Map([
+  ["r", "Resolution"],
+  ["q", "Source quality"],
+  ["v", "Video"],
+  ["a", "Audio"],
+  ["c", "Channels"],
+  ["co", "Codec"],
+  ["p", "Provider"],
+  ["other", "Other"],
+]);
+const specialBadgePatterns = new Map([
+  ["4k", "(?:2160p|\\b4k\\b)"],
+  ["dolby vision", "(?:dolby[ ._-]?vision|\\bdv\\b)"],
+  ["hdr10+", "(?:hdr10\\+|hdr10plus)"],
+  ["web-dl", "web[ ._-]?dl"],
+  ["dd+", "(?:dd\\+|ddp|eac3|e-ac-3)"],
+  ["dts:x", "dts[ ._-]?x"],
+  ["dts-hd ma", "dts[ ._-]?hd[ ._-]?ma"],
+  ["truehd", "true[ ._-]?hd"],
+]);
+
+function badgeSetIdentifier(set) {
+  const slug = (value) => value.toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+  const creator = set.creator === "Xperience" ? "xp" : slug(set.creator || "community");
+  const identifier = `${creator}_${slug(set.label)}`;
+  if (!/^[a-z0-9_-]+$/i.test(identifier) || identifier.length > 96) {
+    throw new Error(`Badge set ${set.label} has an unsafe identifier.`);
+  }
+  return identifier;
+}
+
+function badgePattern(name) {
+  const normalized = name.trim().toLowerCase();
+  const special = specialBadgePatterns.get(normalized);
+  if (special) return `(?i)(?:^|[^A-Za-z0-9])(?:${special})(?:$|[^A-Za-z0-9])`;
+  const escaped = name.trim()
+    .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    .replace(/\s+/g, "[ ._-]*");
+  return `(?i)(?:^|[^A-Za-z0-9])${escaped}(?:$|[^A-Za-z0-9])`;
+}
+
+function badgeGroupID(imageURL) {
+  const filename = new URL(imageURL).pathname.split("/").at(-1).replace(/\.[^.]+$/, "");
+  const prefix = filename.includes("-") ? filename.split("-")[0].toLowerCase() : "other";
+  return badgeGroupNames.has(prefix) ? prefix : "other";
+}
+
 const avatarCatalog = JSON.parse(await readFile(avatarCatalogPath, "utf8"));
 const badgeCatalog = JSON.parse(await readFile(badgeCatalogPath, "utf8"));
 
@@ -239,16 +290,51 @@ const localAvatarCatalog = {
   })),
 };
 
+const badgePackManifests = badgeCatalog.sets.map((set) => {
+  const identifier = badgeSetIdentifier(set);
+  const usedGroups = [...new Set(set.badges.map((badge) => badgeGroupID(badge.imageURL)))];
+  return {
+    identifier,
+    sourceURL: `${publishedBaseURL}/badge-packs/${identifier}.json`,
+    pack: {
+      name: set.label,
+      groups: usedGroups.map((id) => ({ id, name: badgeGroupNames.get(id), isExpanded: true })),
+      filters: set.badges.map((badge, index) => ({
+        id: `${identifier}-${index + 1}`,
+        name: badge.name,
+        groupId: badgeGroupID(badge.imageURL),
+        isEnabled: badge.enabled !== false,
+        pattern: badgePattern(badge.name),
+        imageURL: `${publishedBaseURL}${localURLBySource.get(badge.imageURL)}`,
+      })),
+    },
+  };
+});
+
+if (new Set(badgePackManifests.map((value) => value.identifier)).size !== badgePackManifests.length) {
+  throw new Error("Recovered badge sets do not have unique stable identifiers.");
+}
+
+const badgePackByIdentifier = new Map(
+  badgePackManifests.map((value) => [value.identifier, value]),
+);
+
 const localBadgeCatalog = {
   ...badgeCatalog,
-  sets: badgeCatalog.sets.map((set) => ({
-    ...set,
-    badges: set.badges.map((badge) => ({
-      ...badge,
-      originalImageURL: badge.imageURL,
-      imageURL: localURLBySource.get(badge.imageURL),
-    })),
-  })),
+  sets: badgeCatalog.sets.map((set) => {
+    const identifier = badgeSetIdentifier(set);
+    const manifest = badgePackByIdentifier.get(identifier);
+    return {
+      ...set,
+      id: identifier,
+      sourceURL: manifest.sourceURL,
+      badges: set.badges.map((badge) => ({
+        ...badge,
+        originalImageURL: badge.imageURL,
+        imageURL: localURLBySource.get(badge.imageURL),
+      })),
+    };
+  }),
 };
 
 const generatedAt = new Date().toISOString();
@@ -269,7 +355,9 @@ const manifest = {
 };
 
 const catalogsDirectory = path.join(publicRoot, "catalogs");
+const badgePacksDirectory = path.join(publicRoot, "badge-packs");
 await mkdir(catalogsDirectory, { recursive: true });
+await mkdir(badgePacksDirectory, { recursive: true });
 await Promise.all([
   writeFile(path.join(catalogsDirectory, "avatars.json"), json(localAvatarCatalog)),
   writeFile(path.join(catalogsDirectory, "badges.json"), json(localBadgeCatalog)),
@@ -277,6 +365,10 @@ await Promise.all([
     path.join(catalogsDirectory, "xperience-assets.json"),
     json(manifest),
   ),
+  ...badgePackManifests.map(({ identifier, pack }) => writeFile(
+    path.join(badgePacksDirectory, `${identifier}.json`),
+    json(pack),
+  )),
 ]);
 
 console.log(

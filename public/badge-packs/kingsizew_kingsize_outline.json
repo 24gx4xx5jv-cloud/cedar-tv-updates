@@ -1,0 +1,812 @@
+{
+  "name": "Kingsize Outline",
+  "groups": [
+    {
+      "id": "other",
+      "name": "Other",
+      "isExpanded": true
+    }
+  ],
+  "filters": [
+    {
+      "id": "kingsizew_kingsize_outline-1",
+      "name": "SEADEX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])SEADEX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/seadex-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-2",
+      "name": "HYBRID",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HYBRID(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/hybrid-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-3",
+      "name": "CRITERION",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])CRITERION(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/criterion-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-4",
+      "name": "PROPER",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])PROPER(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/proper-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-5",
+      "name": "REPACK",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REPACK(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/repack-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-6",
+      "name": "REMASTERED",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REMASTERED(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/remastered-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-7",
+      "name": "OPEN MATTE",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])OPEN[ ._-]*MATTE(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/open-matte-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-8",
+      "name": "REGRADED",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REGRADED(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/regraded-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-9",
+      "name": "DIR CUT",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DIR[ ._-]*CUT(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/directors-cut-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-10",
+      "name": "EXTENDED",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])EXTENDED(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/extended-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-11",
+      "name": "UNCUT",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])UNCUT(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/uncut-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-12",
+      "name": "UNCENSORED",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])UNCENSORED(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/uncensored-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-13",
+      "name": "BLACK & WHITE",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLACK[ ._-]*&[ ._-]*WHITE(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/black-and-white-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-14",
+      "name": "TRUE-HUE",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])TRUE-HUE(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/true-hue-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-15",
+      "name": "THTR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])THTR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/special-tags/theatrical-light-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-16",
+      "name": "REMUX 1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/remux-1-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-17",
+      "name": "REMUX 2",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*2(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/remux-2-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-18",
+      "name": "REMUX 3",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*3(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/remux-3-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-19",
+      "name": "BLU-RAY 1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/blu-ray-1-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-20",
+      "name": "BLU-RAY 2",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*2(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/blu-ray-2-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-21",
+      "name": "BLU-RAY 3",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*3(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/blu-ray-3-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-22",
+      "name": "BLU-RAY 4",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*4(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/blu-ray-4-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-23",
+      "name": "BLU-RAY 5",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*5(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/blu-ray-5-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-24",
+      "name": "BLU-RAY 6",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*6(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/blu-ray-6-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-25",
+      "name": "BLU-RAY 7",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*7(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/blu-ray-7-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-26",
+      "name": "BLU-RAY 8",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*8(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/blu-ray-8-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-27",
+      "name": "WEB 1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/web-1-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-28",
+      "name": "WEB 2",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*2(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/web-2-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-29",
+      "name": "WEB 3",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*3(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/web-3-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-30",
+      "name": "WEB 4",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*4(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/web-4-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-31",
+      "name": "WEB 5",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*5(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/web-5-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-32",
+      "name": "WEB 6",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*6(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/media-source/web-6-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-33",
+      "name": "4K",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:2160p|\\b4k\\b))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/resolution/4k-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-34",
+      "name": "1440p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])1440p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/resolution/1440p-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-35",
+      "name": "1080p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])1080p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/resolution/1080p-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-36",
+      "name": "720p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])720p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/resolution/720p-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-37",
+      "name": "576p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])576p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/resolution/576p-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-38",
+      "name": "480p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])480p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/resolution/480p-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-39",
+      "name": "360p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])360p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/resolution/360p-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-40",
+      "name": "240p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])240p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/resolution/240p-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-41",
+      "name": "144p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])144p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/resolution/144p-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-42",
+      "name": "Remux",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Remux(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/remux-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-43",
+      "name": "BluRay",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BluRay(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/bluray-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-44",
+      "name": "WEB-DL",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:web[ ._-]?dl)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/web-dl-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-45",
+      "name": "WEBRip",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEBRip(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/webrip-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-46",
+      "name": "HDRip",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDRip(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/hdrip-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-47",
+      "name": "HC HDRip",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HC[ ._-]*HDRip(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/hc-hdrip-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-48",
+      "name": "DVDRip",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DVDRip(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/dvdrip-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-49",
+      "name": "HDTV",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDTV(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/hdtv-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-50",
+      "name": "SCR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])SCR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/scr-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-51",
+      "name": "TC",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])TC(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/tc-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-52",
+      "name": "TS",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])TS(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/ts-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-53",
+      "name": "CAM",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])CAM(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/quality/cam-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-54",
+      "name": "IMAX Enhanced",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX[ ._-]*Enhanced(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/imax/imax-enhanced-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-55",
+      "name": "IMAX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/imax/imax-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-56",
+      "name": "DV · HDR10+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DV[ ._-]*·[ ._-]*HDR10\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/dolby-vision-hdr10-plus-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-57",
+      "name": "DV · HDR10",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DV[ ._-]*·[ ._-]*HDR10(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/dolby-vision-hdr10-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-58",
+      "name": "DV · HDR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DV[ ._-]*·[ ._-]*HDR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/dolby-vision-hdr-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-59",
+      "name": "DV",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DV(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/dolby-vision-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-60",
+      "name": "HDR10+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:hdr10\\+|hdr10plus))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/hdr10-plus-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-61",
+      "name": "HDR10",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR10(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/hdr10-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-62",
+      "name": "HDR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/hdr-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-63",
+      "name": "HLG",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HLG(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/hlg-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-64",
+      "name": "10bit",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])10bit(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/10bit-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-65",
+      "name": "SDR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])SDR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/sdr-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-66",
+      "name": "AI",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])AI(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/visual/ai-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-67",
+      "name": "ATMOS TRUEHD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])ATMOS[ ._-]*TRUEHD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dolby-atmos-truehd-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-68",
+      "name": "DTS:X HD MA",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS:X[ ._-]*HD[ ._-]*MA(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dts-x-hd-ma-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-69",
+      "name": "ATMOS DIGITAL+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])ATMOS[ ._-]*DIGITAL\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dolby-atmos-digital-plus-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-70",
+      "name": "DTS:X HD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS:X[ ._-]*HD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dts-x-hd-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-71",
+      "name": "Atmos",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Atmos(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dolby-atmos-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-72",
+      "name": "DTS:X",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?x)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dts-x-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-73",
+      "name": "TrueHD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:true[ ._-]?hd)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dolby-truehd-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-74",
+      "name": "DTS-HD MA",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?hd[ ._-]?ma)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dts-hd-ma-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-75",
+      "name": "FLAC",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])FLAC(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/flac-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-76",
+      "name": "DTS-HD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-HD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dts-hd-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-77",
+      "name": "DD+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:dd\\+|ddp|eac3|e-ac-3))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dolby-digital-plus-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-78",
+      "name": "DTS-ES",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-ES(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dts-es-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-79",
+      "name": "DTS",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dts-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-80",
+      "name": "OPUS",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])OPUS(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/opus-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-81",
+      "name": "DD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/dolby-digital-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-82",
+      "name": "AAC",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])AAC(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/audio/aac-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-83",
+      "name": "7.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])7\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/channels/7-1-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-84",
+      "name": "6.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])6\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/channels/6-1-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-85",
+      "name": "5.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])5\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/channels/5-1-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-86",
+      "name": "2.0",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])2\\.0(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/channels/2-0-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-87",
+      "name": "AV1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])AV1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/encoder/av1-gold.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-88",
+      "name": "HEVC",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HEVC(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/encoder/hevc-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-89",
+      "name": "AVC",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])AVC(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/encoder/avc-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-90",
+      "name": "XviD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])XviD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/encoder/xvid-orange.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-91",
+      "name": "DivX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DivX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/encoder/divx-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-92",
+      "name": "PEACOCK",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])PEACOCK(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/streaming/peacock-yellow.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-93",
+      "name": "NETFLIX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])NETFLIX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/streaming/netflix-red.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-94",
+      "name": "PRIME VIDEO",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])PRIME[ ._-]*VIDEO(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/streaming/prime-video-cyan.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-95",
+      "name": "APPLE TV+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])APPLE[ ._-]*TV\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/streaming/apple-tv-plus-gray.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-96",
+      "name": "DISNEY+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DISNEY\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/streaming/disney-plus-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-97",
+      "name": "HBO MAX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HBO[ ._-]*MAX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/streaming/hbo-max-purple.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-98",
+      "name": "HULU",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HULU(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/streaming/hulu-green.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-99",
+      "name": "PARAMOUNT+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])PARAMOUNT\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/streaming/paramount-plus-blue.webp"
+    },
+    {
+      "id": "kingsizew_kingsize_outline-100",
+      "name": "CRUNCHYROLL",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])CRUNCHYROLL(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/kingsize/streaming/crunchyroll-orange.webp"
+    }
+  ]
+}

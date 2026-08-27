@@ -1,0 +1,340 @@
+{
+  "name": "Spectrum",
+  "groups": [
+    {
+      "id": "other",
+      "name": "Other",
+      "isExpanded": true
+    }
+  ],
+  "filters": [
+    {
+      "id": "xp_spectrum-1",
+      "name": "4K",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:2160p|\\b4k\\b))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/4k.webp"
+    },
+    {
+      "id": "xp_spectrum-2",
+      "name": "1080p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])1080p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/1080p.webp"
+    },
+    {
+      "id": "xp_spectrum-3",
+      "name": "720p",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])720p(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/720p.webp"
+    },
+    {
+      "id": "xp_spectrum-4",
+      "name": "Remux",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Remux(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/remux.webp"
+    },
+    {
+      "id": "xp_spectrum-5",
+      "name": "BluRay",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])BluRay(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/bluray.webp"
+    },
+    {
+      "id": "xp_spectrum-6",
+      "name": "WEB-DL",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:web[ ._-]?dl)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/web-dl.webp"
+    },
+    {
+      "id": "xp_spectrum-7",
+      "name": "WEBRip",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])WEBRip(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/webrip.webp"
+    },
+    {
+      "id": "xp_spectrum-8",
+      "name": "SeaDex",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])SeaDex(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/seadex.webp"
+    },
+    {
+      "id": "xp_spectrum-9",
+      "name": "Dolby Vision",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:dolby[ ._-]?vision|\\bdv\\b))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dolby-vision.webp"
+    },
+    {
+      "id": "xp_spectrum-10",
+      "name": "HDR10+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:hdr10\\+|hdr10plus))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/hdr10plus.webp"
+    },
+    {
+      "id": "xp_spectrum-11",
+      "name": "HDR10",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR10(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/hdr10.webp"
+    },
+    {
+      "id": "xp_spectrum-12",
+      "name": "HDR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/hdr.webp"
+    },
+    {
+      "id": "xp_spectrum-13",
+      "name": "IMAX Enhanced",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX[ ._-]*Enhanced(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/imax-enhanced.webp"
+    },
+    {
+      "id": "xp_spectrum-14",
+      "name": "IMAX",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/imax.webp"
+    },
+    {
+      "id": "xp_spectrum-15",
+      "name": "SDR",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])SDR(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/sdr.webp"
+    },
+    {
+      "id": "xp_spectrum-16",
+      "name": "Atmos + Vision",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Atmos[ ._-]*\\+[ ._-]*Vision(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dolby-atmos-vision.webp"
+    },
+    {
+      "id": "xp_spectrum-17",
+      "name": "Atmos",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Atmos(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dolby-atmos.webp"
+    },
+    {
+      "id": "xp_spectrum-18",
+      "name": "TrueHD + Vision",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])TrueHD[ ._-]*\\+[ ._-]*Vision(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dolby-truehd-vision.webp"
+    },
+    {
+      "id": "xp_spectrum-19",
+      "name": "TrueHD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:true[ ._-]?hd)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dolby-truehd.webp"
+    },
+    {
+      "id": "xp_spectrum-20",
+      "name": "DTS:X",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?x)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dts-x.webp"
+    },
+    {
+      "id": "xp_spectrum-21",
+      "name": "DTS-HD MA",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?hd[ ._-]?ma)(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dts-hd-ma.webp"
+    },
+    {
+      "id": "xp_spectrum-22",
+      "name": "DTS-HD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-HD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dts-hd.webp"
+    },
+    {
+      "id": "xp_spectrum-23",
+      "name": "DTS",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dts.webp"
+    },
+    {
+      "id": "xp_spectrum-24",
+      "name": "Digital + Vision",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Digital[ ._-]*\\+[ ._-]*Vision(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dolby-digital-vision.webp"
+    },
+    {
+      "id": "xp_spectrum-25",
+      "name": "DD+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:dd\\+|ddp|eac3|e-ac-3))(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dolby-digital-plus.webp"
+    },
+    {
+      "id": "xp_spectrum-26",
+      "name": "DD",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])DD(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/dolby-digital.webp"
+    },
+    {
+      "id": "xp_spectrum-27",
+      "name": "7.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])7\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/7-1.webp"
+    },
+    {
+      "id": "xp_spectrum-28",
+      "name": "5.1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])5\\.1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/5-1.webp"
+    },
+    {
+      "id": "xp_spectrum-29",
+      "name": "x265",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])x265(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/hevc.webp"
+    },
+    {
+      "id": "xp_spectrum-30",
+      "name": "x264",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])x264(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/avc.webp"
+    },
+    {
+      "id": "xp_spectrum-31",
+      "name": "AV1",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])AV1(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/av1.webp"
+    },
+    {
+      "id": "xp_spectrum-32",
+      "name": "Netflix",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Netflix(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/netflix.webp"
+    },
+    {
+      "id": "xp_spectrum-33",
+      "name": "Prime Video",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Prime[ ._-]*Video(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/prime-video.webp"
+    },
+    {
+      "id": "xp_spectrum-34",
+      "name": "Apple TV+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Apple[ ._-]*TV\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/apple-tv.webp"
+    },
+    {
+      "id": "xp_spectrum-35",
+      "name": "Disney+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Disney\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/disney.webp"
+    },
+    {
+      "id": "xp_spectrum-36",
+      "name": "HBO Max",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])HBO[ ._-]*Max(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/hbo-max.webp"
+    },
+    {
+      "id": "xp_spectrum-37",
+      "name": "Hulu",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Hulu(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/hulu.webp"
+    },
+    {
+      "id": "xp_spectrum-38",
+      "name": "Peacock",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Peacock(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/peacock.webp"
+    },
+    {
+      "id": "xp_spectrum-39",
+      "name": "Paramount+",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Paramount\\+(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/paramount-plus.webp"
+    },
+    {
+      "id": "xp_spectrum-40",
+      "name": "Crave",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Crave(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/crave.webp"
+    },
+    {
+      "id": "xp_spectrum-41",
+      "name": "Crunchyroll",
+      "groupId": "other",
+      "isEnabled": true,
+      "pattern": "(?i)(?:^|[^A-Za-z0-9])Crunchyroll(?:$|[^A-Za-z0-9])",
+      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/xp_white/crunchyroll.webp"
+    }
+  ]
+}

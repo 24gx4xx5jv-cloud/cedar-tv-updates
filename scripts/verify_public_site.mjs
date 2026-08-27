@@ -39,7 +39,7 @@ if (!page.includes(`connect-src 'self' ${relay.origin}`)) {
   throw new Error("The Cedar Link CSP must allow its configured relay origin");
 }
 if (
-  !page.includes('type="module" src="link.js?v=profile-editor-2"')
+  !page.includes('type="module" src="link.js?v=profile-editor-3"')
   || !page.includes('id="link-button"')
   || !page.includes('id="link-companion"')
   || !page.includes('id="profile-selector"')
@@ -53,6 +53,26 @@ const script = await readFile("public/link/link.js", "utf8");
 for (const requiredPath of ["/v1/health", "/claim", "../sync-config.json", "../catalogs/avatars.json", "../catalogs/badges.json"]) {
   if (!script.includes(requiredPath)) {
     throw new Error(`The Cedar Link client is missing ${requiredPath}`);
+  }
+}
+
+const badges = JSON.parse(await readFile("public/catalogs/badges.json", "utf8"));
+if (!Array.isArray(badges.sets) || badges.sets.length === 0) {
+  throw new Error("The Cedar badge catalog is empty");
+}
+for (const set of badges.sets) {
+  const source = new URL(set.sourceURL);
+  if (
+    typeof set.id !== "string"
+    || !/^[a-z0-9_-]+$/i.test(set.id)
+    || source.origin !== "https://24gx4xx5jv-cloud.github.io"
+    || source.pathname !== `/cedar-tv-updates/badge-packs/${set.id}.json`
+  ) {
+    throw new Error(`Badge set ${set.label || "unknown"} has an invalid install source`);
+  }
+  const pack = JSON.parse(await readFile(`public/badge-packs/${set.id}.json`, "utf8"));
+  if (!Array.isArray(pack.groups) || !Array.isArray(pack.filters) || pack.filters.length === 0) {
+    throw new Error(`Badge set ${set.label || set.id} is not installable`);
   }
 }
 
