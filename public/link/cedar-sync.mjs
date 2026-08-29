@@ -1134,7 +1134,18 @@ export const fetchLatestProfile = async (credentials, startingCursor = 0) => {
       const item = record(value);
       const serverSequence = positiveInteger(item.serverSequence, "Cedar Sync returned an invalid cursor.");
       if (serverSequence <= cursor) fail("cursor_backwards", "The Cedar Sync cursor moved backwards.");
-      const change = await openEnvelope(item.envelope, credentials);
+      let change;
+      try {
+        change = await openEnvelope(item.envelope, credentials);
+      } catch (error) {
+        if (!(error instanceof CedarSyncError) || error.code !== "authentication_failed") throw error;
+        // The relay journal intentionally mixes owner-only profile checkpoints with companion-key
+        // changes. A browser cannot authenticate the former and must advance past them, while any
+        // authenticated but malformed envelope continues to fail closed below.
+        cursor = serverSequence;
+        sawChanges = true;
+        continue;
+      }
       const decodedCompanion = decodeCompanionSnapshot(change, credentials.spaceID);
       if (decodedCompanion?.removed) companion = null;
       else if (decodedCompanion) companion = decodedCompanion;

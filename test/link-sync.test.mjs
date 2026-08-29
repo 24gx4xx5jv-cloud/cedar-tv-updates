@@ -143,6 +143,7 @@ const makeEnvelope = async ({
   envelopeChangeID = changeID,
   authorSequence = 6,
   revision = 1_777_777_777_777,
+  operation = "upsert",
 } = {}) => {
   const createdAtEpochMilliseconds = 1_777_777_777_000;
   const change = {
@@ -150,7 +151,7 @@ const makeEnvelope = async ({
     profileID,
     entityKind: "apple-profile-snapshot",
     entityID: profileID.toLowerCase(),
-    operation: "upsert",
+    operation,
     revision,
     modifiedAtEpochMilliseconds: 1_777_777_777_777,
     payload: bytesToBase64(makeSnapshotBytes({ compressed, wrapped })),
@@ -560,6 +561,69 @@ test("paginates encrypted history below the response-size ceiling", async () => 
     assert.ok(
       LIMITS.fetchPage * maximumEnvelopeJSONBytes + 64 * 1_024 <= LIMITS.responseBytes,
       "the worst-case relay page must stay inside the bounded reader",
+    );
+  } finally {
+    globalThis.fetch = nativeFetch;
+  }
+});
+
+test("skips owner-only checkpoints and opens the companion checkpoint", async () => {
+  const nativeFetch = globalThis.fetch;
+  const ownerOnlyEnvelope = await makeEnvelope({
+    key: randomBytes(32),
+    envelopeChangeID: randomUUID(),
+    authorSequence: 1,
+  });
+  const companionPayload = textEncoder.encode(JSON.stringify(companionSnapshot));
+  const companionEnvelope = await sealEnvelope({
+    schemaVersion: 1,
+    profileID,
+    entityKind: "cedar-companion-snapshot",
+    entityID: profileID,
+    operation: "upsert",
+    revision: companionSnapshot.revision,
+    modifiedAtEpochMilliseconds: 1_800_000_000_000,
+    payload: companionPayload,
+  }, credentials, 2, {
+    changeID: randomUUID(),
+    createdAtEpochMilliseconds: 1_800_000_000_000,
+    nonce: new Uint8Array(12).fill(0x2a),
+  });
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    schemaVersion: 1,
+    changes: [
+      { serverSequence: 1, envelope: ownerOnlyEnvelope },
+      { serverSequence: 2, envelope: companionEnvelope },
+    ],
+  }), { status: 200, headers: { "Content-Type": "application/json" } });
+
+  try {
+    const result = await fetchLatestProfile(credentials);
+    assert.equal(result.cursor, 2);
+    assert.equal(result.profile, null);
+    assert.equal(result.companion.revision, companionSnapshot.revision);
+    assert.equal(result.companion.configuration.presentation.name, "Living Room");
+  } finally {
+    globalThis.fetch = nativeFetch;
+  }
+});
+
+test("does not skip authenticated malformed changes", async () => {
+  const nativeFetch = globalThis.fetch;
+  const malformedEnvelope = await makeEnvelope({
+    operation: "delete",
+    envelopeChangeID: randomUUID(),
+    authorSequence: 1,
+  });
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    schemaVersion: 1,
+    changes: [{ serverSequence: 1, envelope: malformedEnvelope }],
+  }), { status: 200, headers: { "Content-Type": "application/json" } });
+
+  try {
+    await assert.rejects(
+      fetchLatestProfile(credentials),
+      (error) => error instanceof CedarSyncError && error.code === "invalid_operation",
     );
   } finally {
     globalThis.fetch = nativeFetch;
