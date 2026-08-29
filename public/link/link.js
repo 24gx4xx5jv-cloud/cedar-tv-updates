@@ -15,7 +15,7 @@ import {
   uploadEnvelope,
   validateProfilePresentation,
   validateCompanionConfiguration,
-} from "./cedar-sync.mjs?v=companion-2";
+} from "./cedar-sync.mjs?v=companion-3";
 
 const pairing = document.querySelector("#link-pairing");
 const card = document.querySelector("#link-card");

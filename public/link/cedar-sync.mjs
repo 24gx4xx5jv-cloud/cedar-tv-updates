@@ -190,7 +190,7 @@ const normalizedWebRelay = (value) => {
 export const parseWebInvitationFragment = (fragment, now = Date.now()) => {
   if (typeof fragment !== "string" || fragment.length <= 1 || fragment.length > 2_048) return null;
   const values = new URLSearchParams(fragment.startsWith("#") ? fragment.slice(1) : fragment);
-  const allowed = new Set(["v", "scope", "relay", "space", "invitation", "enrollment", "key", "expires"]);
+  const allowed = new Set(["v", "scope", "relay", "space", "owner", "invitation", "enrollment", "key", "expires"]);
   for (const field of values.keys()) {
     if (!allowed.has(field)) fail("unknown_field", "The Cedar Link invitation contains an unknown field.");
   }
@@ -205,6 +205,7 @@ export const parseWebInvitationFragment = (fragment, now = Date.now()) => {
   return {
     relayBaseURL: normalizedWebRelay(values.get("relay")),
     spaceID: normalizeUUID(values.get("space")),
+    ownerDeviceID: values.has("owner") ? normalizeUUID(values.get("owner")) : null,
     invitationID: normalizeUUID(values.get("invitation")),
     enrollmentToken: base64URLToBytes(values.get("enrollment"), 32),
     profileKey: base64URLToBytes(values.get("key"), 32),

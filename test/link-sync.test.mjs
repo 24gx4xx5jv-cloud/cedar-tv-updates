@@ -366,9 +366,13 @@ test("creates a one-use browser invitation with secrets only in the fragment", a
     assert.doesNotMatch(request.url, /enrollment|key=/);
     assert.equal(body.enrollmentTokenHash.length, 44);
     assert.doesNotMatch(request.init.body, /profileKey|deviceToken/);
+    const appValues = new URLSearchParams(url.hash.slice(1));
+    appValues.set("owner", credentials.deviceID);
+    url.hash = appValues.toString();
     const parsed = parseWebInvitationFragment(url.hash, 1_800_000_000_000);
     assert.equal(parsed.relayBaseURL, credentials.relayBaseURL);
     assert.equal(parsed.spaceID, credentials.spaceID);
+    assert.equal(parsed.ownerDeviceID, credentials.deviceID);
     assert.equal(parsed.profileKey.length, 32);
     assert.equal(parsed.enrollmentToken.length, 32);
 
