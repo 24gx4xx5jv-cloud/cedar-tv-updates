@@ -10,11 +10,12 @@ import {
   createWebInvitation,
   fetchLatestProfile,
   normalizeUUID,
+  parseWebInvitationFragment,
   sealEnvelope,
   uploadEnvelope,
   validateProfilePresentation,
   validateCompanionConfiguration,
-} from "./cedar-sync.mjs?v=companion-1";
+} from "./cedar-sync.mjs?v=companion-2";
 
 const pairing = document.querySelector("#link-pairing");
 const card = document.querySelector("#link-card");
@@ -76,7 +77,6 @@ const refreshBottom = document.querySelector("#refresh-bottom");
 const hasInvitationFragment = window.location.hash.length > 1;
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const KEY_PATTERN = /^[A-Za-z0-9_-]{43}$/;
 const AVATAR_PATH_PATTERN = /^\/avatars\/[a-z0-9_-]+\/[a-z0-9_-]+\.webp$/i;
 const BADGE_PATH_PATTERN = /^\/badges\/[a-z0-9_-]+\/[a-z0-9_-]+\.webp$/i;
 const BADGE_PACK_PATH_PATTERN = /^\/cedar-tv-updates\/badge-packs\/[a-z0-9_-]+\.json$/i;
@@ -117,31 +117,6 @@ const normalizeRelay = (value) => {
   }
   relay.pathname = relay.pathname.replace(/\/$/, "");
   return relay.href.replace(/\/$/, "");
-};
-
-const invitationKey = (value) => {
-  if (!KEY_PATTERN.test(value || "")) throw new Error("invalid key");
-  return base64URLToBytes(value, 32);
-};
-
-const invitationFromFragment = () => {
-  if (!window.location.hash || window.location.hash.length > 2_048) return null;
-  const values = new URLSearchParams(window.location.hash.slice(1));
-  const allowed = new Set(["v", "relay", "space", "invitation", "enrollment", "key", "expires"]);
-  for (const field of values.keys()) {
-    if (!allowed.has(field)) throw new Error("unknown invitation field");
-  }
-  if (values.get("v") !== "1") throw new Error("unsupported invitation");
-  const expiresAt = Number(values.get("expires"));
-  if (!Number.isSafeInteger(expiresAt) || expiresAt <= Date.now()) throw new Error("expired invitation");
-  return {
-    relayBaseURL: normalizeRelay(values.get("relay")),
-    spaceID: normalizeUUID(values.get("space")),
-    invitationID: normalizeUUID(values.get("invitation")),
-    enrollmentToken: invitationKey(values.get("enrollment")),
-    profileKey: invitationKey(values.get("key")),
-    expiresAt,
-  };
 };
 
 const requestPromise = (request) => new Promise((resolve, reject) => {
@@ -1234,7 +1209,7 @@ const initialize = async () => {
   const config = await configResponse.json();
   if (config.schemaVersion !== 1) throw new Error("configuration unavailable");
   relayBaseURL = config.relayBaseURL ? normalizeRelay(config.relayBaseURL) : "";
-  invitation = invitationFromFragment();
+  invitation = parseWebInvitationFragment(window.location.hash);
   if (!relayBaseURL) {
     setState("Not yet enabled", "Cedar Link is being prepared.", "This site has not been connected to the encrypted Cedar Sync relay yet.");
     return;

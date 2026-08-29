@@ -17,6 +17,7 @@ import {
   decodeProfileSnapshot,
   fetchLatestProfile,
   openEnvelope,
+  parseWebInvitationFragment,
   sealEnvelope,
 } from "../public/link/cedar-sync.mjs";
 
@@ -359,11 +360,26 @@ test("creates a one-use browser invitation with secrets only in the fragment", a
     const url = new URL(invitation.url);
     const body = JSON.parse(request.init.body);
     assert.equal(url.search, "");
+    assert.equal(new URLSearchParams(url.hash.slice(1)).get("scope"), "companion");
     assert.match(url.hash, /enrollment=/);
     assert.match(url.hash, /key=/);
     assert.doesNotMatch(request.url, /enrollment|key=/);
     assert.equal(body.enrollmentTokenHash.length, 44);
     assert.doesNotMatch(request.init.body, /profileKey|deviceToken/);
+    const parsed = parseWebInvitationFragment(url.hash, 1_800_000_000_000);
+    assert.equal(parsed.relayBaseURL, credentials.relayBaseURL);
+    assert.equal(parsed.spaceID, credentials.spaceID);
+    assert.equal(parsed.profileKey.length, 32);
+    assert.equal(parsed.enrollmentToken.length, 32);
+
+    const unsupported = new URL(url);
+    const unsupportedValues = new URLSearchParams(unsupported.hash.slice(1));
+    unsupportedValues.set("scope", "profile");
+    unsupported.hash = unsupportedValues.toString();
+    assert.throws(
+      () => parseWebInvitationFragment(unsupported.hash, 1_800_000_000_000),
+      CedarSyncError,
+    );
   } finally {
     globalThis.fetch = nativeFetch;
   }

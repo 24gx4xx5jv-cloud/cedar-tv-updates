@@ -173,6 +173,45 @@ export const base64URLToBytes = (value, expectedBytes = 32) => {
   return Uint8Array.from(binary, (character) => character.charCodeAt(0));
 };
 
+const normalizedWebRelay = (value) => {
+  let relay;
+  try {
+    relay = new URL(value);
+  } catch {
+    fail("invalid_relay", "The Cedar Link relay is invalid.");
+  }
+  if (relay.protocol !== "https:" || relay.username || relay.password || relay.search || relay.hash) {
+    fail("invalid_relay", "The Cedar Link relay is invalid.");
+  }
+  relay.pathname = relay.pathname.replace(/\/$/, "");
+  return relay.href.replace(/\/$/, "");
+};
+
+export const parseWebInvitationFragment = (fragment, now = Date.now()) => {
+  if (typeof fragment !== "string" || fragment.length <= 1 || fragment.length > 2_048) return null;
+  const values = new URLSearchParams(fragment.startsWith("#") ? fragment.slice(1) : fragment);
+  const allowed = new Set(["v", "scope", "relay", "space", "invitation", "enrollment", "key", "expires"]);
+  for (const field of values.keys()) {
+    if (!allowed.has(field)) fail("unknown_field", "The Cedar Link invitation contains an unknown field.");
+  }
+  if (values.get("v") !== "1") fail("unsupported_schema", "This Cedar Link invitation is not supported.");
+  if (values.has("scope") && values.get("scope") !== "companion") {
+    fail("unsupported_scope", "This Cedar Link invitation has an unsupported scope.");
+  }
+  const expiresAt = Number(values.get("expires"));
+  if (!Number.isSafeInteger(expiresAt) || expiresAt <= now) {
+    fail("expired_invitation", "This Cedar Link invitation has expired.");
+  }
+  return {
+    relayBaseURL: normalizedWebRelay(values.get("relay")),
+    spaceID: normalizeUUID(values.get("space")),
+    invitationID: normalizeUUID(values.get("invitation")),
+    enrollmentToken: base64URLToBytes(values.get("enrollment"), 32),
+    profileKey: base64URLToBytes(values.get("key"), 32),
+    expiresAt,
+  };
+};
+
 export const standardBase64ToBytes = (value, minimumBytes, maximumBytes) => {
   if (typeof value !== "string" || !STANDARD_BASE64_PATTERN.test(value)) {
     fail("invalid_base64", "Cedar Sync returned malformed encrypted data.");
@@ -1062,6 +1101,7 @@ export const createWebInvitation = async (
     target.search = "";
     target.hash = new URLSearchParams({
       v: "1",
+      scope: "companion",
       relay: credentials.relayBaseURL,
       space: normalizeUUID(credentials.spaceID),
       invitation: invitationID,
