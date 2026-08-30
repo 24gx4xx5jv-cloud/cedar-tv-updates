@@ -1256,7 +1256,7 @@ const initialize = async () => {
   setState(
     "Service online",
     "Ready for a Cedar invitation.",
-    "In Cedar on iPhone or iPad, open Settings → Cedar Link and create a browser link.",
+    "In Cedar on your Apple device, open Settings → Cedar Link and create a browser link.",
   );
 };
 

@@ -1010,7 +1010,7 @@ const fetchPage = async (credentials, after) => {
   }
   if (!response.ok) {
     if (response.status === 401 || response.status === 403) {
-      fail("authorization", "This browser's Cedar Link access is no longer valid. Create a new link on iPhone.");
+      fail("authorization", "This browser's Cedar Link access is no longer valid. Create a new link on your Apple device.");
     }
     fail("relay_rejected", `Cedar Sync could not load this profile (HTTP ${response.status}).`);
   }
@@ -1058,7 +1058,7 @@ export const uploadEnvelope = async (credentials, envelope) => {
   }
   if (!response.ok) {
     if (response.status === 401 || response.status === 403) {
-      fail("authorization", "This browser's Cedar Link access is no longer valid. Create a new link on iPhone.");
+      fail("authorization", "This browser's Cedar Link access is no longer valid. Create a new link on your Apple device.");
     }
     fail("relay_rejected", `Cedar Sync could not save this edit (HTTP ${response.status}).`);
   }
