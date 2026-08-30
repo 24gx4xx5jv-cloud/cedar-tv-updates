@@ -652,6 +652,7 @@ const makeCompanionEnvelope = ({
   revision = companionSnapshot.revision,
   name = companionSnapshot.configuration.presentation.name,
   envelopeChangeID = randomUUID(),
+  operation = "upsert",
 } = {}) => {
   const snapshot = structuredClone(companionSnapshot);
   snapshot.revision = revision;
@@ -662,16 +663,71 @@ const makeCompanionEnvelope = ({
     profileID,
     entityKind: "cedar-companion-snapshot",
     entityID: profileID,
-    operation: "upsert",
+    operation,
     revision,
     modifiedAtEpochMilliseconds: snapshot.publishedAtEpochMilliseconds,
-    payload: textEncoder.encode(JSON.stringify(snapshot)),
+    payload: operation === "tombstone"
+      ? new Uint8Array()
+      : textEncoder.encode(JSON.stringify(snapshot)),
   }, authorCredentials, authorSequence, {
     changeID: envelopeChangeID,
     createdAtEpochMilliseconds: snapshot.publishedAtEpochMilliseconds,
     nonce: new Uint8Array(12).fill(authorSequence),
   });
 };
+
+test("surfaces an authenticated profile tombstone for cache removal", async () => {
+  const nativeFetch = globalThis.fetch;
+  const tombstone = await sealEnvelope({
+    schemaVersion: 1,
+    profileID,
+    entityKind: "apple-profile-snapshot",
+    entityID: profileID,
+    operation: "tombstone",
+    revision: 44,
+    modifiedAtEpochMilliseconds: 1_800_000_000_044,
+    payload: new Uint8Array(),
+  }, credentials, 1, {
+    changeID: randomUUID(),
+    createdAtEpochMilliseconds: 1_800_000_000_044,
+    nonce: new Uint8Array(12).fill(0x44),
+  });
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    schemaVersion: 1,
+    changes: [{ serverSequence: 1, envelope: tombstone }],
+  }), { status: 200, headers: { "Content-Type": "application/json" } });
+
+  try {
+    const result = await fetchLatestProfile(credentials);
+    assert.equal(result.cursor, 1);
+    assert.equal(result.profile, null);
+    assert.equal(result.profileRemoved, true);
+  } finally {
+    globalThis.fetch = nativeFetch;
+  }
+});
+
+test("surfaces an owner companion tombstone and clears the starting snapshot", async () => {
+  const nativeFetch = globalThis.fetch;
+  const tombstone = await makeCompanionEnvelope({
+    authorSequence: 2,
+    operation: "tombstone",
+    revision: companionSnapshot.revision + 1,
+  });
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    schemaVersion: 1,
+    changes: [{ serverSequence: 2, envelope: tombstone }],
+  }), { status: 200, headers: { "Content-Type": "application/json" } });
+
+  try {
+    const result = await fetchLatestCompanion(companionCredentials, 0, companionSnapshot);
+    assert.equal(result.cursor, 2);
+    assert.equal(result.companion, null);
+    assert.equal(result.companionRemoved, true);
+  } finally {
+    globalThis.fetch = nativeFetch;
+  }
+});
 
 test("keeps companion configuration bound to the invitation owner across a mixed-key journal", async () => {
   const nativeFetch = globalThis.fetch;

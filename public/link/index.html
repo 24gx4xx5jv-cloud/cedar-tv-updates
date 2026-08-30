@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" href="../assets/cedar-app-icon.png">
     <link rel="apple-touch-icon" href="../assets/cedar-app-icon.png">
     <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="link.css?v=companion-5">
+    <link rel="stylesheet" href="link.css?v=workspace-1">
   </head>
   <body class="link-page">
     <header class="site-header link-header">
@@ -58,38 +58,44 @@
             <button class="icon-button" id="refresh-profile" type="button" aria-label="Refresh linked profile" title="Refresh linked profile">↻</button>
           </div>
 
-          <label class="profile-picker-label" for="profile-selector">Linked profile</label>
-          <select class="profile-selector" id="profile-selector" aria-label="Linked profile"></select>
+          <div class="companion-overview">
+            <div class="companion-identity">
+              <label class="profile-picker-label" for="profile-selector">Linked profile</label>
+              <select class="profile-selector" id="profile-selector" aria-label="Linked profile"></select>
 
-          <div class="profile-hero">
-            <div class="profile-avatar" id="profile-avatar" aria-hidden="true">
-              <img id="profile-avatar-image" alt="" hidden>
-              <span id="profile-avatar-fallback">C</span>
+              <div class="profile-hero">
+                <div class="profile-avatar" id="profile-avatar" aria-hidden="true">
+                  <img id="profile-avatar-image" alt="" hidden>
+                  <span id="profile-avatar-fallback">C</span>
+                </div>
+                <div>
+                  <p class="profile-kicker" id="profile-kicker">Profile received</p>
+                  <h2 id="profile-name">Cedar profile</h2>
+                  <p class="profile-meta" id="profile-meta">Opening encrypted profile…</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <p class="profile-kicker" id="profile-kicker">Profile received</p>
-              <h2 id="profile-name">Cedar profile</h2>
-              <p class="profile-meta" id="profile-meta">Opening encrypted profile…</p>
+
+            <div class="companion-summary">
+              <div class="profile-stats" aria-label="Profile summary">
+                <div><strong id="source-count">—</strong><span>Devices</span></div>
+                <div><strong id="branch-count">—</strong><span>Home rows</span></div>
+                <div><strong id="shelf-count">—</strong><span>Remotes</span></div>
+              </div>
+
+              <p class="sync-message" id="sync-message" role="status" aria-live="polite">Checking Cedar Sync for your encrypted profile…</p>
             </div>
           </div>
 
-          <div class="profile-stats" aria-label="Profile summary">
-            <div><strong id="source-count">—</strong><span>Devices</span></div>
-            <div><strong id="branch-count">—</strong><span>Home rows</span></div>
-            <div><strong id="shelf-count">—</strong><span>Remotes</span></div>
-          </div>
-
-          <p class="sync-message" id="sync-message" role="status" aria-live="polite">Checking Cedar Sync for your encrypted profile…</p>
-
-          <nav class="companion-tabs" aria-label="Cedar Link sections">
-            <button type="button" data-panel="profile" aria-selected="true">Profile</button>
-            <button type="button" data-panel="settings" aria-selected="false">Settings</button>
-            <button type="button" data-panel="branches" aria-selected="false">Home</button>
-            <button type="button" data-panel="devices" aria-selected="false">Devices</button>
-            <button type="button" data-panel="remote" aria-selected="false">Remote</button>
+          <nav class="companion-tabs" aria-label="Cedar Link sections" role="tablist" aria-orientation="horizontal">
+            <button id="tab-profile" type="button" role="tab" data-panel="profile" aria-selected="true" aria-controls="panel-profile" tabindex="0">Profile</button>
+            <button id="tab-settings" type="button" role="tab" data-panel="settings" aria-selected="false" aria-controls="panel-settings" tabindex="-1">Settings</button>
+            <button id="tab-branches" type="button" role="tab" data-panel="branches" aria-selected="false" aria-controls="panel-branches" tabindex="-1">Home</button>
+            <button id="tab-devices" type="button" role="tab" data-panel="devices" aria-selected="false" aria-controls="panel-devices" tabindex="-1">Devices</button>
+            <button id="tab-remote" type="button" role="tab" data-panel="remote" aria-selected="false" aria-controls="panel-remote" tabindex="-1">Remote</button>
           </nav>
 
-          <section class="companion-panel is-active" id="panel-profile" data-companion-panel="profile">
+          <section class="companion-panel is-active" id="panel-profile" role="tabpanel" aria-labelledby="tab-profile" tabindex="0" data-companion-panel="profile">
 
           <form class="profile-editor" id="profile-editor" hidden>
             <div class="editor-heading">
@@ -148,7 +154,7 @@
 
           </section>
 
-          <section class="companion-panel" id="panel-settings" data-companion-panel="settings" hidden>
+          <section class="companion-panel" id="panel-settings" role="tabpanel" aria-labelledby="tab-settings" tabindex="0" data-companion-panel="settings" hidden>
             <form class="companion-form" id="settings-editor">
               <div class="editor-heading">
                 <div><p class="profile-kicker">Linked configuration</p><h3>Playback and discovery</h3></div>
@@ -169,7 +175,7 @@
             </form>
           </section>
 
-          <section class="companion-panel" id="panel-branches" data-companion-panel="branches" hidden>
+          <section class="companion-panel" id="panel-branches" role="tabpanel" aria-labelledby="tab-branches" tabindex="0" data-companion-panel="branches" hidden>
             <form class="companion-form" id="branches-editor">
               <div class="editor-heading">
                 <div><p class="profile-kicker">Home configuration</p><h3>Branches and order</h3></div>
@@ -185,7 +191,7 @@
             </form>
           </section>
 
-          <section class="companion-panel" id="panel-devices" data-companion-panel="devices" hidden>
+          <section class="companion-panel" id="panel-devices" role="tabpanel" aria-labelledby="tab-devices" tabindex="0" data-companion-panel="devices" hidden>
             <div class="companion-form">
               <div class="editor-heading"><div><p class="profile-kicker">Linked access</p><h3>Devices and recovery</h3></div><span>Owner enforced</span></div>
               <ul class="device-list" id="device-list"></ul>
@@ -194,22 +200,26 @@
                 <button class="button library-more danger-button" id="forget-browser" type="button">Forget this browser</button>
               </div>
               <div class="invitation-result" id="invitation-result" hidden>
-                <label class="stacked-field" for="invitation-url"><span>Expires in 10 minutes</span><input class="library-search" id="invitation-url" readonly></label>
-                <button class="button library-more" id="copy-invitation" type="button">Copy link</button>
+                <label class="stacked-field" for="invitation-url"><span id="invitation-expiry">One-use link ready</span><input class="library-search" id="invitation-url" readonly autocomplete="off" spellcheck="false" aria-describedby="invitation-privacy"></label>
+                <div class="invitation-actions">
+                  <button class="button library-more" id="reveal-invitation" type="button" aria-pressed="false" disabled>Reveal link</button>
+                  <button class="button library-more" id="copy-invitation" type="button" disabled>Copy link</button>
+                </div>
+                <p class="editor-note" id="invitation-privacy">The key stays hidden on screen unless you reveal it. This browser clears the displayed invitation when it expires.</p>
               </div>
               <p class="editor-note">A revoke request is encrypted and completed only by the owning Cedar app. “Forget this browser” removes this browser's local protected key immediately.</p>
             </div>
           </section>
 
-          <section class="companion-panel" id="panel-remote" data-companion-panel="remote" hidden>
+          <section class="companion-panel" id="panel-remote" role="tabpanel" aria-labelledby="tab-remote" tabindex="0" data-companion-panel="remote" hidden>
             <div class="companion-form">
               <div class="editor-heading"><div><p class="profile-kicker">Transport only</p><h3>Remote control</h3></div><span>No web player</span></div>
               <label class="stacked-field" for="remote-device"><span>Cedar device</span><select class="profile-selector" id="remote-device"></select></label>
               <p class="remote-state" id="remote-state">Choose an online Cedar device.</p>
               <div class="remote-controls" id="remote-controls">
-                <button type="button" data-command="skip-backward" aria-label="Skip backward">−10</button>
+                <button type="button" data-command="skip-backward" aria-label="Skip backward 10 seconds">−10</button>
                 <button type="button" class="remote-primary" data-command="toggle-playback" aria-label="Play or pause">Play / Pause</button>
-                <button type="button" data-command="skip-forward" aria-label="Skip forward">+10</button>
+                <button type="button" data-command="skip-forward" aria-label="Skip forward 30 seconds">+30</button>
                 <button type="button" data-command="skip-intro">Skip Intro</button>
                 <button type="button" data-command="next-episode">Next Episode</button>
                 <button type="button" data-command="jump-to-live">Jump to Live</button>
@@ -217,6 +227,17 @@
               <p class="editor-note">Commands are encrypted, expire after one minute, and are executed by the selected Cedar device. This page never receives or renders the program itself.</p>
             </div>
           </section>
+
+          <div class="companion-savebar" id="companion-savebar" aria-label="Unsaved companion changes" hidden>
+            <div class="companion-savebar-copy">
+              <strong id="companion-dirty-summary" role="status" aria-live="polite" aria-atomic="true">No unsaved changes</strong>
+              <span>Changes are encrypted and confirmed by the owning Cedar app.</span>
+            </div>
+            <div class="companion-savebar-actions">
+              <button class="button library-more" id="discard-companion-changes" type="button" disabled>Discard</button>
+              <button class="button button-primary" id="save-companion-changes" type="button" disabled>Send changes to Cedar</button>
+            </div>
+          </div>
 
           <div class="companion-actions">
             <button class="button library-more" id="refresh-bottom" type="button">Refresh companion state</button>
@@ -234,6 +255,6 @@
       </div>
     </footer>
 
-    <script type="module" src="link.js?v=companion-5"></script>
+    <script type="module" src="link.js?v=workspace-1"></script>
   </body>
 </html>

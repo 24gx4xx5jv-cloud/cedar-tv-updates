@@ -1217,6 +1217,7 @@ export const fetchLatestCompanion = async (
 ) => {
   let cursor = nonnegativeInteger(startingCursor);
   let companion = startingCompanion;
+  let companionRemoved = false;
   let sawChanges = false;
   let unreadableChanges = 0;
   const ownerDeviceID = normalizeUUID(credentials.ownerDeviceID);
@@ -1233,8 +1234,13 @@ export const fetchLatestCompanion = async (
         unreadableChanges += 1;
       } else if (authorDeviceID === ownerDeviceID) {
         const decoded = decodeCompanionSnapshot(change, credentials.spaceID);
-        if (decoded?.removed) companion = null;
-        else if (decoded) companion = decoded;
+        if (decoded?.removed) {
+          companion = null;
+          companionRemoved = true;
+        } else if (decoded) {
+          companion = decoded;
+          companionRemoved = false;
+        }
         else change.payload.fill(0);
       } else {
         // Linked devices can publish their own projections and requests, but only the owner named
@@ -1245,7 +1251,7 @@ export const fetchLatestCompanion = async (
       sawChanges = true;
     }
     if (values.length < LIMITS.fetchPage) {
-      return { cursor, companion, sawChanges, unreadableChanges };
+      return { cursor, companion, companionRemoved, sawChanges, unreadableChanges };
     }
   }
   fail("too_many_changes", "Cedar Sync has too many pending changes. Refresh and try again.");
@@ -1255,6 +1261,8 @@ export const fetchLatestProfile = async (credentials, startingCursor = 0) => {
   let cursor = nonnegativeInteger(startingCursor);
   let profile = null;
   let companion = null;
+  let profileRemoved = false;
+  let companionRemoved = false;
   let sawChanges = false;
   const maximumPages = Math.ceil(LIMITS.maximumCatchUp / LIMITS.fetchPage);
   for (let page = 0; page < maximumPages; page += 1) {
@@ -1276,18 +1284,30 @@ export const fetchLatestProfile = async (credentials, startingCursor = 0) => {
         continue;
       }
       const decodedCompanion = decodeCompanionSnapshot(change, credentials.spaceID);
-      if (decodedCompanion?.removed) companion = null;
-      else if (decodedCompanion) companion = decodedCompanion;
+      if (decodedCompanion?.removed) {
+        companion = null;
+        companionRemoved = true;
+      } else if (decodedCompanion) {
+        companion = decodedCompanion;
+        companionRemoved = false;
+      }
       else {
         const decoded = await decodeProfileSnapshot(change, credentials.spaceID);
-        if (decoded?.removed) profile = null;
-        else if (decoded) profile = decoded;
+        if (decoded?.removed) {
+          profile = null;
+          profileRemoved = true;
+        } else if (decoded) {
+          profile = decoded;
+          profileRemoved = false;
+        }
         else change.payload.fill(0);
       }
       cursor = serverSequence;
       sawChanges = true;
     }
-    if (values.length < LIMITS.fetchPage) return { cursor, profile, companion, sawChanges };
+    if (values.length < LIMITS.fetchPage) {
+      return { cursor, profile, profileRemoved, companion, companionRemoved, sawChanges };
+    }
   }
   fail("too_many_changes", "Cedar Sync has too many pending changes. Refresh and try again.");
 };
