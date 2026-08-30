@@ -8,14 +8,15 @@ import {
   createProfilePresentationPatchChange,
   createRemoteCommandChange,
   createWebInvitation,
-  fetchLatestProfile,
+  fetchLatestCompanion,
   normalizeUUID,
   parseWebInvitationFragment,
   sealEnvelope,
   uploadEnvelope,
+  validateCompanionClaimResult,
   validateProfilePresentation,
   validateCompanionConfiguration,
-} from "./cedar-sync.mjs?v=companion-4";
+} from "./cedar-sync.mjs?v=companion-5";
 
 const pairing = document.querySelector("#link-pairing");
 const card = document.querySelector("#link-card");
@@ -117,6 +118,14 @@ const normalizeRelay = (value) => {
   }
   relay.pathname = relay.pathname.replace(/\/$/, "");
   return relay.href.replace(/\/$/, "");
+};
+
+const invitationFromFragment = () => {
+  if (!window.location.hash) return null;
+  const fragment = window.location.hash;
+  // Remove secret material before the first network request, user interaction, or async yield.
+  history.replaceState(null, "", `${location.pathname}${location.search}`);
+  return parseWebInvitationFragment(fragment);
 };
 
 const requestPromise = (request) => new Promise((resolve, reject) => {
@@ -257,8 +266,10 @@ const pendingCredentials = async (currentInvitation) => {
   if (existing) return { recordKey, secrets: await decryptValue(existing) };
   const deviceToken = crypto.getRandomValues(new Uint8Array(32));
   const secrets = {
+    scope: "companion",
     relayBaseURL: currentInvitation.relayBaseURL,
     spaceID: currentInvitation.spaceID,
+    ownerDeviceID: currentInvitation.ownerDeviceID,
     invitationID: currentInvitation.invitationID,
     deviceID: crypto.randomUUID().toLowerCase(),
     deviceToken: bytesToBase64URL(deviceToken),
@@ -305,26 +316,34 @@ const claim = async (currentInvitation, secrets) => {
     );
     if (!response.ok) throw new Error(`relay rejected link (${response.status})`);
     const result = await response.json();
-    if (result.schemaVersion !== 1) throw new Error("invalid relay response");
+    return validateCompanionClaimResult(result, secrets, currentInvitation.ownerDeviceID);
   } finally {
     clearTimeout(timeout);
     deviceToken.fill(0);
   }
 };
 
-const activate = async (pendingKey, secrets) => {
+const activate = async (pendingKey, secrets, baseline) => {
   const encrypted = await encryptValue(secrets);
-  await writeRecord(`space:${secrets.spaceID}`, {
+  const entries = [[`space:${secrets.spaceID}`, {
     schemaVersion: 1,
     spaceID: secrets.spaceID,
     deviceID: secrets.deviceID,
     relayBaseURL: secrets.relayBaseURL,
     state: "active",
     linkedAt: Date.now(),
-    cursor: 0,
+    cursor: baseline.highWaterCursor,
     outboundSequence: 0,
     ...encrypted,
-  });
+  }]];
+  if (baseline.companion) {
+    entries.push([`companion:${secrets.spaceID}`, {
+      schemaVersion: 1,
+      spaceID: secrets.spaceID,
+      ...await encryptValue(baseline.companion),
+    }]);
+  }
+  await writeRecords(entries);
   await deleteRecord(pendingKey);
 };
 
@@ -338,6 +357,7 @@ const loadActiveProfiles = async () => {
       const credentials = await decryptValue(entry.value);
       if (credentials.relayBaseURL !== relayBaseURL || !UUID_PATTERN.test(credentials.spaceID || "")) continue;
       if (entry.recordKey !== `space:${credentials.spaceID}` || entry.value.spaceID !== credentials.spaceID) continue;
+      if (credentials.scope !== "companion" || !UUID_PATTERN.test(credentials.ownerDeviceID || "")) continue;
       const cachedRecord = await readRecord(`snapshot:${credentials.spaceID}`);
       const cachedProfile = cachedRecord ? await decryptValue(cachedRecord) : null;
       const profile = cachedProfile?.spaceID === credentials.spaceID ? cachedProfile : null;
@@ -791,12 +811,11 @@ const performSelectedProfileSync = async ({ poll = false } = {}) => {
   try {
     for (const delay of delays) {
       if (delay) await sleep(delay);
-      // Profiles cached by the first read-only companion did not include a snapshot revision.
-      // Replay the encrypted log once so those existing linked browsers become safely editable.
-      const startingCursor = Number.isSafeInteger(item.companion?.revision ?? item.profile?.snapshotRevision)
-        ? item.record.cursor || 0
-        : 0;
-      const result = await fetchLatestProfile(item.credentials, startingCursor);
+      const result = await fetchLatestCompanion(
+        item.credentials,
+        item.record.cursor || 0,
+        item.companion,
+      );
       const reconciliation = await persistSyncResult(item, result);
       renderCompanion();
       if (reconciliation === "applied") {
@@ -1204,12 +1223,12 @@ const saveProfilePresentation = async () => {
 };
 
 const initialize = async () => {
+  invitation = invitationFromFragment();
   const configResponse = await fetch("../sync-config.json", { cache: "no-store", credentials: "omit" });
   if (!configResponse.ok) throw new Error("configuration unavailable");
   const config = await configResponse.json();
   if (config.schemaVersion !== 1) throw new Error("configuration unavailable");
   relayBaseURL = config.relayBaseURL ? normalizeRelay(config.relayBaseURL) : "";
-  invitation = parseWebInvitationFragment(window.location.hash);
   if (!relayBaseURL) {
     setState("Not yet enabled", "Cedar Link is being prepared.", "This site has not been connected to the encrypted Cedar Sync relay yet.");
     return;
@@ -1248,9 +1267,8 @@ button.addEventListener("click", async () => {
   try {
     if (invitation.expiresAt <= Date.now()) throw new Error("expired invitation");
     const pending = await pendingCredentials(invitation);
-    await claim(invitation, pending.secrets);
-    await activate(pending.recordKey, pending.secrets);
-    history.replaceState(null, "", `${location.pathname}${location.search}`);
+    const baseline = await claim(invitation, pending.secrets);
+    await activate(pending.recordKey, pending.secrets, baseline);
     invitation.enrollmentToken.fill(0);
     invitation.profileKey.fill(0);
     selectedSpaceID = invitation.spaceID;

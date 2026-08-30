@@ -63,6 +63,9 @@ const claimed = await request(`/v1/spaces/${spaceID}/invitations/${invitationID}
   },
 });
 assert.equal(claimed.status, 200);
+assert.equal(claimed.value.ownerDeviceID, firstDeviceID);
+assert.equal(claimed.value.highWaterCursor, 0);
+assert.deepEqual(claimed.value.checkpoints, []);
 
 const replayedClaim = await request(`/v1/spaces/${spaceID}/invitations/${invitationID}/claim`, {
   method: "POST",
@@ -100,13 +103,95 @@ const duplicate = await request(`/v1/spaces/${spaceID}/changes`, {
 assert.equal(duplicate.status, 200);
 assert.equal(duplicate.value.serverSequence, uploaded.value.serverSequence);
 
+const ownerCheckpoint = async (retentionClass, authorSequence) => request(
+  `/v1/spaces/${spaceID}/changes`,
+  {
+    method: "POST",
+    token: firstDeviceToken,
+    body: {
+      schemaVersion: 1,
+      spaceID,
+      deviceID: firstDeviceID,
+      changeID: randomUUID(),
+      authorSequence,
+      createdAtEpochMilliseconds: Date.now(),
+      sealedPayload: standardBase64(randomBytes(64)),
+      retentionClass,
+    },
+  },
+);
+assert.equal((await ownerCheckpoint("profile-checkpoint", 1)).status, 200);
+assert.equal((await ownerCheckpoint("companion-checkpoint", 2)).status, 200);
+
+const participantCompanionCheckpoint = await request(`/v1/spaces/${spaceID}/changes`, {
+  method: "POST",
+  token: secondDeviceToken,
+  body: {
+    ...envelope,
+    changeID: randomUUID(),
+    authorSequence: 2,
+    retentionClass: "companion-checkpoint",
+  },
+});
+assert.equal(participantCompanionCheckpoint.status, 200);
+
+const participantProfileCheckpoint = await request(`/v1/spaces/${spaceID}/changes`, {
+  method: "POST",
+  token: secondDeviceToken,
+  body: {
+    ...envelope,
+    changeID: randomUUID(),
+    authorSequence: 3,
+    retentionClass: "profile-checkpoint",
+  },
+});
+assert.equal(participantProfileCheckpoint.status, 403);
+
+const baselineInvitationID = randomUUID();
+const baselineEnrollmentToken = randomBytes(32);
+const baselineInvitation = await request(`/v1/spaces/${spaceID}/invitations`, {
+  method: "POST",
+  token: firstDeviceToken,
+  body: {
+    schemaVersion: 1,
+    invitationID: baselineInvitationID,
+    enrollmentTokenHash: standardBase64(tokenHash(baselineEnrollmentToken)),
+    expiresAtEpochMilliseconds: Date.now() + 5 * 60 * 1000,
+  },
+});
+assert.equal(baselineInvitation.status, 200);
+const thirdDeviceID = randomUUID();
+const thirdDeviceToken = randomBytes(32);
+const baselineClaim = await request(
+  `/v1/spaces/${spaceID}/invitations/${baselineInvitationID}/claim`,
+  {
+    method: "POST",
+    token: baselineEnrollmentToken,
+    body: {
+      schemaVersion: 1,
+      deviceID: thirdDeviceID,
+      deviceToken: standardBase64(thirdDeviceToken),
+    },
+  },
+);
+assert.equal(baselineClaim.status, 200);
+assert.equal(baselineClaim.value.ownerDeviceID, firstDeviceID);
+assert.ok(baselineClaim.value.highWaterCursor > 0);
+assert.equal(baselineClaim.value.checkpoints.length, 2);
+assert.ok(baselineClaim.value.checkpoints.every((checkpoint) => (
+  checkpoint.envelope.deviceID === firstDeviceID
+  && checkpoint.serverSequence <= baselineClaim.value.highWaterCursor
+)));
+
 const fetched = await request(`/v1/spaces/${spaceID}/changes?after=0&limit=20`, {
   token: firstDeviceToken,
 });
 assert.equal(fetched.status, 200);
-assert.equal(fetched.value.changes.length, 1);
-assert.equal(fetched.value.changes[0].envelope.changeID, changeID);
-assert.equal(fetched.value.changes[0].envelope.sealedPayload, envelope.sealedPayload);
+assert.equal(fetched.value.changes.length, 4);
+const fetchedParticipantChange = fetched.value.changes.find(
+  (change) => change.envelope.changeID === changeID,
+);
+assert.equal(fetchedParticipantChange.envelope.sealedPayload, envelope.sealedPayload);
 
 const ownerDevices = await request(`/v1/spaces/${spaceID}/devices`, {
   token: firstDeviceToken,
@@ -114,7 +199,7 @@ const ownerDevices = await request(`/v1/spaces/${spaceID}/devices`, {
 assert.equal(ownerDevices.status, 200);
 assert.deepEqual(
   ownerDevices.value.devices.map((device) => device.deviceID),
-  [firstDeviceID, secondDeviceID],
+  [firstDeviceID, secondDeviceID, thirdDeviceID],
 );
 assert.ok(ownerDevices.value.devices.every((device) => (
   Number.isSafeInteger(device.createdAtEpochMilliseconds)
@@ -157,4 +242,6 @@ assert.equal(afterRevocation.status, 401);
 firstDeviceToken.fill(0);
 enrollmentToken.fill(0);
 secondDeviceToken.fill(0);
+baselineEnrollmentToken.fill(0);
+thirdDeviceToken.fill(0);
 process.stdout.write("Cedar Sync relay integration flow passed.\n");

@@ -12,9 +12,11 @@ The Cedar source code, service credentials, Android signing keystore, and OTA ma
 
 `public/link/` contains the static, phone-friendly Cedar Link surface. It is safe-by-default,
 verifies relay health before accepting an invitation, and remains disabled while
-`public/sync-config.json` has an empty relay URL. After a link is claimed, the browser fetches and
-authenticates Cedar's encrypted, content-free companion snapshot locally. The linked configuration
-and device credentials remain AES-GCM protected in browser storage.
+`public/sync-config.json` has an empty relay URL. Current Apple invitations provide only a derived
+companion key. After a link is claimed, the browser authenticates Cedar's encrypted, content-free
+companion checkpoint locally and deliberately advances past full-profile journal entries that this
+limited key cannot decrypt. The linked configuration and device credentials remain AES-GCM
+protected in browser storage.
 
 The companion can edit allowlisted profile presentation, playback/discovery settings, and Home
 branch configuration with optimistic revision checks. It can also create one-use recovery links,
@@ -23,6 +25,10 @@ commands to linked Apple and Android Cedar devices. Cedar Link is deliberately n
 no media element and never receives catalogs, guide rows, channel/program names, media titles,
 artwork, stream URLs, source candidates, or playback payloads. Its remote status contains only
 online, playing/paused, live-mode, and supported-command booleans.
+
+The invitation-bound Apple owner remains authoritative for profile configuration and the canonical
+device/status projection. Authenticated updates from other linked devices cannot replace that
+owner snapshot in the browser.
 
 Legacy linked browsers can still bounded-decompress the Apple profile snapshot to migrate their
 existing presentation cache. New companion features use only the smaller explicit projection.

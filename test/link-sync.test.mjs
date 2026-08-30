@@ -9,6 +9,8 @@ import {
   bytesToBase64,
   bytesToBase64URL,
   createCompanionConfigurationPatchChange,
+  createCompanionDeviceRequestChange,
+  createCompanionRemoteRequestChange,
   createDeviceRequestChange,
   createProfilePresentationPatchChange,
   createRemoteCommandChange,
@@ -16,9 +18,12 @@ import {
   decodeCompanionSnapshot,
   decodeProfileSnapshot,
   fetchLatestProfile,
+  fetchLatestCompanion,
   openEnvelope,
   parseWebInvitationFragment,
+  parseCompanionInvitationFragment,
   sealEnvelope,
+  validateCompanionClaimResult,
 } from "../public/link/cedar-sync.mjs";
 
 if (!globalThis.crypto) globalThis.crypto = webcrypto;
@@ -367,15 +372,17 @@ test("creates a one-use browser invitation with secrets only in the fragment", a
     assert.doesNotMatch(request.url, /enrollment|key=/);
     assert.equal(body.enrollmentTokenHash.length, 44);
     assert.doesNotMatch(request.init.body, /profileKey|deviceToken/);
-    const appValues = new URLSearchParams(url.hash.slice(1));
-    appValues.set("owner", credentials.deviceID);
-    url.hash = appValues.toString();
     const parsed = parseWebInvitationFragment(url.hash, 1_800_000_000_000);
     assert.equal(parsed.relayBaseURL, credentials.relayBaseURL);
     assert.equal(parsed.spaceID, credentials.spaceID);
     assert.equal(parsed.ownerDeviceID, credentials.deviceID);
     assert.equal(parsed.profileKey.length, 32);
     assert.equal(parsed.enrollmentToken.length, 32);
+
+    assert.throws(
+      () => parseCompanionInvitationFragment(`${url.hash}&key=${bytesToBase64URL(randomBytes(32))}`, 1_800_000_000_000),
+      (error) => error instanceof CedarSyncError && error.code === "invalid_invitation",
+    );
 
     const unsupported = new URL(url);
     const unsupportedValues = new URLSearchParams(unsupported.hash.slice(1));
@@ -628,4 +635,130 @@ test("does not skip authenticated malformed changes", async () => {
   } finally {
     globalThis.fetch = nativeFetch;
   }
+});
+
+const companionCredentials = {
+  ...credentials,
+  ownerDeviceID: deviceID,
+};
+const ownerCompanionCredentials = {
+  ...companionCredentials,
+  deviceID,
+};
+
+const makeCompanionEnvelope = ({
+  authorCredentials = ownerCompanionCredentials,
+  authorSequence = 1,
+  revision = companionSnapshot.revision,
+  name = companionSnapshot.configuration.presentation.name,
+  envelopeChangeID = randomUUID(),
+} = {}) => {
+  const snapshot = structuredClone(companionSnapshot);
+  snapshot.revision = revision;
+  snapshot.publishedAtEpochMilliseconds += revision;
+  snapshot.configuration.presentation.name = name;
+  return sealEnvelope({
+    schemaVersion: 1,
+    profileID,
+    entityKind: "cedar-companion-snapshot",
+    entityID: profileID,
+    operation: "upsert",
+    revision,
+    modifiedAtEpochMilliseconds: snapshot.publishedAtEpochMilliseconds,
+    payload: textEncoder.encode(JSON.stringify(snapshot)),
+  }, authorCredentials, authorSequence, {
+    changeID: envelopeChangeID,
+    createdAtEpochMilliseconds: snapshot.publishedAtEpochMilliseconds,
+    nonce: new Uint8Array(12).fill(authorSequence),
+  });
+};
+
+test("keeps companion configuration bound to the invitation owner across a mixed-key journal", async () => {
+  const nativeFetch = globalThis.fetch;
+  const participantCredentials = {
+    ...companionCredentials,
+    deviceID: randomUUID(),
+  };
+  const entries = [{
+    serverSequence: 1,
+    envelope: await makeEnvelope({
+      key: randomBytes(32),
+      envelopeChangeID: randomUUID(),
+      authorSequence: 1,
+    }),
+  }, {
+    serverSequence: 2,
+    envelope: await makeCompanionEnvelope({ authorSequence: 2 }),
+  }, {
+    serverSequence: 3,
+    envelope: await makeCompanionEnvelope({
+      authorCredentials: participantCredentials,
+      authorSequence: 3,
+      revision: 43,
+      name: "Participant must not replace owner",
+    }),
+  }];
+  globalThis.fetch = async (input) => {
+    const after = Number(new URL(input).searchParams.get("after"));
+    return new Response(JSON.stringify({
+      schemaVersion: 1,
+      changes: entries.filter((entry) => entry.serverSequence > after),
+    }), { status: 200, headers: { "Content-Type": "application/json" } });
+  };
+
+  try {
+    const result = await fetchLatestCompanion(companionCredentials);
+    assert.equal(result.cursor, 3);
+    assert.equal(result.unreadableChanges, 1);
+    assert.equal(result.companion.revision, 42);
+    assert.equal(result.companion.configuration.presentation.name, "Living Room");
+  } finally {
+    globalThis.fetch = nativeFetch;
+  }
+});
+
+test("validates the owner and both encryption domains in a claim baseline", async () => {
+  const result = await validateCompanionClaimResult({
+    schemaVersion: 1,
+    ownerDeviceID: deviceID,
+    highWaterCursor: 9,
+    checkpoints: [{
+      serverSequence: 7,
+      envelope: await makeEnvelope({
+        key: randomBytes(32),
+        envelopeChangeID: randomUUID(),
+        authorSequence: 7,
+      }),
+    }, {
+      serverSequence: 9,
+      envelope: await makeCompanionEnvelope({ authorSequence: 9 }),
+    }],
+  }, companionCredentials, deviceID);
+
+  assert.equal(result.ownerDeviceID, deviceID.toLowerCase());
+  assert.equal(result.highWaterCursor, 9);
+  assert.equal(result.unreadableChanges, 1);
+  assert.equal(result.companion.configuration.presentation.name, "Living Room");
+});
+
+test("keeps the explicit current companion request aliases on the shared wire contract", () => {
+  const companion = { profileID, revision: 42, configuration: companionConfiguration };
+  const rename = createCompanionDeviceRequestChange(
+    companion,
+    deviceID,
+    "rename",
+    10,
+    { displayName: "Living Room", createdAtEpochMilliseconds: 1_800_000_010_000 },
+  );
+  const remote = createCompanionRemoteRequestChange(
+    companion,
+    deviceID,
+    "toggle-playback",
+    11,
+    1_800_000_011_000,
+  );
+  assert.equal(rename.entityKind, "browser-device-action");
+  assert.equal(remote.entityKind, "browser-remote-command");
+  rename.payload.fill(0);
+  remote.payload.fill(0);
 });

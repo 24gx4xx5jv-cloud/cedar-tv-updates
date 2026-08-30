@@ -36,7 +36,8 @@ jobs:
         run: |
           node --check public/link/link.js
           node --check public/link/cedar-sync.mjs
-          node --test test/link-sync.test.mjs
+          node --check public/link/companion-ui.mjs
+          node --test test/*.test.mjs
           node scripts/verify_public_site.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5

@@ -12,6 +12,8 @@ export const LIMITS = Object.freeze({
   presentationPatchBytes: 16 * 1_024,
   companionDocumentBytes: 256 * 1_024,
   companionCommandBytes: 8 * 1_024,
+  maximumLinkedDevices: 50,
+  maximumBranches: 50,
   maximumFetch: 200,
   fetchPage: 5,
   maximumCatchUp: 2_000,
@@ -188,30 +190,40 @@ const normalizedWebRelay = (value) => {
 };
 
 export const parseWebInvitationFragment = (fragment, now = Date.now()) => {
-  if (typeof fragment !== "string" || fragment.length <= 1 || fragment.length > 2_048) return null;
+  if (typeof fragment !== "string" || fragment.length <= 1 || fragment.length > 2_048) {
+    fail("invalid_invitation", "This Cedar Link invitation is invalid.");
+  }
   const values = new URLSearchParams(fragment.startsWith("#") ? fragment.slice(1) : fragment);
   const allowed = new Set(["v", "scope", "relay", "space", "owner", "invitation", "enrollment", "key", "expires"]);
+  const seen = new Set();
   for (const field of values.keys()) {
-    if (!allowed.has(field)) fail("unknown_field", "The Cedar Link invitation contains an unknown field.");
+    if (!allowed.has(field) || seen.has(field)) {
+      fail("invalid_invitation", "This Cedar Link invitation contains unsupported fields.");
+    }
+    seen.add(field);
   }
-  if (values.get("v") !== "1") fail("unsupported_schema", "This Cedar Link invitation is not supported.");
-  if (values.has("scope") && values.get("scope") !== "companion") {
-    fail("unsupported_scope", "This Cedar Link invitation has an unsupported scope.");
+  if (seen.size !== allowed.size || values.get("v") !== "1" || values.get("scope") !== "companion") {
+    fail("invalid_invitation", "This Cedar Link invitation is not a companion link.");
   }
   const expiresAt = Number(values.get("expires"));
   if (!Number.isSafeInteger(expiresAt) || expiresAt <= now) {
     fail("expired_invitation", "This Cedar Link invitation has expired.");
   }
   return {
+    scope: "companion",
     relayBaseURL: normalizedWebRelay(values.get("relay")),
     spaceID: normalizeUUID(values.get("space")),
-    ownerDeviceID: values.has("owner") ? normalizeUUID(values.get("owner")) : null,
+    ownerDeviceID: normalizeUUID(values.get("owner")),
     invitationID: normalizeUUID(values.get("invitation")),
     enrollmentToken: base64URLToBytes(values.get("enrollment"), 32),
     profileKey: base64URLToBytes(values.get("key"), 32),
     expiresAt,
   };
 };
+
+// Kept as an explicit companion name for callers that must reject the older, broader web-link
+// shape. Both exports intentionally share the same fail-closed parser.
+export const parseCompanionInvitationFragment = parseWebInvitationFragment;
 
 export const standardBase64ToBytes = (value, minimumBytes, maximumBytes) => {
   if (typeof value !== "string" || !STANDARD_BASE64_PATTERN.test(value)) {
@@ -758,6 +770,11 @@ export const createDeviceRequestChange = (
   }, authorSequence, LIMITS.companionCommandBytes);
 };
 
+// Current companion callers use names that make the limited key domain explicit. The wire
+// entities remain unchanged for compatibility with Apple and Android Cedar clients.
+export const createCompanionDeviceRequestChange = createDeviceRequestChange;
+export const createCompanionRemoteRequestChange = createRemoteCommandChange;
+
 const safeArray = (value) => Array.isArray(value) ? value : [];
 
 const decodedConfigurationPayload = (configuration, key) => {
@@ -1105,6 +1122,7 @@ export const createWebInvitation = async (
       scope: "companion",
       relay: credentials.relayBaseURL,
       space: normalizeUUID(credentials.spaceID),
+      owner: normalizeUUID(credentials.ownerDeviceID ?? credentials.deviceID),
       invitation: invitationID,
       enrollment: bytesToBase64URL(enrollmentToken),
       key: bytesToBase64URL(profileKey),
@@ -1120,6 +1138,117 @@ export const createWebInvitation = async (
     enrollmentToken.fill(0);
     profileKey.fill(0);
   }
+};
+
+const openedCompanionChange = async (envelope, credentials) => {
+  try {
+    return await openEnvelope(envelope, credentials);
+  } catch (error) {
+    // A companion journal deliberately contains owner-only profile ciphertext beside
+    // companion-key ciphertext. An authentication failure is therefore an unreadable key domain,
+    // while authenticated malformed data must continue to fail closed.
+    if (error instanceof CedarSyncError && error.code === "authentication_failed") return null;
+    throw error;
+  }
+};
+
+export const validateCompanionClaimResult = async (
+  value,
+  credentials,
+  expectedOwnerDeviceID,
+) => {
+  const root = record(value, "Cedar Sync returned an invalid enrollment response.");
+  schemaOne(root.schemaVersion);
+  const ownerDeviceID = normalizeUUID(root.ownerDeviceID);
+  if (ownerDeviceID !== normalizeUUID(expectedOwnerDeviceID)) {
+    fail("owner_mismatch", "The Cedar Link owner identity changed.");
+  }
+  const highWaterCursor = nonnegativeInteger(root.highWaterCursor);
+  if (!Array.isArray(root.checkpoints) || root.checkpoints.length > 2) {
+    fail("invalid_checkpoints", "Cedar Sync returned an invalid enrollment baseline.");
+  }
+  if ((highWaterCursor === 0) !== (root.checkpoints.length === 0)) {
+    fail("invalid_checkpoints", "Cedar Sync returned an incomplete enrollment baseline.");
+  }
+  if (highWaterCursor > 0 && root.checkpoints.length !== 2) {
+    fail("invalid_checkpoints", "Cedar Sync returned an incomplete enrollment baseline.");
+  }
+
+  let previousSequence = 0;
+  let companion = null;
+  let unreadableChanges = 0;
+  for (const checkpointValue of root.checkpoints) {
+    const checkpoint = record(checkpointValue, "Cedar Sync returned an invalid checkpoint.");
+    const serverSequence = positiveInteger(checkpoint.serverSequence);
+    if (serverSequence <= previousSequence || serverSequence > highWaterCursor) {
+      fail("invalid_checkpoints", "Cedar Sync returned an invalid checkpoint order.");
+    }
+    const envelope = validateEnvelope(checkpoint.envelope, credentials.spaceID);
+    if (envelope.deviceID !== ownerDeviceID) {
+      envelope.sealedPayload.fill(0);
+      fail("owner_mismatch", "The Cedar Link checkpoint was not written by its owner.");
+    }
+    const wireEnvelope = {
+      ...envelope,
+      sealedPayload: bytesToBase64(envelope.sealedPayload),
+    };
+    envelope.sealedPayload.fill(0);
+    const change = await openedCompanionChange(wireEnvelope, credentials);
+    if (!change) {
+      unreadableChanges += 1;
+    } else {
+      const decoded = decodeCompanionSnapshot(change, credentials.spaceID);
+      if (decoded?.removed) companion = null;
+      else if (decoded) companion = decoded;
+      else change.payload.fill(0);
+    }
+    previousSequence = serverSequence;
+  }
+  if (highWaterCursor > 0 && (!companion || unreadableChanges !== 1)) {
+    fail("invalid_checkpoints", "Cedar Sync returned an incomplete companion baseline.");
+  }
+  return { ownerDeviceID, highWaterCursor, companion, unreadableChanges };
+};
+
+export const fetchLatestCompanion = async (
+  credentials,
+  startingCursor = 0,
+  startingCompanion = null,
+) => {
+  let cursor = nonnegativeInteger(startingCursor);
+  let companion = startingCompanion;
+  let sawChanges = false;
+  let unreadableChanges = 0;
+  const ownerDeviceID = normalizeUUID(credentials.ownerDeviceID);
+  const maximumPages = Math.ceil(LIMITS.maximumCatchUp / LIMITS.fetchPage);
+  for (let page = 0; page < maximumPages; page += 1) {
+    const values = await fetchPage(credentials, cursor);
+    for (const value of values) {
+      const item = record(value);
+      const serverSequence = positiveInteger(item.serverSequence, "Cedar Sync returned an invalid cursor.");
+      if (serverSequence <= cursor) fail("cursor_backwards", "The Cedar Sync cursor moved backwards.");
+      const authorDeviceID = normalizeUUID(record(item.envelope).deviceID);
+      const change = await openedCompanionChange(item.envelope, credentials);
+      if (!change) {
+        unreadableChanges += 1;
+      } else if (authorDeviceID === ownerDeviceID) {
+        const decoded = decodeCompanionSnapshot(change, credentials.spaceID);
+        if (decoded?.removed) companion = null;
+        else if (decoded) companion = decoded;
+        else change.payload.fill(0);
+      } else {
+        // Linked devices can publish their own projections and requests, but only the owner named
+        // by the invitation may replace the browser's canonical configuration and device list.
+        change.payload.fill(0);
+      }
+      cursor = serverSequence;
+      sawChanges = true;
+    }
+    if (values.length < LIMITS.fetchPage) {
+      return { cursor, companion, sawChanges, unreadableChanges };
+    }
+  }
+  fail("too_many_changes", "Cedar Sync has too many pending changes. Refresh and try again.");
 };
 
 export const fetchLatestProfile = async (credentials, startingCursor = 0) => {

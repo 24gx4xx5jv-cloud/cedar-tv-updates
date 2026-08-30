@@ -9,6 +9,7 @@ const requiredFiles = [
   "public/link/link.css",
   "public/link/link.js",
   "public/link/cedar-sync.mjs",
+  "public/link/companion-ui.mjs",
   "public/link/vendor/fflate-inflate.mjs",
   "public/link/vendor/fflate-LICENSE.txt",
   "public/catalogs/avatars.json",
@@ -39,7 +40,8 @@ if (!page.includes(`connect-src 'self' ${relay.origin}`)) {
   throw new Error("The Cedar Link CSP must allow its configured relay origin");
 }
 if (
-  !page.includes('type="module" src="link.js?v=companion-4"')
+  !page.includes('href="link.css?v=companion-5"')
+  || !page.includes('type="module" src="link.js?v=companion-5"')
   || !page.includes('id="link-button"')
   || !page.includes('id="link-companion"')
   || !page.includes('id="profile-selector"')
@@ -57,6 +59,15 @@ if (/<(?:video|audio|iframe|canvas)\b/i.test(page)) {
 }
 
 const script = await readFile("public/link/link.js", "utf8");
+if (!script.includes('from "./cedar-sync.mjs?v=companion-5"')) {
+  throw new Error("The Cedar Link protocol module needs the current cache token");
+}
+if (
+  script.indexOf("history.replaceState") < 0
+  || script.indexOf("history.replaceState") > script.indexOf("parseWebInvitationFragment(fragment)")
+) {
+  throw new Error("The Cedar Link fragment must be removed before invitation parsing continues");
+}
 for (const requiredPath of ["/v1/health", "/claim", "../sync-config.json", "../catalogs/avatars.json", "../catalogs/badges.json"]) {
   if (!script.includes(requiredPath)) {
     throw new Error(`The Cedar Link client is missing ${requiredPath}`);
@@ -91,6 +102,8 @@ for (const requiredProtocol of [
   "AES-GCM",
   "DecompressionStream",
   "inflateSync",
+  "scope",
+  "ownerDeviceID",
   "cedar-companion-snapshot",
   "browser-companion-configuration",
   "browser-remote-command",

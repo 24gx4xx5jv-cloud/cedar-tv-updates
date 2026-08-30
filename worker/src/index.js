@@ -35,6 +35,16 @@ const emptySuccess = (origin) => jsonResponse(200, { schemaVersion: 1 }, origin)
 
 const routeParts = (pathname) => pathname.split("/").filter(Boolean);
 
+const envelopeFromRow = (spaceID, row) => ({
+  schemaVersion: 1,
+  spaceID,
+  deviceID: row.author_device_id,
+  changeID: row.change_id,
+  authorSequence: Number(row.author_sequence),
+  createdAtEpochMilliseconds: Number(row.created_at_ms),
+  sealedPayload: row.sealed_payload,
+});
+
 const enforceRateLimit = async (request, env) => {
   const url = new URL(request.url);
   const isSpaceCreation = request.method === "POST" && url.pathname === "/v1/spaces";
@@ -196,14 +206,59 @@ const claimInvitation = async (request, env, origin, spaceID, invitationID) => {
       WHERE space_id = ?1 AND device_id = ?2 AND token_hash = ?3 AND revoked_at_ms IS NULL`,
   ).bind(spaceID, deviceID, deviceTokenHash).first();
   if (!device) throw new ProtocolError(409, "device_identity_exists");
-  return emptySuccess(origin);
+  const owner = await env.DB.prepare(
+    `SELECT device_id
+       FROM sync_devices
+      WHERE space_id = ?1 AND is_owner = 1 AND revoked_at_ms IS NULL
+      ORDER BY created_at_ms ASC, device_id ASC
+      LIMIT 1`,
+  ).bind(spaceID).first();
+  if (!owner) throw new ProtocolError(409, "owner_unavailable");
+  const ownerDeviceID = normalizeUUID(owner.device_id);
+  const checkpointRows = await env.DB.prepare(
+    `SELECT server_sequence, change_id, author_device_id, author_sequence,
+            created_at_ms, sealed_payload, retention_class
+       FROM sync_changes AS candidate
+      WHERE candidate.space_id = ?1
+        AND candidate.author_device_id = ?2
+        AND candidate.retention_class IN ('profile-checkpoint', 'companion-checkpoint')
+        AND candidate.server_sequence = (
+          SELECT MAX(latest.server_sequence)
+            FROM sync_changes AS latest
+           WHERE latest.space_id = candidate.space_id
+             AND latest.author_device_id = candidate.author_device_id
+             AND latest.retention_class = candidate.retention_class
+        )
+      ORDER BY server_sequence ASC`,
+  ).bind(spaceID, ownerDeviceID).all();
+  const rows = checkpointRows.results || [];
+  const hasCompleteBaseline = rows.length === 2
+    && new Set(rows.map((row) => row.retention_class)).size === 2;
+  let highWaterCursor = 0;
+  let checkpoints = [];
+  if (hasCompleteBaseline) {
+    const highWater = await env.DB.prepare(
+      "SELECT COALESCE(MAX(server_sequence), 0) AS value FROM sync_changes WHERE space_id = ?1",
+    ).bind(spaceID).first();
+    highWaterCursor = nonnegativeInteger(Number(highWater?.value || 0), "invalid_cursor");
+    checkpoints = rows.map((row) => ({
+      serverSequence: positiveInteger(Number(row.server_sequence), "invalid_cursor"),
+      envelope: envelopeFromRow(spaceID, row),
+    }));
+  }
+  return jsonResponse(200, {
+    schemaVersion: 1,
+    ownerDeviceID,
+    highWaterCursor,
+    checkpoints,
+  }, origin);
 };
 
 const uploadChange = async (request, env, origin, spaceID) => {
   const author = await authenticateDevice(request, env, spaceID);
   const body = exactObject(await readJSON(request), [
     "schemaVersion", "spaceID", "deviceID", "changeID", "authorSequence",
-    "createdAtEpochMilliseconds", "sealedPayload",
+    "createdAtEpochMilliseconds", "sealedPayload", "retentionClass",
   ]);
   schemaOne(body.schemaVersion);
   if (normalizeUUID(body.spaceID) !== spaceID) throw new ProtocolError(400, "space_mismatch");
@@ -217,17 +272,26 @@ const uploadChange = async (request, env, origin, spaceID) => {
     28,
     LIMITS.sealedPayloadBytes,
   );
+  const retentionClass = body.retentionClass ?? "journal";
+  if (!["journal", "profile-checkpoint", "companion-checkpoint"].includes(retentionClass)) {
+    throw new ProtocolError(400, "invalid_retention_class");
+  }
+  if (retentionClass === "profile-checkpoint" && !author.isOwner) {
+    throw new ProtocolError(403, "owner_authorization_required");
+  }
   const now = Date.now();
   const insert = await env.DB.prepare(
     `INSERT OR IGNORE INTO sync_changes(
        space_id, change_id, author_device_id, author_sequence,
-       created_at_ms, sealed_payload, stored_at_ms
-     ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)`,
-  ).bind(spaceID, changeID, deviceID, authorSequence, createdAt, sealedPayload, now).run();
+       created_at_ms, sealed_payload, stored_at_ms, retention_class
+     ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)`,
+  ).bind(
+    spaceID, changeID, deviceID, authorSequence, createdAt, sealedPayload, now, retentionClass,
+  ).run();
 
   const stored = await env.DB.prepare(
     `SELECT server_sequence, change_id, author_device_id, author_sequence,
-            created_at_ms, sealed_payload
+            created_at_ms, sealed_payload, retention_class
        FROM sync_changes
       WHERE space_id = ?1
         AND (change_id = ?2 OR (author_device_id = ?3 AND author_sequence = ?4))`,
@@ -237,7 +301,8 @@ const uploadChange = async (request, env, origin, spaceID) => {
     && stored.author_device_id === deviceID
     && Number(stored.author_sequence) === authorSequence
     && Number(stored.created_at_ms) === createdAt
-    && stored.sealed_payload === sealedPayload;
+    && stored.sealed_payload === sealedPayload
+    && stored.retention_class === retentionClass;
   if (!identical) throw new ProtocolError(409, "change_conflict");
   if (!insert.success && !stored) throw new ProtocolError(503, "relay_unavailable");
   return jsonResponse(200, {
@@ -267,15 +332,7 @@ const fetchChanges = async (request, env, origin, spaceID) => {
   ).bind(spaceID, after, limit).all();
   const changes = (result.results || []).map((row) => ({
     serverSequence: Number(row.server_sequence),
-    envelope: {
-      schemaVersion: 1,
-      spaceID,
-      deviceID: row.author_device_id,
-      changeID: row.change_id,
-      authorSequence: Number(row.author_sequence),
-      createdAtEpochMilliseconds: Number(row.created_at_ms),
-      sealedPayload: row.sealed_payload,
-    },
+    envelope: envelopeFromRow(spaceID, row),
   }));
   return jsonResponse(200, { schemaVersion: 1, changes }, origin);
 };

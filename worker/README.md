@@ -14,9 +14,11 @@ npm run dev
 ```
 
 With the local Worker running in another terminal, `npm run test:integration` verifies space
-creation, single-use enrollment, authenticated idempotent upload/fetch, unauthorized rejection,
-owner-only device listing, and owner-only revocation. The first device in a space is its owner;
-linked devices can sync normally but cannot enumerate or revoke other devices.
+creation, single-use enrollment, authenticated idempotent upload/fetch, owner-authored checkpoint
+baselines, unauthorized rejection, owner-only device listing, and owner-only revocation. The first
+device in a space is its owner; linked devices can sync normally and publish their own content-free
+companion checkpoints, but cannot publish owner profile checkpoints, enumerate devices, or revoke
+other devices.
 
 ## Production deployment
 
