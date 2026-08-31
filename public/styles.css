@@ -121,6 +121,7 @@ h1 em { color: var(--cedar); font-family: Georgia, "Times New Roman", serif; fon
 .button-primary { background: var(--text); color: #0b0c0e; }
 .button-secondary { border: 1px solid var(--line); background: rgba(255,255,255,0.035); }
 .button-secondary span { margin-left: 10px; color: var(--cedar); }
+.button:active { transform: scale(0.97); }
 .compatibility { margin: 23px 0 0; color: #70747b; font-size: 0.78rem; letter-spacing: 0.04em; }
 
 .hero-visual { position: relative; width: 100%; isolation: isolate; }
@@ -178,6 +179,45 @@ h1 em { color: var(--cedar); font-family: Georgia, "Times New Roman", serif; fon
 }
 .proof-strip p:last-child { border-right: 0; }
 .proof-strip span { margin-right: 11px; color: #666a71; font-size: 0.69rem; }
+
+.platforms { padding-bottom: 54px; }
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 72px;
+}
+
+.platform-card {
+  grid-column: span 4;
+  display: flex;
+  min-height: 330px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(28px, 4vw, 46px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.035), transparent 52%),
+    var(--surface);
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), border-color 160ms ease, background-color 160ms ease;
+}
+
+.platform-card-primary {
+  grid-column: span 7;
+  background:
+    radial-gradient(circle at 86% 18%, rgba(132, 163, 110, 0.18), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent 52%),
+    var(--surface);
+}
+
+.platform-card-primary + .platform-card { grid-column: span 5; }
+.platform-device { color: var(--cedar); font-size: 0.7rem; font-weight: 760; letter-spacing: 0.1em; text-transform: uppercase; }
+.platform-card h3 { margin: 28px 0 0; font-size: clamp(2rem, 3.8vw, 3.65rem); font-weight: 590; letter-spacing: -0.052em; line-height: 0.98; }
+.platform-card p { max-width: 590px; margin: 22px 0 0; color: var(--muted); line-height: 1.65; }
+.platform-release { display: flex; flex-wrap: wrap; gap: 9px 16px; margin-top: auto; padding-top: 36px; color: #7d8188; font-size: 0.76rem; font-weight: 680; }
+.platform-release span:first-child { color: var(--cedar-bright); letter-spacing: 0.05em; text-transform: uppercase; }
+.platform-card:active { transform: scale(0.985); }
 
 .section-shell {
   width: min(1320px, calc(100% - 64px));
@@ -321,6 +361,7 @@ footer > p { max-width: 630px; margin: 0; color: #73777e; font-size: 0.75rem; li
   .button:hover { transform: translateY(-2px); }
   .button-primary:hover { background: var(--cedar-bright); }
   .button-secondary:hover { border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.07); }
+  .platform-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
   .footer-links a:hover { color: var(--text); }
 }
 
@@ -330,6 +371,10 @@ footer > p { max-width: 630px; margin: 0; color: #73777e; font-size: 0.75rem; li
   .hero-visual { width: min(100%, 1000px); margin: 16px auto 0; }
   .screen-frame { transform: none; }
   .section-heading { grid-template-columns: 1fr; gap: 30px; }
+  .platform-card,
+  .platform-card-primary,
+  .platform-card-primary + .platform-card { grid-column: span 6; }
+  .platform-card-primary { grid-column: 1 / -1; }
   .detail-stage { grid-template-columns: 1fr; }
   .detail-caption { max-width: 680px; }
   .feature-card, .feature-card-wide { grid-column: span 6; grid-template-columns: 1fr; }
@@ -357,6 +402,10 @@ footer > p { max-width: 630px; margin: 0; color: #73777e; font-size: 0.75rem; li
   .proof-strip p:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .section-shell { padding: 92px 0; }
   .section-heading h2, .download-copy h2 { font-size: clamp(2.8rem, 13vw, 4.2rem); }
+  .platform-grid { margin-top: 52px; }
+  .platform-card,
+  .platform-card-primary,
+  .platform-card-primary + .platform-card { grid-column: 1 / -1; min-height: 290px; padding: 28px; border-radius: 18px; }
   .detail-stage, .feature-grid { margin-top: 52px; }
   .feature-card, .feature-card-wide { grid-column: 1 / -1; min-height: 340px; padding: 28px; border-radius: 18px; }
   .poster-rail { inset: auto -17% -14% 22%; }
