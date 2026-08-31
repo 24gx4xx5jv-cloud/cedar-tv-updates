@@ -7,8 +7,8 @@ import {
   createDeviceRequestChange,
   createProfilePresentationPatchChange,
   createRemoteCommandChange,
-  createWebInvitation,
   fetchLatestCompanion,
+  leaveSpace,
   normalizeUUID,
   parseWebInvitationFragment,
   sealEnvelope,
@@ -16,7 +16,7 @@ import {
   validateCompanionClaimResult,
   validateProfilePresentation,
   validateCompanionConfiguration,
-} from "./cedar-sync.mjs?v=companion-5";
+} from "./cedar-sync.mjs?v=companion-6";
 import {
   companionConfigurationsMatch,
   companionDraftDirtySections,
@@ -83,13 +83,7 @@ const branchEditorList = document.querySelector("#branch-editor-list");
 const branchPreset = document.querySelector("#branch-preset");
 const addBranchButton = document.querySelector("#add-branch");
 const deviceList = document.querySelector("#device-list");
-const createInvitationButton = document.querySelector("#create-invitation");
 const forgetBrowserButton = document.querySelector("#forget-browser");
-const invitationResult = document.querySelector("#invitation-result");
-const invitationURL = document.querySelector("#invitation-url");
-const invitationExpiry = document.querySelector("#invitation-expiry");
-const revealInvitationButton = document.querySelector("#reveal-invitation");
-const copyInvitationButton = document.querySelector("#copy-invitation");
 const remoteDevice = document.querySelector("#remote-device");
 const remoteState = document.querySelector("#remote-state");
 const remoteControls = document.querySelector("#remote-controls");
@@ -124,15 +118,9 @@ let draftPresentation = null;
 let isSavingProfile = false;
 let isSavingCompanion = false;
 let isForgettingProfile = false;
-let isCreatingInvitation = false;
 const companionDrafts = new Map();
 const syncInFlightBySpace = new Map();
 const profileOperationGenerations = new Map();
-let currentInvitationURL = "";
-let currentInvitationSpaceID = "";
-let currentInvitationExpiresAt = 0;
-let invitationCountdownTimer = null;
-let invitationRevealTimer = null;
 
 const profileOperationGeneration = (spaceID) => profileOperationGenerations.get(spaceID) || 0;
 
@@ -939,10 +927,6 @@ const renderCompanionPanels = (item, { preserveFocus = true } = {}) => {
   renderDevices(item);
   renderRemote(item);
   renderCompanionSaveState(item);
-  createInvitationButton.disabled = isSavingProfile
-    || isSavingCompanion
-    || isForgettingProfile
-    || isCreatingInvitation;
   forgetBrowserButton.disabled = isSavingProfile || isSavingCompanion || isForgettingProfile;
   restoreCompanionFocus(focusToken);
 };
@@ -1025,14 +1009,12 @@ const persistSyncResult = async (item, result, generation) => {
     item.pending = null;
     item.configurationPending = null;
     companionDrafts.delete(item.credentials.spaceID);
-    if (currentInvitationSpaceID === item.credentials.spaceID) clearInvitationDisplay();
     resetDraft(item);
     return "companion-removed";
   }
   if (profileRemoved) {
     item.profile = null;
     item.pending = null;
-    if (currentInvitationSpaceID === item.credentials.spaceID) clearInvitationDisplay();
     if (!item.companion) resetDraft(item);
   } else if (result.profile) {
     item.profile = result.profile;
@@ -1872,7 +1854,6 @@ profileSelector.addEventListener("change", async () => {
       companionDrafts.set(currentItem.credentials.spaceID, discardCompanionDraftChanges(currentDraft));
     }
   }
-  clearInvitationDisplay();
   selectedSpaceID = targetSpaceID;
   draftSpaceID = "";
   draftPresentation = null;
@@ -1955,147 +1936,16 @@ branchesEditor.addEventListener("submit", (event) => {
   );
 });
 
-const clearInvitationTimers = () => {
-  if (invitationCountdownTimer) clearInterval(invitationCountdownTimer);
-  if (invitationRevealTimer) clearTimeout(invitationRevealTimer);
-  invitationCountdownTimer = null;
-  invitationRevealTimer = null;
-};
-
-const maskInvitation = () => {
-  if (invitationRevealTimer) clearTimeout(invitationRevealTimer);
-  invitationRevealTimer = null;
-  invitationURL.value = currentInvitationURL
-    ? "Invitation hidden — use Copy link or Reveal"
-    : "";
-  revealInvitationButton.setAttribute("aria-pressed", "false");
-  revealInvitationButton.textContent = "Reveal link";
-};
-
-const clearInvitationDisplay = ({ expired = false } = {}) => {
-  clearInvitationTimers();
-  currentInvitationURL = "";
-  currentInvitationSpaceID = "";
-  currentInvitationExpiresAt = 0;
-  invitationURL.value = expired ? "Invitation expired" : "";
-  invitationExpiry.textContent = expired ? "Invitation expired" : "One-use link ready";
-  revealInvitationButton.disabled = true;
-  revealInvitationButton.setAttribute("aria-pressed", "false");
-  revealInvitationButton.textContent = "Reveal link";
-  copyInvitationButton.disabled = true;
-  copyInvitationButton.textContent = "Copy link";
-  invitationResult.hidden = !expired;
-};
-
-const updateInvitationCountdown = () => {
-  if (!currentInvitationURL || currentInvitationSpaceID !== selectedSpaceID) {
-    clearInvitationDisplay();
-    return;
-  }
-  const remainingSeconds = Math.ceil((currentInvitationExpiresAt - Date.now()) / 1_000);
-  if (remainingSeconds <= 0) {
-    clearInvitationDisplay({ expired: true });
-    syncMessage.classList.remove("is-success", "is-error");
-    syncMessage.classList.add("is-pending");
-    syncMessage.textContent = "The one-use invitation expired and was cleared from this page. Create another when you need it.";
-    return;
-  }
-  const minutes = Math.floor(remainingSeconds / 60);
-  const seconds = String(remainingSeconds % 60).padStart(2, "0");
-  invitationExpiry.textContent = `Expires in ${minutes}:${seconds}`;
-};
-
-const showInvitationDisplay = (spaceID, result) => {
-  clearInvitationTimers();
-  currentInvitationURL = result.url;
-  currentInvitationSpaceID = spaceID;
-  currentInvitationExpiresAt = result.expiresAtEpochMilliseconds;
-  invitationResult.hidden = false;
-  revealInvitationButton.disabled = false;
-  copyInvitationButton.disabled = false;
-  maskInvitation();
-  updateInvitationCountdown();
-  invitationCountdownTimer = setInterval(updateInvitationCountdown, 1_000);
-};
-
-const revealInvitation = () => {
-  if (!currentInvitationURL
-    || currentInvitationSpaceID !== selectedSpaceID
-    || currentInvitationExpiresAt <= Date.now()) return;
-  invitationURL.value = currentInvitationURL;
-  revealInvitationButton.setAttribute("aria-pressed", "true");
-  revealInvitationButton.textContent = "Hide link";
-  if (invitationRevealTimer) clearTimeout(invitationRevealTimer);
-  invitationRevealTimer = setTimeout(maskInvitation, 30_000);
-};
-
-createInvitationButton.addEventListener("click", async () => {
-  const item = selectedProfile();
-  if (!item || createInvitationButton.disabled || isForgettingProfile) return;
-  const requestSpaceID = item.credentials.spaceID;
-  const generation = profileOperationGeneration(requestSpaceID);
-  const focusToken = captureCompanionFocus();
-  clearInvitationDisplay();
-  isCreatingInvitation = true;
-  renderCompanionPanels(item);
-  createInvitationButton.textContent = "Creating encrypted link…";
-  try {
-    const result = await createWebInvitation(item.credentials, window.location.href);
-    if (!profileOperationIsCurrent(item, generation)
-      || selectedSpaceID !== requestSpaceID
-      || selectedProfile() !== item) return;
-    showInvitationDisplay(requestSpaceID, result);
-    syncMessage.classList.remove("is-error", "is-pending");
-    syncMessage.textContent = "One-use invitation created. It expires in 10 minutes; share it only with a device you trust.";
-    syncMessage.classList.add("is-success");
-  } catch (error) {
-    if (!profileOperationIsCurrent(item, generation) || selectedSpaceID !== requestSpaceID) return;
-    clearInvitationDisplay();
-    syncMessage.classList.remove("is-success", "is-pending");
-    syncMessage.textContent = error instanceof CedarSyncError ? error.message : "The one-use invitation could not be created.";
-    syncMessage.classList.add("is-error");
-  } finally {
-    isCreatingInvitation = false;
-    createInvitationButton.textContent = "Create one-use link";
-    if (selectedProfile()) renderCompanionPanels(selectedProfile());
-    if (profileOperationIsCurrent(item, generation)
-      && selectedSpaceID === requestSpaceID) restoreOperationFocus(focusToken);
-  }
-});
-
-revealInvitationButton.addEventListener("click", () => {
-  if (revealInvitationButton.getAttribute("aria-pressed") === "true") maskInvitation();
-  else revealInvitation();
-});
-
-copyInvitationButton.addEventListener("click", async () => {
-  if (!currentInvitationURL
-    || currentInvitationSpaceID !== selectedSpaceID
-    || currentInvitationExpiresAt <= Date.now()) return;
-  try {
-    await navigator.clipboard.writeText(currentInvitationURL);
-    copyInvitationButton.textContent = "Copied";
-    const copiedSpaceID = currentInvitationSpaceID;
-    setTimeout(() => {
-      if (currentInvitationSpaceID === copiedSpaceID) copyInvitationButton.textContent = "Copy link";
-    }, 2_000);
-  } catch {
-    revealInvitation();
-    invitationURL.select();
-    syncMessage.textContent = "Copy is unavailable in this browser. The invitation is revealed and selected for manual copying.";
-  }
-});
-
 forgetBrowserButton.addEventListener("click", async () => {
   const item = selectedProfile();
   if (!item || isSavingProfile || isSavingCompanion || isForgettingProfile) return;
-  if (!window.confirm("Forget this Cedar Link profile in this browser? This removes its protected local key and any unsent edits, and cannot be undone here.")) return;
+  if (!window.confirm("Forget this Cedar Link profile in this browser? This unlinks the browser, removes its protected local key and unsent edits, and cannot be undone here.")) return;
   const spaceID = item.credentials.spaceID;
   isForgettingProfile = true;
   invalidateProfileOperations(spaceID);
-  clearInvitationDisplay();
   renderCompanion();
   try {
+    await leaveSpace(item.credentials);
     // IndexedDB serializes this transaction after any already-started write. Coupled
     // with the generation gate above, the deletion is the final local operation.
     await deleteRecords([
@@ -2111,11 +1961,13 @@ forgetBrowserButton.addEventListener("click", async () => {
     selectedSpaceID = activeProfiles[0]?.credentials.spaceID || "";
     draftSpaceID = "";
     draftPresentation = null;
-  } catch {
-    companionState.textContent = "Browser storage needs attention";
+  } catch (error) {
+    companionState.textContent = "Unlink needs attention";
     syncMessage.classList.remove("is-success", "is-pending");
     syncMessage.classList.add("is-error");
-    syncMessage.textContent = "This profile could not be removed from protected browser storage. Try again.";
+    syncMessage.textContent = error instanceof CedarSyncError
+      ? error.message
+      : "This browser could not be fully unlinked. Its protected key was kept so you can retry.";
     isForgettingProfile = false;
     renderCompanion();
     return;

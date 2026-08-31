@@ -184,7 +184,7 @@
               <p class="editor-note">Rename, hide, or reorder rows shown by Cedar. Link configures these rows but never loads their content.</p>
               <ol class="branch-editor-list" id="branch-editor-list"></ol>
               <div class="branch-add">
-                <label class="stacked-field" for="branch-preset"><span>Add a preset row</span><select class="profile-selector" id="branch-preset"><option value="continue-watching">Continue Watching</option><option value="favorites">Favorites</option><option value="watchlist">Watchlist</option><option value="trending">Trending</option><option value="popular">Popular</option><option value="top-rated">Top Rated</option><option value="coming-soon">Coming Soon</option></select></label>
+                <label class="stacked-field" for="branch-preset"><span>Add a preset row</span><select class="profile-selector" id="branch-preset"><option value="trending">Trending</option><option value="popular">Popular</option><option value="top-rated">Top Rated</option><option value="coming-soon">Coming Soon</option></select></label>
                 <button class="button library-more" id="add-branch" type="button">Add row</button>
               </div>
               <button class="button button-primary editor-save" type="submit">Send Home changes to Cedar</button>
@@ -193,21 +193,12 @@
 
           <section class="companion-panel" id="panel-devices" role="tabpanel" aria-labelledby="tab-devices" tabindex="0" data-companion-panel="devices" hidden>
             <div class="companion-form">
-              <div class="editor-heading"><div><p class="profile-kicker">Linked access</p><h3>Devices and recovery</h3></div><span>Owner enforced</span></div>
+              <div class="editor-heading"><div><p class="profile-kicker">Linked access</p><h3>Devices and access</h3></div><span>Owner enforced</span></div>
               <ul class="device-list" id="device-list"></ul>
               <div class="access-actions">
-                <button class="button button-primary" id="create-invitation" type="button">Create one-use link</button>
                 <button class="button library-more danger-button" id="forget-browser" type="button">Forget this browser</button>
               </div>
-              <div class="invitation-result" id="invitation-result" hidden>
-                <label class="stacked-field" for="invitation-url"><span id="invitation-expiry">One-use link ready</span><input class="library-search" id="invitation-url" readonly autocomplete="off" spellcheck="false" aria-describedby="invitation-privacy"></label>
-                <div class="invitation-actions">
-                  <button class="button library-more" id="reveal-invitation" type="button" aria-pressed="false" disabled>Reveal link</button>
-                  <button class="button library-more" id="copy-invitation" type="button" disabled>Copy link</button>
-                </div>
-                <p class="editor-note" id="invitation-privacy">The key stays hidden on screen unless you reveal it. This browser clears the displayed invitation when it expires.</p>
-              </div>
-              <p class="editor-note">A revoke request is encrypted and completed only by the owning Cedar app. “Forget this browser” removes this browser's local protected key immediately.</p>
+              <p class="editor-note">Only the owning Cedar app can create new links or complete a revoke request. “Forget this browser” first removes this device from the encrypted relay, then erases its local protected companion key.</p>
             </div>
           </section>
 
@@ -255,6 +246,6 @@
       </div>
     </footer>
 
-    <script type="module" src="link.js?v=workspace-1"></script>
+    <script type="module" src="link.js?v=workspace-2"></script>
   </body>
 </html>

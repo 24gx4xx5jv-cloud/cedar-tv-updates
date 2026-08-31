@@ -97,7 +97,7 @@ if (!page.includes(`connect-src 'self' ${relay.origin}`)) {
 }
 if (
   !page.includes('href="link.css?v=workspace-1"')
-  || !page.includes('type="module" src="link.js?v=workspace-1"')
+  || !page.includes('type="module" src="link.js?v=workspace-2"')
   || !page.includes('id="link-button"')
   || !page.includes('id="link-companion"')
   || !page.includes('id="profile-selector"')
@@ -106,10 +106,9 @@ if (
   || !page.includes('id="settings-editor"')
   || !page.includes('id="branches-editor"')
   || !page.includes('id="device-list"')
+  || !page.includes('id="forget-browser"')
   || !page.includes('id="remote-controls"')
   || !page.includes('id="companion-savebar"')
-  || !page.includes('id="reveal-invitation"')
-  || !page.includes('id="invitation-expiry"')
   || !page.includes('role="tablist"')
 ) {
   throw new Error("The Cedar Link page is missing its required script or primary action");
@@ -119,7 +118,7 @@ if (/<(?:video|audio|iframe|canvas)\b/i.test(page)) {
 }
 
 const script = await readFile("public/link/link.js", "utf8");
-if (!script.includes('from "./cedar-sync.mjs?v=companion-5"')) {
+if (!script.includes('from "./cedar-sync.mjs?v=companion-6"')) {
   throw new Error("The Cedar Link protocol module needs the current cache token");
 }
 if (!script.includes('from "./companion-draft.mjs?v=workspace-1"')) {

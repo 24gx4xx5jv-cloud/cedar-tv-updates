@@ -1,10 +1,21 @@
 export const LIMITS = Object.freeze({
   requestBytes: 1_500_000,
   sealedPayloadBytes: 1_064_960,
+  companionCheckpointBytes: 96 * 1_024,
   tokenBytes: 32,
   maximumFetch: 200,
   maximumDevices: 50,
+  maximumInvitations: 64,
+  maximumJournalChanges: 1_900,
+  maximumJournalEncodedCharacters: 32 * 1_024 * 1_024,
   invitationLifetimeMs: 10 * 60 * 1000,
+  deletionReceiptLifetimeMs: 30 * 24 * 60 * 60 * 1000,
+});
+
+export const RETENTION_CLASSES = Object.freeze({
+  journal: "journal",
+  profileCheckpoint: "profile-checkpoint",
+  companionCheckpoint: "companion-checkpoint",
 });
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -33,6 +44,13 @@ export const positiveInteger = (value, code = "invalid_number") => {
 
 export const nonnegativeInteger = (value, code = "invalid_number") => {
   if (!Number.isSafeInteger(value) || value < 0) throw new ProtocolError(400, code);
+  return value;
+};
+
+export const retentionClass = (value = RETENTION_CLASSES.journal) => {
+  if (!Object.values(RETENTION_CLASSES).includes(value)) {
+    throw new ProtocolError(400, "invalid_retention_class");
+  }
   return value;
 };
 

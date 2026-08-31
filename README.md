@@ -38,8 +38,9 @@ limited key cannot decrypt. The linked configuration and device credentials rema
 protected in browser storage.
 
 The companion can edit allowlisted profile presentation, playback/discovery settings, and Home
-branch configuration with optimistic revision checks. It can also create one-use recovery links,
-forget its own protected key, request owner-enforced device actions, and send expiring transport
+branch configuration with optimistic revision checks. New links remain owner-only in the native
+Cedar app. The browser can unlink itself from the relay before erasing its protected key, request
+owner-enforced device actions, and send expiring transport
 commands to linked Apple and Android Cedar devices. Cedar Link is deliberately not a player: it has
 no media element and never receives catalogs, guide rows, channel/program names, media titles,
 artwork, stream URLs, source candidates, or playback payloads. Its remote status contains only

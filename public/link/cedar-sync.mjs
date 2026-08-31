@@ -28,6 +28,9 @@ const TOP_SHELF_PRESENTATIONS = new Set(["automatic", "continue-watching", "feat
 const BRANCH_PRESETS = new Set([
   "continue-watching", "favorites", "watchlist", "trending", "popular", "top-rated", "coming-soon",
 ]);
+const BROWSER_CREATABLE_BRANCH_PRESETS = new Set([
+  "trending", "popular", "top-rated", "coming-soon",
+]);
 const COMPANION_PLATFORMS = new Set(["apple", "android", "browser"]);
 const REMOTE_COMMANDS = new Set([
   "status", "toggle-playback", "skip-backward", "skip-forward", "skip-intro", "next-episode", "jump-to-live",
@@ -711,7 +714,7 @@ export const createCompanionConfigurationPatchChange = (
   }
   const baseIDs = new Set(base.branches.map((branch) => branch.id));
   for (const branch of replacement.branches) {
-    if (!baseIDs.has(branch.id) && !BRANCH_PRESETS.has(branch.preset)) {
+    if (!baseIDs.has(branch.id) && !BROWSER_CREATABLE_BRANCH_PRESETS.has(branch.preset)) {
       fail("invalid_branch_preset", "New Home branches must use a Cedar preset.");
     }
   }
@@ -1072,6 +1075,43 @@ export const uploadEnvelope = async (credentials, envelope) => {
   ));
   schemaOne(root.schemaVersion);
   return positiveInteger(root.serverSequence, "Cedar Sync returned an invalid save cursor.");
+};
+
+export const leaveSpace = async (credentials) => {
+  const relay = new URL(credentials.relayBaseURL);
+  relay.pathname = `${relay.pathname.replace(/\/$/, "")}/v1/spaces/${normalizeUUID(credentials.spaceID)}/devices/${normalizeUUID(credentials.deviceID)}`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15_000);
+  let response;
+  try {
+    response = await fetch(relay, {
+      method: "DELETE",
+      cache: "no-store",
+      credentials: "omit",
+      redirect: "error",
+      referrerPolicy: "no-referrer",
+      signal: controller.signal,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${credentials.deviceToken}`,
+      },
+    });
+  } catch (error) {
+    if (error?.name === "AbortError") fail("timeout", "Cedar Sync took too long to unlink this browser.");
+    fail("network", "Cedar Sync could not unlink this browser.");
+  } finally {
+    clearTimeout(timeout);
+  }
+  // A revoked browser no longer has server access, so local protected-key removal is safe.
+  if (response.status === 401) return;
+  if (!response.ok) {
+    fail("relay_rejected", `Cedar Sync could not unlink this browser (HTTP ${response.status}).`);
+  }
+  const root = record(parseJSONText(
+    await readBoundedText(response, 64 * 1_024),
+    "Cedar Sync returned an invalid unlink response.",
+  ));
+  schemaOne(root.schemaVersion);
 };
 
 export const createWebInvitation = async (

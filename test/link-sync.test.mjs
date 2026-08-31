@@ -19,6 +19,7 @@ import {
   decodeProfileSnapshot,
   fetchLatestProfile,
   fetchLatestCompanion,
+  leaveSpace,
   openEnvelope,
   parseWebInvitationFragment,
   parseCompanionInvitationFragment,
@@ -817,4 +818,73 @@ test("keeps the explicit current companion request aliases on the shared wire co
   assert.equal(remote.entityKind, "browser-remote-command");
   rename.payload.fill(0);
   remote.payload.fill(0);
+});
+
+
+test("keeps native personal rows readable but prevents the browser from adding them", () => {
+  const companion = { profileID, revision: 10, configuration: companionConfiguration };
+  for (const preset of ["continue-watching", "favorites", "watchlist"]) {
+    const replacement = structuredClone(companion.configuration);
+    replacement.branches.push({
+      id: `${preset}-browser-row`,
+      title: "Unsupported browser row",
+      position: 1,
+      isEnabled: true,
+      preset,
+      sourceKind: "catalog",
+      presentationKind: "row",
+    });
+    assert.throws(
+      () => createCompanionConfigurationPatchChange(companion, replacement, 1),
+      (error) => error instanceof CedarSyncError && error.code === "invalid_branch_preset",
+    );
+  }
+
+  const replacement = structuredClone(companion.configuration);
+  replacement.branches.push({
+    id: "trending-browser-row",
+    title: "Trending",
+    position: 1,
+    isEnabled: true,
+    preset: "trending",
+    sourceKind: "catalog",
+    presentationKind: "row",
+  });
+  assert.equal(
+    createCompanionConfigurationPatchChange(companion, replacement, 1).entityKind,
+    "browser-companion-configuration",
+  );
+});
+
+test("leaves the relay before local browser credentials are forgotten", async () => {
+  const nativeFetch = globalThis.fetch;
+  const requests = [];
+  globalThis.fetch = async (input, options) => {
+    requests.push({ url: String(input), options });
+    return new Response(JSON.stringify({ schemaVersion: 1 }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+  try {
+    await leaveSpace(credentials);
+    assert.equal(requests.length, 1);
+    assert.equal(requests[0].options.method, "DELETE");
+    assert.equal(
+      new URL(requests[0].url).pathname,
+      `/v1/spaces/${spaceID}/devices/${credentials.deviceID}`,
+    );
+    assert.equal(requests[0].options.headers.Authorization, `Bearer ${credentials.deviceToken}`);
+
+    globalThis.fetch = async () => new Response(JSON.stringify({
+      schemaVersion: 1,
+      error: "invalid_authorization",
+    }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+    await leaveSpace(credentials);
+  } finally {
+    globalThis.fetch = nativeFetch;
+  }
 });

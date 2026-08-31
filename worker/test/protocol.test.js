@@ -3,9 +3,11 @@ import test from "node:test";
 import {
   LIMITS,
   ProtocolError,
+  RETENTION_CLASSES,
   corsOrigin,
   exactObject,
   normalizeUUID,
+  retentionClass,
   standardBase64,
 } from "../src/protocol.js";
 
@@ -34,6 +36,20 @@ test("unknown request fields are rejected", () => {
     () => exactObject({ schemaVersion: 1, plaintext: "secret" }, ["schemaVersion"]),
     ProtocolError,
   );
+});
+
+test("retention hints are strict and legacy uploads default to journal", () => {
+  assert.equal(retentionClass(), RETENTION_CLASSES.journal);
+  assert.equal(
+    retentionClass("profile-checkpoint"),
+    RETENTION_CLASSES.profileCheckpoint,
+  );
+  assert.equal(
+    retentionClass("companion-checkpoint"),
+    RETENTION_CLASSES.companionCheckpoint,
+  );
+  assert.throws(() => retentionClass("profile"), ProtocolError);
+  assert.ok(LIMITS.maximumJournalChanges + LIMITS.maximumDevices + 1 <= 2_000);
 });
 
 test("browser access is restricted to the configured Cedar site", () => {

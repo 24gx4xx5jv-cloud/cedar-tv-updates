@@ -52,6 +52,7 @@ const invitation = await request(`/v1/spaces/${spaceID}/invitations`, {
   },
 });
 assert.equal(invitation.status, 200);
+assert.equal(invitation.value.ownerDeviceID, firstDeviceID);
 
 const claimed = await request(`/v1/spaces/${spaceID}/invitations/${invitationID}/claim`, {
   method: "POST",
@@ -66,6 +67,37 @@ assert.equal(claimed.status, 200);
 assert.equal(claimed.value.ownerDeviceID, firstDeviceID);
 assert.equal(claimed.value.highWaterCursor, 0);
 assert.deepEqual(claimed.value.checkpoints, []);
+
+const identity = await request(`/v1/spaces/${spaceID}/identity`, {
+  token: secondDeviceToken,
+});
+assert.equal(identity.status, 200);
+assert.equal(identity.value.ownerDeviceID, firstDeviceID);
+
+// The relay never receives encryption keys or an invitation scope. Therefore the same owner-only
+// authorization gate protects both native full-profile and browser-companion enrollment records.
+const linkedDeviceCannotCreateCompanionInvitation = await request(`/v1/spaces/${spaceID}/invitations`, {
+  method: "POST",
+  token: secondDeviceToken,
+  body: {
+    schemaVersion: 1,
+    invitationID: randomUUID(),
+    enrollmentTokenHash: standardBase64(tokenHash(randomBytes(32))),
+    expiresAtEpochMilliseconds: Date.now() + 5 * 60 * 1000,
+  },
+});
+assert.equal(linkedDeviceCannotCreateCompanionInvitation.status, 403);
+const linkedDeviceCannotCreateFullProfileInvitation = await request(`/v1/spaces/${spaceID}/invitations`, {
+  method: "POST",
+  token: secondDeviceToken,
+  body: {
+    schemaVersion: 1,
+    invitationID: randomUUID(),
+    enrollmentTokenHash: standardBase64(tokenHash(randomBytes(32))),
+    expiresAtEpochMilliseconds: Date.now() + 5 * 60 * 1000,
+  },
+});
+assert.equal(linkedDeviceCannotCreateFullProfileInvitation.status, 403);
 
 const replayedClaim = await request(`/v1/spaces/${spaceID}/invitations/${invitationID}/claim`, {
   method: "POST",
@@ -103,52 +135,102 @@ const duplicate = await request(`/v1/spaces/${spaceID}/changes`, {
 assert.equal(duplicate.status, 200);
 assert.equal(duplicate.value.serverSequence, uploaded.value.serverSequence);
 
-const ownerCheckpoint = async (retentionClass, authorSequence) => request(
-  `/v1/spaces/${spaceID}/changes`,
-  {
-    method: "POST",
-    token: firstDeviceToken,
-    body: {
-      schemaVersion: 1,
-      spaceID,
-      deviceID: firstDeviceID,
-      changeID: randomUUID(),
-      authorSequence,
-      createdAtEpochMilliseconds: Date.now(),
-      sealedPayload: standardBase64(randomBytes(64)),
-      retentionClass,
-    },
-  },
-);
-assert.equal((await ownerCheckpoint("profile-checkpoint", 1)).status, 200);
-assert.equal((await ownerCheckpoint("companion-checkpoint", 2)).status, 200);
+const fetched = await request(`/v1/spaces/${spaceID}/changes?after=0&limit=20`, {
+  token: firstDeviceToken,
+});
+assert.equal(fetched.status, 200);
+assert.equal(fetched.value.ownerDeviceID, firstDeviceID);
+assert.equal(fetched.value.changes.length, 1);
+assert.equal(fetched.value.changes[0].envelope.changeID, changeID);
+assert.equal(fetched.value.changes[0].envelope.sealedPayload, envelope.sealedPayload);
 
-const participantCompanionCheckpoint = await request(`/v1/spaces/${spaceID}/changes`, {
+const nonOwnerProfileCheckpoint = await request(`/v1/spaces/${spaceID}/changes`, {
   method: "POST",
   token: secondDeviceToken,
   body: {
     ...envelope,
     changeID: randomUUID(),
     authorSequence: 2,
-    retentionClass: "companion-checkpoint",
+    retentionClass: "profile-checkpoint",
   },
 });
-assert.equal(participantCompanionCheckpoint.status, 200);
+assert.equal(nonOwnerProfileCheckpoint.status, 403);
 
-const participantProfileCheckpoint = await request(`/v1/spaces/${spaceID}/changes`, {
+const firstProfileCheckpointID = randomUUID();
+const companionCheckpointID = randomUUID();
+const currentProfileCheckpointID = randomUUID();
+const ownerCheckpointEnvelope = (changeIDValue, authorSequence, retentionClass) => ({
+  schemaVersion: 1,
+  spaceID,
+  deviceID: firstDeviceID,
+  changeID: changeIDValue,
+  authorSequence,
+  createdAtEpochMilliseconds: Date.now() + authorSequence,
+  sealedPayload: standardBase64(randomBytes(64)),
+  retentionClass,
+});
+const firstProfileCheckpoint = await request(`/v1/spaces/${spaceID}/changes`, {
+  method: "POST",
+  token: firstDeviceToken,
+  body: ownerCheckpointEnvelope(firstProfileCheckpointID, 1, "profile-checkpoint"),
+});
+assert.equal(firstProfileCheckpoint.status, 200);
+const companionCheckpoint = await request(`/v1/spaces/${spaceID}/changes`, {
+  method: "POST",
+  token: firstDeviceToken,
+  body: ownerCheckpointEnvelope(companionCheckpointID, 2, "companion-checkpoint"),
+});
+assert.equal(companionCheckpoint.status, 200);
+
+const betweenCheckpointJournalID = randomUUID();
+const betweenCheckpointJournal = await request(`/v1/spaces/${spaceID}/changes`, {
   method: "POST",
   token: secondDeviceToken,
   body: {
     ...envelope,
-    changeID: randomUUID(),
-    authorSequence: 3,
-    retentionClass: "profile-checkpoint",
+    changeID: betweenCheckpointJournalID,
+    authorSequence: 2,
+    createdAtEpochMilliseconds: Date.now() + 4,
   },
 });
-assert.equal(participantProfileCheckpoint.status, 403);
+assert.equal(betweenCheckpointJournal.status, 200);
+
+const currentProfileCheckpoint = await request(`/v1/spaces/${spaceID}/changes`, {
+  method: "POST",
+  token: firstDeviceToken,
+  body: ownerCheckpointEnvelope(currentProfileCheckpointID, 3, "profile-checkpoint"),
+});
+assert.equal(currentProfileCheckpoint.status, 200);
+assert.ok(currentProfileCheckpoint.value.serverSequence > firstProfileCheckpoint.value.serverSequence);
+
+const followingCheckpointJournalID = randomUUID();
+const followingCheckpointJournal = await request(`/v1/spaces/${spaceID}/changes`, {
+  method: "POST",
+  token: secondDeviceToken,
+  body: {
+    ...envelope,
+    changeID: followingCheckpointJournalID,
+    authorSequence: 3,
+    createdAtEpochMilliseconds: Date.now() + 6,
+  },
+});
+assert.equal(followingCheckpointJournal.status, 200);
+
+const checkpointedJournal = await request(`/v1/spaces/${spaceID}/changes?after=0&limit=20`, {
+  token: firstDeviceToken,
+});
+assert.equal(checkpointedJournal.status, 200);
+const retainedChangeIDs = checkpointedJournal.value.changes.map((item) => item.envelope.changeID);
+assert.equal(retainedChangeIDs.includes(firstProfileCheckpointID), false);
+assert.equal(retainedChangeIDs.includes(companionCheckpointID), true);
+assert.equal(retainedChangeIDs.includes(betweenCheckpointJournalID), true);
+assert.equal(retainedChangeIDs.includes(currentProfileCheckpointID), true);
+assert.equal(retainedChangeIDs.includes(followingCheckpointJournalID), true);
 
 const baselineInvitationID = randomUUID();
 const baselineEnrollmentToken = randomBytes(32);
+const baselineDeviceID = randomUUID();
+const baselineDeviceToken = randomBytes(32);
 const baselineInvitation = await request(`/v1/spaces/${spaceID}/invitations`, {
   method: "POST",
   token: firstDeviceToken,
@@ -160,8 +242,6 @@ const baselineInvitation = await request(`/v1/spaces/${spaceID}/invitations`, {
   },
 });
 assert.equal(baselineInvitation.status, 200);
-const thirdDeviceID = randomUUID();
-const thirdDeviceToken = randomBytes(32);
 const baselineClaim = await request(
   `/v1/spaces/${spaceID}/invitations/${baselineInvitationID}/claim`,
   {
@@ -169,29 +249,72 @@ const baselineClaim = await request(
     token: baselineEnrollmentToken,
     body: {
       schemaVersion: 1,
-      deviceID: thirdDeviceID,
-      deviceToken: standardBase64(thirdDeviceToken),
+      deviceID: baselineDeviceID,
+      deviceToken: standardBase64(baselineDeviceToken),
     },
   },
 );
 assert.equal(baselineClaim.status, 200);
 assert.equal(baselineClaim.value.ownerDeviceID, firstDeviceID);
-assert.ok(baselineClaim.value.highWaterCursor > 0);
-assert.equal(baselineClaim.value.checkpoints.length, 2);
-assert.ok(baselineClaim.value.checkpoints.every((checkpoint) => (
-  checkpoint.envelope.deviceID === firstDeviceID
-  && checkpoint.serverSequence <= baselineClaim.value.highWaterCursor
-)));
-
-const fetched = await request(`/v1/spaces/${spaceID}/changes?after=0&limit=20`, {
-  token: firstDeviceToken,
-});
-assert.equal(fetched.status, 200);
-assert.equal(fetched.value.changes.length, 4);
-const fetchedParticipantChange = fetched.value.changes.find(
-  (change) => change.envelope.changeID === changeID,
+assert.equal(
+  baselineClaim.value.highWaterCursor,
+  companionCheckpoint.value.serverSequence,
 );
-assert.equal(fetchedParticipantChange.envelope.sealedPayload, envelope.sealedPayload);
+assert.deepEqual(
+  baselineClaim.value.checkpoints.map((item) => item.envelope.changeID),
+  [companionCheckpointID, currentProfileCheckpointID],
+);
+
+const baselineCatchUp = await request(
+  `/v1/spaces/${spaceID}/changes?after=${baselineClaim.value.highWaterCursor}&limit=20`,
+  { token: baselineDeviceToken },
+);
+assert.equal(baselineCatchUp.status, 200);
+assert.deepEqual(
+  baselineCatchUp.value.changes.map((item) => item.envelope.changeID),
+  [betweenCheckpointJournalID, currentProfileCheckpointID, followingCheckpointJournalID],
+);
+
+// A bounded encoded-byte suffix prevents one space from monopolizing D1 even when every envelope
+// is individually valid. The checkpoints remain outside this quota and define the safe prefix.
+const quotaPayload = standardBase64(randomBytes(1_064_960));
+let journalQuotaFailure = null;
+let journalQuotaAccepted = 0;
+for (let index = 0; index < 30; index += 1) {
+  const candidate = await request(`/v1/spaces/${spaceID}/changes`, {
+    method: "POST",
+    token: firstDeviceToken,
+    body: {
+      schemaVersion: 1,
+      spaceID,
+      deviceID: firstDeviceID,
+      changeID: randomUUID(),
+      authorSequence: 4 + index,
+      createdAtEpochMilliseconds: Date.now() + 10 + index,
+      sealedPayload: quotaPayload,
+    },
+  });
+  if (candidate.status === 409) {
+    journalQuotaFailure = candidate;
+    break;
+  }
+  assert.equal(candidate.status, 200);
+  journalQuotaAccepted += 1;
+}
+assert.ok(journalQuotaAccepted > 0);
+assert.equal(journalQuotaFailure?.status, 409);
+assert.equal(journalQuotaFailure.value.error, "space_change_quota_exceeded");
+
+const baselineLeave = await request(
+  `/v1/spaces/${spaceID}/devices/${baselineDeviceID}`,
+  { method: "DELETE", token: baselineDeviceToken },
+);
+assert.equal(baselineLeave.status, 200);
+const baselineLeaveRetry = await request(
+  `/v1/spaces/${spaceID}/devices/${baselineDeviceID}`,
+  { method: "DELETE", token: baselineDeviceToken },
+);
+assert.equal(baselineLeaveRetry.status, 200);
 
 const ownerDevices = await request(`/v1/spaces/${spaceID}/devices`, {
   token: firstDeviceToken,
@@ -199,7 +322,7 @@ const ownerDevices = await request(`/v1/spaces/${spaceID}/devices`, {
 assert.equal(ownerDevices.status, 200);
 assert.deepEqual(
   ownerDevices.value.devices.map((device) => device.deviceID),
-  [firstDeviceID, secondDeviceID, thirdDeviceID],
+  [firstDeviceID, secondDeviceID],
 );
 assert.ok(ownerDevices.value.devices.every((device) => (
   Number.isSafeInteger(device.createdAtEpochMilliseconds)
@@ -228,20 +351,159 @@ const unauthorized = await request(`/v1/spaces/${spaceID}/changes?after=0`, {
 });
 assert.equal(unauthorized.status, 401);
 
+// Fill the active-device bound, then prove a rejected enrollment does not burn its invitation.
+const capacityDevices = [];
+for (let index = 0; index < 48; index += 1) {
+  const extraInvitationID = randomUUID();
+  const extraEnrollmentToken = randomBytes(32);
+  const extraDeviceID = randomUUID();
+  const extraDeviceToken = randomBytes(32);
+  const createdInvitation = await request(`/v1/spaces/${spaceID}/invitations`, {
+    method: "POST",
+    token: firstDeviceToken,
+    body: {
+      schemaVersion: 1,
+      invitationID: extraInvitationID,
+      enrollmentTokenHash: standardBase64(tokenHash(extraEnrollmentToken)),
+      expiresAtEpochMilliseconds: Date.now() + 5 * 60 * 1000,
+    },
+  });
+  assert.equal(createdInvitation.status, 200);
+  const extraClaim = await request(
+    `/v1/spaces/${spaceID}/invitations/${extraInvitationID}/claim`,
+    {
+      method: "POST",
+      token: extraEnrollmentToken,
+      body: {
+        schemaVersion: 1,
+        deviceID: extraDeviceID,
+        deviceToken: standardBase64(extraDeviceToken),
+      },
+    },
+  );
+  assert.equal(extraClaim.status, 200);
+  capacityDevices.push({ deviceID: extraDeviceID, token: extraDeviceToken });
+  extraEnrollmentToken.fill(0);
+}
+
+const boundedInvitationID = randomUUID();
+const boundedEnrollmentToken = randomBytes(32);
+const boundedDeviceID = randomUUID();
+const boundedDeviceToken = randomBytes(32);
+const boundedInvitation = await request(`/v1/spaces/${spaceID}/invitations`, {
+  method: "POST",
+  token: firstDeviceToken,
+  body: {
+    schemaVersion: 1,
+    invitationID: boundedInvitationID,
+    enrollmentTokenHash: standardBase64(tokenHash(boundedEnrollmentToken)),
+    expiresAtEpochMilliseconds: Date.now() + 5 * 60 * 1000,
+  },
+});
+assert.equal(boundedInvitation.status, 200);
+const boundedClaim = async () => request(
+  `/v1/spaces/${spaceID}/invitations/${boundedInvitationID}/claim`,
+  {
+    method: "POST",
+    token: boundedEnrollmentToken,
+    body: {
+      schemaVersion: 1,
+      deviceID: boundedDeviceID,
+      deviceToken: standardBase64(boundedDeviceToken),
+    },
+  },
+);
+const rejectedAtCapacity = await boundedClaim();
+assert.equal(rejectedAtCapacity.status, 409);
+assert.equal(rejectedAtCapacity.value.error, "too_many_devices");
+const freedCapacity = await request(
+  `/v1/spaces/${spaceID}/devices/${capacityDevices[0].deviceID}`,
+  { method: "DELETE", token: firstDeviceToken },
+);
+assert.equal(freedCapacity.status, 200);
+const retriedAfterCapacity = await boundedClaim();
+assert.equal(retriedAfterCapacity.status, 200);
+assert.equal(retriedAfterCapacity.value.ownerDeviceID, firstDeviceID);
+
 const revoked = await request(`/v1/spaces/${spaceID}/devices/${secondDeviceID}`, {
   method: "DELETE",
   token: firstDeviceToken,
 });
 assert.equal(revoked.status, 200);
+const revokedDeviceRetry = await request(`/v1/spaces/${spaceID}/devices/${secondDeviceID}`, {
+  method: "DELETE",
+  token: secondDeviceToken,
+});
+assert.equal(revokedDeviceRetry.status, 200);
 
 const afterRevocation = await request(`/v1/spaces/${spaceID}/changes?after=0`, {
   token: secondDeviceToken,
 });
 assert.equal(afterRevocation.status, 401);
 
+// The per-space invitation bound counts every still-live claim receipt, not just pending links.
+let invitationOverQuota = null;
+let quotaInvitationsCreated = 0;
+for (let index = 0; index < 65; index += 1) {
+  const candidate = await request(`/v1/spaces/${spaceID}/invitations`, {
+    method: "POST",
+    token: firstDeviceToken,
+    body: {
+      schemaVersion: 1,
+      invitationID: randomUUID(),
+      enrollmentTokenHash: standardBase64(tokenHash(randomBytes(32))),
+      expiresAtEpochMilliseconds: Date.now() + 5 * 60 * 1000,
+    },
+  });
+  if (candidate.status === 409) {
+    invitationOverQuota = candidate;
+    break;
+  }
+  assert.equal(candidate.status, 200);
+  quotaInvitationsCreated += 1;
+}
+assert.ok(quotaInvitationsCreated > 0);
+assert.equal(invitationOverQuota?.status, 409);
+assert.equal(invitationOverQuota.value.error, "too_many_invitations");
+
+const participantCannotDeleteSpace = await request(`/v1/spaces/${spaceID}`, {
+  method: "DELETE",
+  token: boundedDeviceToken,
+});
+assert.equal(participantCannotDeleteSpace.status, 403);
+assert.equal(participantCannotDeleteSpace.value.error, "owner_authorization_required");
+const deletedSpace = await request(`/v1/spaces/${spaceID}`, {
+  method: "DELETE",
+  token: firstDeviceToken,
+});
+assert.equal(deletedSpace.status, 200);
+const retriedSpaceDelete = await request(`/v1/spaces/${spaceID}`, {
+  method: "DELETE",
+  token: firstDeviceToken,
+});
+assert.equal(retriedSpaceDelete.status, 200);
+const formerParticipantCannotReplayOwnerDelete = await request(`/v1/spaces/${spaceID}`, {
+  method: "DELETE",
+  token: boundedDeviceToken,
+});
+assert.equal(formerParticipantCannotReplayOwnerDelete.status, 401);
+const deletedSpaceCannotBeRecreatedDuringRetryWindow = await request("/v1/spaces", {
+  method: "POST",
+  body: {
+    schemaVersion: 1,
+    spaceID,
+    deviceID: randomUUID(),
+    deviceToken: standardBase64(randomBytes(32)),
+  },
+});
+assert.equal(deletedSpaceCannotBeRecreatedDuringRetryWindow.status, 409);
+
 firstDeviceToken.fill(0);
 enrollmentToken.fill(0);
 secondDeviceToken.fill(0);
 baselineEnrollmentToken.fill(0);
-thirdDeviceToken.fill(0);
+baselineDeviceToken.fill(0);
+for (const value of capacityDevices) value.token.fill(0);
+boundedEnrollmentToken.fill(0);
+boundedDeviceToken.fill(0);
 process.stdout.write("Cedar Sync relay integration flow passed.\n");
