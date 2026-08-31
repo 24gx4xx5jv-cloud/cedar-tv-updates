@@ -35,7 +35,7 @@ const deviceID = randomUUID();
 const changeID = randomUUID();
 const profileID = randomUUID();
 const installedBadgePackID = randomUUID();
-const installedBadgePackURL = "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badge-packs/xp_aurora.json";
+const installedBadgePackURL = "https://cedartv.github.io/cedar-tv-updates/badge-packs/xp_aurora.json";
 const profileKey = randomBytes(32);
 const credentials = {
   relayBaseURL: "https://relay.example",
@@ -225,7 +225,7 @@ test("seals an allowlisted browser presentation patch for Apple Cedar", async ()
   const replacement = {
     name: "Tyler",
     avatarSymbol:
-      "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/avatars/nuvio/avatar.webp",
+      "https://cedartv.github.io/cedar-tv-updates/avatars/nuvio/avatar.webp",
     theme: "dark",
     badgeSelection: installedBadgePackURL,
   };

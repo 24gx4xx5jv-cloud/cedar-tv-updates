@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "releases": [
+    {
+      "platform": "iphone",
+      "version": "1.0.0",
+      "build": "1",
+      "date": "2026-08-30",
+      "status": "release-candidate",
+      "summary": "The first Cedar release candidate for iPhone brings authorized personal media, Live TV, downloads, and private sync into a focused mobile player.",
+      "notes": "release-notes/apple/iphone/1.0.0.md"
+    },
+    {
+      "platform": "ipad",
+      "version": "1.0.0",
+      "build": "1",
+      "date": "2026-08-30",
+      "status": "release-candidate",
+      "summary": "The first Cedar release candidate for iPad pairs a spacious browsing experience with authorized sources, downloads, Live TV, and private sync.",
+      "notes": "release-notes/apple/ipad/1.0.0.md"
+    },
+    {
+      "platform": "apple-tv",
+      "version": "1.0.0",
+      "build": "1",
+      "date": "2026-08-30",
+      "status": "release-candidate",
+      "summary": "The first Cedar release candidate for Apple TV delivers a remote-first Home experience, Live TV guide, local pairing, and focused playback.",
+      "notes": "release-notes/apple/apple-tv/1.0.0.md"
+    },
+    {
+      "platform": "mac",
+      "version": "1.0.0",
+      "build": "1",
+      "date": "2026-08-30",
+      "status": "release-candidate",
+      "summary": "The first Cedar release candidate for Mac combines native file imports, authorized sources, Live TV, and private sync in a desktop player.",
+      "notes": "release-notes/apple/mac/1.0.0.md"
+    }
+  ]
+}

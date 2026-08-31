@@ -39,7 +39,7 @@ const policyPages = [
 ];
 for (const route of policyPages) {
   const policyPage = await readFile(`public/${route}/index.html`, "utf8");
-  const canonical = `https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/${route}/`;
+  const canonical = `https://cedartv.github.io/cedar-tv-updates/${route}/`;
   if (
     !policyPage.includes(`<link rel="canonical" href="${canonical}">`)
     || !policyPage.includes("Content-Security-Policy")
@@ -145,7 +145,7 @@ for (const set of badges.sets) {
   if (
     typeof set.id !== "string"
     || !/^[a-z0-9_-]+$/i.test(set.id)
-    || source.origin !== "https://24gx4xx5jv-cloud.github.io"
+    || source.origin !== "https://cedartv.github.io"
     || source.pathname !== `/cedar-tv-updates/badge-packs/${set.id}.json`
   ) {
     throw new Error(`Badge set ${set.label || "unknown"} has an invalid install source`);

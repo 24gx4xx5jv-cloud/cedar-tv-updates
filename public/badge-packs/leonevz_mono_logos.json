@@ -14,7 +14,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/1.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/1.webp"
     },
     {
       "id": "leonevz_mono_logos-2",
@@ -22,7 +22,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Blu-ray[ ._-]*Disc(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/2.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/2.webp"
     },
     {
       "id": "leonevz_mono_logos-3",
@@ -30,7 +30,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:web[ ._-]?dl)(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/3.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/3.webp"
     },
     {
       "id": "leonevz_mono_logos-4",
@@ -38,7 +38,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])WEBRip(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/4.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/4.webp"
     },
     {
       "id": "leonevz_mono_logos-5",
@@ -46,7 +46,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HDTV(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/5.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/5.webp"
     },
     {
       "id": "leonevz_mono_logos-6",
@@ -54,7 +54,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DVD[ ._-]*RIP(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/6.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/6.webp"
     },
     {
       "id": "leonevz_mono_logos-7",
@@ -62,7 +62,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])4K[ ._-]*Ultra[ ._-]*HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/7.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/7.webp"
     },
     {
       "id": "leonevz_mono_logos-8",
@@ -70,7 +70,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])1080p[ ._-]*Full[ ._-]*HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/8.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/8.webp"
     },
     {
       "id": "leonevz_mono_logos-9",
@@ -78,7 +78,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])720p[ ._-]*HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/9.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/9.webp"
     },
     {
       "id": "leonevz_mono_logos-10",
@@ -86,7 +86,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])480p[ ._-]*SD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/10.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/10.webp"
     },
     {
       "id": "leonevz_mono_logos-11",
@@ -94,7 +94,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:dolby[ ._-]?vision|\\bdv\\b))(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/11.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/11.webp"
     },
     {
       "id": "leonevz_mono_logos-12",
@@ -102,7 +102,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:hdr10\\+|hdr10plus))(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/12.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/12.webp"
     },
     {
       "id": "leonevz_mono_logos-13",
@@ -110,7 +110,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR10(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/13.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/13.webp"
     },
     {
       "id": "leonevz_mono_logos-14",
@@ -118,7 +118,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/14.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/14.webp"
     },
     {
       "id": "leonevz_mono_logos-15",
@@ -126,7 +126,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])SDR(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/15.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/15.webp"
     },
     {
       "id": "leonevz_mono_logos-16",
@@ -134,7 +134,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX[ ._-]*Enhanced(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/16.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/16.webp"
     },
     {
       "id": "leonevz_mono_logos-17",
@@ -142,7 +142,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/17.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/17.webp"
     },
     {
       "id": "leonevz_mono_logos-18",
@@ -150,7 +150,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HEVC(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/18.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/18.webp"
     },
     {
       "id": "leonevz_mono_logos-19",
@@ -158,7 +158,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])AVC(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/19.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/19.webp"
     },
     {
       "id": "leonevz_mono_logos-20",
@@ -166,7 +166,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])10Bit(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/20.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/20.webp"
     },
     {
       "id": "leonevz_mono_logos-21",
@@ -174,7 +174,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])8Bit(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/21.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/21.webp"
     },
     {
       "id": "leonevz_mono_logos-22",
@@ -182,7 +182,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Dolby[ ._-]*Atmos(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/22.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/22.webp"
     },
     {
       "id": "leonevz_mono_logos-23",
@@ -190,7 +190,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:true[ ._-]?hd)(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/23.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/23.webp"
     },
     {
       "id": "leonevz_mono_logos-24",
@@ -198,7 +198,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Dolby[ ._-]*Digital[ ._-]*Plus(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/24.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/24.webp"
     },
     {
       "id": "leonevz_mono_logos-25",
@@ -206,7 +206,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Dolby[ ._-]*Digital(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/25.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/25.webp"
     },
     {
       "id": "leonevz_mono_logos-26",
@@ -214,7 +214,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?x)(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/26.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/26.webp"
     },
     {
       "id": "leonevz_mono_logos-27",
@@ -222,7 +222,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-HD[ ._-]*Master[ ._-]*Audio(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/27.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/27.webp"
     },
     {
       "id": "leonevz_mono_logos-28",
@@ -230,7 +230,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/28.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/28.webp"
     },
     {
       "id": "leonevz_mono_logos-29",
@@ -238,7 +238,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/29.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/29.webp"
     },
     {
       "id": "leonevz_mono_logos-30",
@@ -246,7 +246,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])7\\.1[ ._-]*Audio(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/7_1_audio.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/7_1_audio.webp"
     },
     {
       "id": "leonevz_mono_logos-31",
@@ -254,7 +254,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])5\\.1[ ._-]*Audio(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/elite/31.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/elite/31.webp"
     }
   ]
 }

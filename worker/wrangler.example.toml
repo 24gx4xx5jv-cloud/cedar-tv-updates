@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2026-08-01"
 
 [vars]
-CEDAR_WEB_ORIGIN = "https://24gx4xx5jv-cloud.github.io"
+CEDAR_WEB_ORIGIN = "https://cedartv.github.io"
 
 [[d1_databases]]
 binding = "DB"

@@ -169,7 +169,7 @@ function json(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
-const publishedBaseURL = "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates";
+const publishedBaseURL = "https://cedartv.github.io/cedar-tv-updates";
 const badgeGroupNames = new Map([
   ["r", "Resolution"],
   ["q", "Source quality"],

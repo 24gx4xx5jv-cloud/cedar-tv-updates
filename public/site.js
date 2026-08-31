@@ -1,4 +1,4 @@
-const allowedRepositoryPath = "/24gx4xx5jv-cloud/cedar-tv-updates/releases/download/";
+const allowedRepositoryPath = "/CedarTV/cedar-tv-updates/releases/download/";
 
 const formatBytes = (bytes) => {
   if (!Number.isFinite(bytes) || bytes <= 0) return null;
@@ -17,7 +17,7 @@ const applyRelease = (manifest) => {
   document.querySelectorAll("[data-version]").forEach((node) => { node.textContent = version; });
   document.querySelectorAll("[data-download-link]").forEach((link) => { link.href = download.href; });
   document.querySelectorAll("[data-release-link]").forEach((link) => {
-    link.href = `https://github.com/24gx4xx5jv-cloud/cedar-tv-updates/releases/tag/v${encodeURIComponent(version)}`;
+    link.href = `https://github.com/CedarTV/cedar-tv-updates/releases/tag/v${encodeURIComponent(version)}`;
   });
 
   const fileSize = formatBytes(Number(manifest.apkSize));

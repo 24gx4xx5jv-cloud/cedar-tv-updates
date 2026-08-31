@@ -19,7 +19,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:2160p|\\b4k\\b))(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/res-4k.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/res-4k.webp"
     },
     {
       "id": "vowl313_nardbadges-2",
@@ -27,7 +27,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])FHD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/res-fhd.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/res-fhd.webp"
     },
     {
       "id": "vowl313_nardbadges-3",
@@ -35,7 +35,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/res-hd.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/res-hd.webp"
     },
     {
       "id": "vowl313_nardbadges-4",
@@ -43,7 +43,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Remux(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/rel-remux.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/rel-remux.webp"
     },
     {
       "id": "vowl313_nardbadges-5",
@@ -51,7 +51,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BluRay(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/rel-bluray.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/rel-bluray.webp"
     },
     {
       "id": "vowl313_nardbadges-6",
@@ -59,7 +59,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])WebDL(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/rel-webdl.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/rel-webdl.webp"
     },
     {
       "id": "vowl313_nardbadges-7",
@@ -67,7 +67,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])WebRip(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/rel-webrip.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/rel-webrip.webp"
     },
     {
       "id": "vowl313_nardbadges-8",
@@ -75,7 +75,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:hdr10\\+|hdr10plus))(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-hdr10plus.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-hdr10plus.webp"
     },
     {
       "id": "vowl313_nardbadges-9",
@@ -83,7 +83,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR10(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-hdr10.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-hdr10.webp"
     },
     {
       "id": "vowl313_nardbadges-10",
@@ -91,7 +91,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-hdr.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-hdr.webp"
     },
     {
       "id": "vowl313_nardbadges-11",
@@ -99,7 +99,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX[ ._-]*Enhanced(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-imax-enhanced.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-imax-enhanced.webp"
     },
     {
       "id": "vowl313_nardbadges-12",
@@ -107,7 +107,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-imax.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-imax.webp"
     },
     {
       "id": "vowl313_nardbadges-13",
@@ -115,7 +115,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Atmos\\+DV(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-atmos-dv.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-atmos-dv.webp"
     },
     {
       "id": "vowl313_nardbadges-14",
@@ -123,7 +123,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])TrueHD\\+DV(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-truehd-dv.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-truehd-dv.webp"
     },
     {
       "id": "vowl313_nardbadges-15",
@@ -131,7 +131,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DD\\+\\+DV(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-ddp-dv.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-ddp-dv.webp"
     },
     {
       "id": "vowl313_nardbadges-16",
@@ -139,7 +139,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DD\\+DV(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-dd-dv.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-dd-dv.webp"
     },
     {
       "id": "vowl313_nardbadges-17",
@@ -147,7 +147,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DV(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vis-dv.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vis-dv.webp"
     },
     {
       "id": "vowl313_nardbadges-18",
@@ -155,7 +155,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])SDR(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/sdr.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/sdr.webp"
     },
     {
       "id": "vowl313_nardbadges-19",
@@ -163,7 +163,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])3D(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/3d.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/3d.webp"
     },
     {
       "id": "vowl313_nardbadges-20",
@@ -171,7 +171,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HEVC(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/codec-hevc.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/codec-hevc.webp"
     },
     {
       "id": "vowl313_nardbadges-21",
@@ -179,7 +179,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])AVC(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/codec-avc.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/codec-avc.webp"
     },
     {
       "id": "vowl313_nardbadges-22",
@@ -187,7 +187,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])AV1(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/codec-av1.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/codec-av1.webp"
     },
     {
       "id": "vowl313_nardbadges-23",
@@ -195,7 +195,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?x)(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/aud-dtsx.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/aud-dtsx.webp"
     },
     {
       "id": "vowl313_nardbadges-24",
@@ -203,7 +203,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?hd[ ._-]?ma)(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/aud-dtshdma.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/aud-dtshdma.webp"
     },
     {
       "id": "vowl313_nardbadges-25",
@@ -211,7 +211,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/aud-dtshd.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/aud-dtshd.webp"
     },
     {
       "id": "vowl313_nardbadges-26",
@@ -219,7 +219,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/aud-dts.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/aud-dts.webp"
     },
     {
       "id": "vowl313_nardbadges-27",
@@ -227,7 +227,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Atmos(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/aud-atmos.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/aud-atmos.webp"
     },
     {
       "id": "vowl313_nardbadges-28",
@@ -235,7 +235,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:true[ ._-]?hd)(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/aud-truehd.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/aud-truehd.webp"
     },
     {
       "id": "vowl313_nardbadges-29",
@@ -243,7 +243,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:dd\\+|ddp|eac3|e-ac-3))(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/aud-ddplus.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/aud-ddplus.webp"
     },
     {
       "id": "vowl313_nardbadges-30",
@@ -251,7 +251,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/aud-dd.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/aud-dd.webp"
     },
     {
       "id": "vowl313_nardbadges-31",
@@ -259,7 +259,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])AAC(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/aac.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/aac.webp"
     },
     {
       "id": "vowl313_nardbadges-32",
@@ -267,7 +267,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])FLAC(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/flac.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/flac.webp"
     },
     {
       "id": "vowl313_nardbadges-33",
@@ -275,7 +275,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])OPUS(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/opus.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/opus.webp"
     },
     {
       "id": "vowl313_nardbadges-34",
@@ -283,7 +283,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])MP3(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/mp3.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/mp3.webp"
     },
     {
       "id": "vowl313_nardbadges-35",
@@ -291,7 +291,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])PCM(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/pcm.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/pcm.webp"
     },
     {
       "id": "vowl313_nardbadges-36",
@@ -299,7 +299,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])7\\.1(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ch71.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ch71.webp"
     },
     {
       "id": "vowl313_nardbadges-37",
@@ -307,7 +307,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])6\\.1(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ch61.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ch61.webp"
     },
     {
       "id": "vowl313_nardbadges-38",
@@ -315,7 +315,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])5\\.1(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ch51.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ch51.webp"
     },
     {
       "id": "vowl313_nardbadges-39",
@@ -323,7 +323,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])2\\.0(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ch20.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ch20.webp"
     },
     {
       "id": "vowl313_nardbadges-40",
@@ -331,7 +331,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])NETFLIX(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/stream-netflix.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/stream-netflix.webp"
     },
     {
       "id": "vowl313_nardbadges-41",
@@ -339,7 +339,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])PRIME(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/stream-prime.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/stream-prime.webp"
     },
     {
       "id": "vowl313_nardbadges-42",
@@ -347,7 +347,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])APPLE[ ._-]*TV\\+(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/stream-appletv.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/stream-appletv.webp"
     },
     {
       "id": "vowl313_nardbadges-43",
@@ -355,7 +355,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DISNEY\\+(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/stream-disney.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/stream-disney.webp"
     },
     {
       "id": "vowl313_nardbadges-44",
@@ -363,7 +363,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])MAX(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/stream-max.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/stream-max.webp"
     },
     {
       "id": "vowl313_nardbadges-45",
@@ -371,7 +371,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HULU(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/stream-hulu.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/stream-hulu.webp"
     },
     {
       "id": "vowl313_nardbadges-46",
@@ -379,7 +379,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])PEACOCK(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/stream-peacock.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/stream-peacock.webp"
     },
     {
       "id": "vowl313_nardbadges-47",
@@ -387,7 +387,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])PARAMOUNT\\+(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/stream-paramount.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/stream-paramount.webp"
     },
     {
       "id": "vowl313_nardbadges-48",
@@ -395,7 +395,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])CRUNCHYROLL(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/stream-crunchyroll.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/stream-crunchyroll.webp"
     },
     {
       "id": "vowl313_nardbadges-49",
@@ -403,7 +403,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])SEADEX(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tag-seadex.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tag-seadex.webp"
     },
     {
       "id": "vowl313_nardbadges-50",
@@ -411,7 +411,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DIR[ ._-]*CUT(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tag-dircut.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tag-dircut.webp"
     },
     {
       "id": "vowl313_nardbadges-51",
@@ -419,7 +419,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])EXTENDED(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tag-extended.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tag-extended.webp"
     },
     {
       "id": "vowl313_nardbadges-52",
@@ -427,7 +427,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])TRUE-HUE(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tag-truehue.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tag-truehue.webp"
     },
     {
       "id": "vowl313_nardbadges-53",
@@ -435,7 +435,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])B&W(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tag-bw.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tag-bw.webp"
     },
     {
       "id": "vowl313_nardbadges-54",
@@ -443,7 +443,7 @@
       "groupId": "q",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Best[ ._-]*Remux(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/q-best-remux.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/q-best-remux.webp"
     },
     {
       "id": "vowl313_nardbadges-55",
@@ -451,7 +451,7 @@
       "groupId": "q",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Best[ ._-]*BluRay(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/q-best-bluray.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/q-best-bluray.webp"
     },
     {
       "id": "vowl313_nardbadges-56",
@@ -459,7 +459,7 @@
       "groupId": "q",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Best[ ._-]*WebDL(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/q-best-webdl.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/q-best-webdl.webp"
     },
     {
       "id": "vowl313_nardbadges-57",
@@ -467,7 +467,7 @@
       "groupId": "q",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Good[ ._-]*Remux(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/q-good-remux.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/q-good-remux.webp"
     },
     {
       "id": "vowl313_nardbadges-58",
@@ -475,7 +475,7 @@
       "groupId": "q",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Good[ ._-]*BluRay(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/q-good-bluray.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/q-good-bluray.webp"
     },
     {
       "id": "vowl313_nardbadges-59",
@@ -483,7 +483,7 @@
       "groupId": "q",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Good[ ._-]*WebDL(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/q-good-webdl.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/q-good-webdl.webp"
     },
     {
       "id": "vowl313_nardbadges-60",
@@ -491,7 +491,7 @@
       "groupId": "q",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])OK[ ._-]*Remux(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/q-ok-remux.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/q-ok-remux.webp"
     },
     {
       "id": "vowl313_nardbadges-61",
@@ -499,7 +499,7 @@
       "groupId": "q",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])OK[ ._-]*BluRay(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/q-ok-bluray.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/q-ok-bluray.webp"
     },
     {
       "id": "vowl313_nardbadges-62",
@@ -507,7 +507,7 @@
       "groupId": "q",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])OK[ ._-]*WebDL(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/q-ok-webdl.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/q-ok-webdl.webp"
     },
     {
       "id": "vowl313_nardbadges-63",
@@ -515,7 +515,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*6(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-web-6.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-web-6.webp"
     },
     {
       "id": "vowl313_nardbadges-64",
@@ -523,7 +523,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*5(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-web-5.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-web-5.webp"
     },
     {
       "id": "vowl313_nardbadges-65",
@@ -531,7 +531,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*4(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-web-4.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-web-4.webp"
     },
     {
       "id": "vowl313_nardbadges-66",
@@ -539,7 +539,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*3(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-web-3.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-web-3.webp"
     },
     {
       "id": "vowl313_nardbadges-67",
@@ -547,7 +547,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*2(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-web-2.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-web-2.webp"
     },
     {
       "id": "vowl313_nardbadges-68",
@@ -555,7 +555,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])WEB[ ._-]*1(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-web-1.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-web-1.webp"
     },
     {
       "id": "vowl313_nardbadges-69",
@@ -563,7 +563,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*8(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-8.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-8.webp"
     },
     {
       "id": "vowl313_nardbadges-70",
@@ -571,7 +571,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*7(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-7.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-7.webp"
     },
     {
       "id": "vowl313_nardbadges-71",
@@ -579,7 +579,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*6(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-6.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-6.webp"
     },
     {
       "id": "vowl313_nardbadges-72",
@@ -587,7 +587,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*5(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-5.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-5.webp"
     },
     {
       "id": "vowl313_nardbadges-73",
@@ -595,7 +595,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*4(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-4.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-4.webp"
     },
     {
       "id": "vowl313_nardbadges-74",
@@ -603,7 +603,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*3(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-3.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-3.webp"
     },
     {
       "id": "vowl313_nardbadges-75",
@@ -611,7 +611,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*2(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-2.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-2.webp"
     },
     {
       "id": "vowl313_nardbadges-76",
@@ -619,7 +619,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BLU-RAY[ ._-]*1(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-1.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-bluray-1.webp"
     },
     {
       "id": "vowl313_nardbadges-77",
@@ -627,7 +627,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*3(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-remux-3.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-remux-3.webp"
     },
     {
       "id": "vowl313_nardbadges-78",
@@ -635,7 +635,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*2(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-remux-2.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-remux-2.webp"
     },
     {
       "id": "vowl313_nardbadges-79",
@@ -643,7 +643,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX[ ._-]*1(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tier-remux-1.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tier-remux-1.webp"
     },
     {
       "id": "vowl313_nardbadges-80",
@@ -651,7 +651,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])ENG(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/en.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/en.webp"
     },
     {
       "id": "vowl313_nardbadges-81",
@@ -659,7 +659,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])ESP(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/esp.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/esp.webp"
     },
     {
       "id": "vowl313_nardbadges-82",
@@ -667,7 +667,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])LAT(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/lat.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/lat.webp"
     },
     {
       "id": "vowl313_nardbadges-83",
@@ -675,7 +675,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])SPA(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/es.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/es.webp"
     },
     {
       "id": "vowl313_nardbadges-84",
@@ -683,7 +683,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])FRE(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/fr.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/fr.webp"
     },
     {
       "id": "vowl313_nardbadges-85",
@@ -691,7 +691,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])GER(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/de.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/de.webp"
     },
     {
       "id": "vowl313_nardbadges-86",
@@ -699,7 +699,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])ITA(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/it.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/it.webp"
     },
     {
       "id": "vowl313_nardbadges-87",
@@ -707,7 +707,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])BRA(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ptbr.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ptbr.webp"
     },
     {
       "id": "vowl313_nardbadges-88",
@@ -715,7 +715,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])POR(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/pt.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/pt.webp"
     },
     {
       "id": "vowl313_nardbadges-89",
@@ -723,7 +723,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])TUR(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/tr.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/tr.webp"
     },
     {
       "id": "vowl313_nardbadges-90",
@@ -731,7 +731,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])POL(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/pl.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/pl.webp"
     },
     {
       "id": "vowl313_nardbadges-91",
@@ -739,7 +739,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])UKR(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ua.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ua.webp"
     },
     {
       "id": "vowl313_nardbadges-92",
@@ -747,7 +747,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])IND(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/id.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/id.webp"
     },
     {
       "id": "vowl313_nardbadges-93",
@@ -755,7 +755,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])THA(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/th.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/th.webp"
     },
     {
       "id": "vowl313_nardbadges-94",
@@ -763,7 +763,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])VIE(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/vi.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/vi.webp"
     },
     {
       "id": "vowl313_nardbadges-95",
@@ -771,7 +771,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])JPN(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ja.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ja.webp"
     },
     {
       "id": "vowl313_nardbadges-96",
@@ -779,7 +779,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])KOR(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ko.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ko.webp"
     },
     {
       "id": "vowl313_nardbadges-97",
@@ -787,7 +787,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])CHI(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/zh.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/zh.webp"
     },
     {
       "id": "vowl313_nardbadges-98",
@@ -795,7 +795,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HIN(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/hi.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/hi.webp"
     },
     {
       "id": "vowl313_nardbadges-99",
@@ -803,7 +803,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])ARA(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ar.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ar.webp"
     },
     {
       "id": "vowl313_nardbadges-100",
@@ -811,7 +811,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])RUS(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/ru.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/ru.webp"
     },
     {
       "id": "vowl313_nardbadges-101",
@@ -819,7 +819,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])GRE(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/el.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/el.webp"
     },
     {
       "id": "vowl313_nardbadges-102",
@@ -827,7 +827,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])CZE(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/cz.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/cz.webp"
     },
     {
       "id": "vowl313_nardbadges-103",
@@ -835,7 +835,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])SVK(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/svk.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/svk.webp"
     },
     {
       "id": "vowl313_nardbadges-104",
@@ -843,7 +843,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])SLO(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/slo.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/slo.webp"
     },
     {
       "id": "vowl313_nardbadges-105",
@@ -851,7 +851,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])SWE(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/se.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/se.webp"
     },
     {
       "id": "vowl313_nardbadges-106",
@@ -859,7 +859,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])MUL(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/nardbadges/multi.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/nardbadges/multi.webp"
     }
   ]
 }

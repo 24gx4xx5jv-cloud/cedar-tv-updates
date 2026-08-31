@@ -241,6 +241,105 @@ h1 {
 
 .policy-callout p { max-width: 740px; color: var(--muted); font-size: 1.08rem; line-height: 1.65; }
 
+.release-page { max-width: 1180px; margin: 0 auto; }
+.release-header { margin-bottom: clamp(48px, 7vw, 80px); }
+.release-header h1 { max-width: 1040px; }
+
+.release-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.release-card,
+.release-entry {
+  border: 1px solid var(--line);
+  background: rgba(17, 19, 23, 0.86);
+}
+
+.release-card {
+  display: flex;
+  min-height: 340px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(28px, 4vw, 46px);
+  border-radius: 26px;
+}
+
+.release-card h2,
+.release-entry h2 {
+  margin-bottom: 16px;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 590;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.release-card > p:not(.eyebrow),
+.release-summary,
+.release-notes-body p,
+.release-notes-body li {
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.release-card .inline-document-link { margin-top: auto; padding-top: 32px; }
+
+.release-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 22px;
+  color: #858990;
+  font-size: 0.8rem;
+  font-weight: 680;
+}
+
+.release-status {
+  color: var(--cedar);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.release-status-released { color: var(--cedar-bright); }
+.release-status-testflight { color: #c9d8ff; }
+.compact-callout { margin-bottom: 0; }
+
+.release-back {
+  display: inline-flex;
+  margin-bottom: 42px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 720;
+  text-decoration: none;
+}
+
+.release-back::before { content: "←"; margin-right: 9px; }
+.release-stack { display: grid; gap: 24px; }
+
+.release-entry {
+  overflow: hidden;
+  border-radius: 30px;
+}
+
+.release-entry > header,
+.release-notes-body { padding: clamp(30px, 5vw, 60px); }
+.release-entry > header { border-bottom: 1px solid var(--line); }
+.release-entry > header .release-metadata { margin-bottom: 0; }
+.release-summary { max-width: 780px; margin-bottom: 0; }
+.release-notes-body { max-width: 860px; }
+
+.release-notes-body h3 {
+  margin: 40px 0 14px;
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  letter-spacing: -0.03em;
+}
+
+.release-notes-body h3:first-child { margin-top: 0; }
+.release-notes-body ul { margin: 0; padding-left: 22px; }
+.release-notes-body li + li { margin-top: 10px; }
+
 .policy-footer {
   align-items: flex-start;
   border-top: 1px solid var(--line);
@@ -263,7 +362,8 @@ h1 {
 
 @media (max-width: 820px) {
   .apple-hero,
-  .document-grid { grid-template-columns: 1fr; }
+  .document-grid,
+  .release-grid { grid-template-columns: 1fr; }
   .brand-stage { justify-self: center; }
   .brand-stage img { width: min(70vw, 330px); }
   .document-grid section,

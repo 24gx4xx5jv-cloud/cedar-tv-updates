@@ -1284,7 +1284,7 @@ const loadBadges = async () => {
     try {
       const source = new URL(set.sourceURL);
       return source.protocol === "https:"
-        && source.origin === "https://24gx4xx5jv-cloud.github.io"
+        && source.origin === "https://cedartv.github.io"
         && BADGE_PACK_PATH_PATTERN.test(source.pathname);
     } catch {
       return false;

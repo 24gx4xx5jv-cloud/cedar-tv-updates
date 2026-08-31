@@ -9,7 +9,7 @@ test("Apple policy pages are static, public, and scoped to the GitHub Pages proj
     const source = await readFile(`public/${route}/index.html`, "utf8");
     assert.match(source, /<meta name="robots" content="index,follow">/);
     assert.match(source, /<meta http-equiv="Content-Security-Policy"/);
-    assert.match(source, new RegExp(`https://24gx4xx5jv-cloud\\.github\\.io/cedar-tv-updates/${route}/`));
+    assert.match(source, new RegExp(`https://cedartv\\.github\\.io/cedar-tv-updates/${route}/`));
     assert.match(source, /href="\/cedar-tv-updates\/support\/"/);
     assert.match(source, /href="\/cedar-tv-updates\/privacy\/"/);
     assert.doesNotMatch(source, /chatgpt\.site|\[(?:SUPPORT EMAIL|LEGAL HOLDER|OWNER REQUIRED)\]/i);
@@ -33,7 +33,7 @@ test("privacy policy identifies collection, use, retention, deletion, and contac
 test("support page exposes public contact paths without leaking private information", async () => {
   const source = await readFile("public/support/index.html", "utf8");
   assert.match(source, /https:\/\/discord\.gg\/TFTx7j86v/);
-  assert.match(source, /https:\/\/github\.com\/24gx4xx5jv-cloud\/cedar-tv-updates\/issues/);
+  assert.match(source, /https:\/\/github\.com\/CedarTV\/cedar-tv-updates\/issues/);
   assert.doesNotMatch(source, /mailto:|\+\d{6,}|\d+ [A-Za-z]+ (?:Street|St\.|Road|Rd\.)/i);
 });
 

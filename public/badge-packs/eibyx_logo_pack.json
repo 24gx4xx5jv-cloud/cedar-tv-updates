@@ -14,7 +14,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])4K[ ._-]*Ultra[ ._-]*HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/1.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/1.webp"
     },
     {
       "id": "eibyx_logo_pack-2",
@@ -22,7 +22,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])1080p[ ._-]*Full[ ._-]*HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/2.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/2.webp"
     },
     {
       "id": "eibyx_logo_pack-3",
@@ -30,7 +30,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])720p[ ._-]*HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/3.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/3.webp"
     },
     {
       "id": "eibyx_logo_pack-4",
@@ -38,7 +38,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])480p[ ._-]*SD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/4.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/4.webp"
     },
     {
       "id": "eibyx_logo_pack-5",
@@ -46,7 +46,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:dolby[ ._-]?vision|\\bdv\\b))(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/5.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/5.webp"
     },
     {
       "id": "eibyx_logo_pack-6",
@@ -54,7 +54,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/6.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/6.webp"
     },
     {
       "id": "eibyx_logo_pack-7",
@@ -62,7 +62,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])HDR10(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/7.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/7.webp"
     },
     {
       "id": "eibyx_logo_pack-8",
@@ -70,7 +70,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:(?:hdr10\\+|hdr10plus))(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/8.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/8.webp"
     },
     {
       "id": "eibyx_logo_pack-9",
@@ -78,7 +78,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/9.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/9.webp"
     },
     {
       "id": "eibyx_logo_pack-10",
@@ -86,7 +86,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])IMAX[ ._-]*Enhanced(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/10.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/10.webp"
     },
     {
       "id": "eibyx_logo_pack-11",
@@ -94,7 +94,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Dolby[ ._-]*Atmos(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/11.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/11.webp"
     },
     {
       "id": "eibyx_logo_pack-12",
@@ -102,7 +102,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Dolby[ ._-]*Digital(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/12.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/12.webp"
     },
     {
       "id": "eibyx_logo_pack-13",
@@ -110,7 +110,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Dolby[ ._-]*Digital[ ._-]*Plus(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/13.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/13.webp"
     },
     {
       "id": "eibyx_logo_pack-14",
@@ -118,7 +118,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:true[ ._-]?hd)(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/14.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/14.webp"
     },
     {
       "id": "eibyx_logo_pack-15",
@@ -126,7 +126,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/DTS.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/DTS.webp"
     },
     {
       "id": "eibyx_logo_pack-16",
@@ -134,7 +134,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-HD(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/16.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/16.webp"
     },
     {
       "id": "eibyx_logo_pack-17",
@@ -142,7 +142,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])DTS-HD[ ._-]*Master[ ._-]*Audio(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/17.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/17.webp"
     },
     {
       "id": "eibyx_logo_pack-18",
@@ -150,7 +150,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])(?:dts[ ._-]?x)(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/18.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/18.webp"
     },
     {
       "id": "eibyx_logo_pack-19",
@@ -158,7 +158,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])5\\.1[ ._-]*Audio(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/19.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/19.webp"
     },
     {
       "id": "eibyx_logo_pack-20",
@@ -166,7 +166,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])7\\.1[ ._-]*Audio(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/20.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/20.webp"
     },
     {
       "id": "eibyx_logo_pack-21",
@@ -174,7 +174,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Blu-ray[ ._-]*Disc(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/21.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/21.webp"
     },
     {
       "id": "eibyx_logo_pack-22",
@@ -182,7 +182,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])REMUX(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/22.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/22.webp"
     },
     {
       "id": "eibyx_logo_pack-23",
@@ -190,7 +190,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])German(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/23.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/23.webp"
     },
     {
       "id": "eibyx_logo_pack-24",
@@ -198,7 +198,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])English(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/24.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/24.webp"
     },
     {
       "id": "eibyx_logo_pack-25",
@@ -206,7 +206,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Spanish(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/25.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/25.webp"
     },
     {
       "id": "eibyx_logo_pack-26",
@@ -214,7 +214,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])French(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/26.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/26.webp"
     },
     {
       "id": "eibyx_logo_pack-27",
@@ -222,7 +222,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Hindi(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/27.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/27.webp"
     },
     {
       "id": "eibyx_logo_pack-28",
@@ -230,7 +230,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Italian(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/28.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/28.webp"
     },
     {
       "id": "eibyx_logo_pack-29",
@@ -238,7 +238,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Japanese(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/29.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/29.webp"
     },
     {
       "id": "eibyx_logo_pack-30",
@@ -246,7 +246,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Korean(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/30.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/30.webp"
     },
     {
       "id": "eibyx_logo_pack-31",
@@ -254,7 +254,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Latino(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/31.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/31.webp"
     },
     {
       "id": "eibyx_logo_pack-32",
@@ -262,7 +262,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Portuguese(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/32.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/32.webp"
     },
     {
       "id": "eibyx_logo_pack-33",
@@ -270,7 +270,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Russian(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/33.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/33.webp"
     },
     {
       "id": "eibyx_logo_pack-34",
@@ -278,7 +278,7 @@
       "groupId": "other",
       "isEnabled": true,
       "pattern": "(?i)(?:^|[^A-Za-z0-9])Chinese(?:$|[^A-Za-z0-9])",
-      "imageURL": "https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/badges/eibyx/34.webp"
+      "imageURL": "https://cedartv.github.io/cedar-tv-updates/badges/eibyx/34.webp"
     }
   ]
 }

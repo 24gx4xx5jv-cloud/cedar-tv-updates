@@ -54,19 +54,19 @@ test("retention hints are strict and legacy uploads default to journal", () => {
 
 test("browser access is restricted to the configured Cedar site", () => {
   const allowed = new Request("https://sync.example/v1/health", {
-    headers: { Origin: "https://24gx4xx5jv-cloud.github.io" },
+    headers: { Origin: "https://cedartv.github.io" },
   });
   const denied = new Request("https://sync.example/v1/health", {
     headers: { Origin: "https://attacker.example" },
   });
   const native = new Request("https://sync.example/v1/health");
   assert.equal(
-    corsOrigin(allowed, "https://24gx4xx5jv-cloud.github.io"),
-    "https://24gx4xx5jv-cloud.github.io",
+    corsOrigin(allowed, "https://cedartv.github.io"),
+    "https://cedartv.github.io",
   );
-  assert.equal(corsOrigin(native, "https://24gx4xx5jv-cloud.github.io"), null);
+  assert.equal(corsOrigin(native, "https://cedartv.github.io"), null);
   assert.throws(
-    () => corsOrigin(denied, "https://24gx4xx5jv-cloud.github.io"),
+    () => corsOrigin(denied, "https://cedartv.github.io"),
     ProtocolError,
   );
 });

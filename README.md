@@ -27,6 +27,22 @@ answers, and review notes. Do not add personal contact information without the a
 approval, and never publish production credentials, customer data, private media URLs, or pairing
 invitations.
 
+### Publishing Apple release notes
+
+Apple release notes use one versioned source for all four product records:
+
+- `release-notes/apple/releases.json` records platform, version, build, date, status, and summary.
+- `release-notes/apple/<platform>/<version>.md` contains the full platform-specific notes.
+- `node scripts/render_apple_releases.mjs --write` renders the public overview, iPhone, iPad,
+  Apple TV, Mac, and machine-readable JSON pages.
+- `node scripts/render_apple_releases.mjs --check` fails when generated pages do not match the
+  versioned sources and runs in the Pages deployment gate.
+
+Use `release-candidate` while a build is still in release QA, `testflight` only after the matching
+build is available to testers, and `released` only after App Store availability is confirmed. Keep
+the public notes and App Store “What’s New” text aligned, but do not attach Apple binaries to this
+repository; App Store and TestFlight remain the binary distribution channels.
+
 ## Cedar Link and encrypted sync relay
 
 `public/link/` contains the static, phone-friendly Cedar Link surface. It is safe-by-default,
