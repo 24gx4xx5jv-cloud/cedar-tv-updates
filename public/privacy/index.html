@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#08090b">
+    <meta name="description" content="How the Cedar media player stores, syncs, and protects data.">
+    <meta name="robots" content="index,follow">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
+    <title>Privacy Policy — Cedar</title>
+    <link rel="canonical" href="https://24gx4xx5jv-cloud.github.io/cedar-tv-updates/privacy/">
+    <link rel="icon" type="image/png" href="../assets/cedar-app-icon.png">
+    <link rel="apple-touch-icon" href="../assets/cedar-app-icon.png">
+    <link rel="stylesheet" href="../policy.css">
+  </head>
+  <body>
+    <div class="site-frame">
+      <header class="policy-header">
+        <a class="site-brand" href="/cedar-tv-updates/" aria-label="Cedar home">
+          <img src="../assets/cedar-app-icon.png" alt="" width="34" height="34" aria-hidden="true">
+          <span>Cedar</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="/cedar-tv-updates/apple/">Apple apps</a>
+          <a href="/cedar-tv-updates/support/">Support</a>
+          <a href="/cedar-tv-updates/privacy/" aria-current="page">Privacy</a>
+          <a href="/cedar-tv-updates/cedar-link/">Cedar Link</a>
+        </nav>
+      </header>
+
+      <main class="document-page">
+        <header class="document-header">
+          <p class="eyebrow">Effective August 9, 2026</p>
+          <h1>Privacy Policy</h1>
+          <p>Cedar is local-first. Cedar requires no developer-operated user account and has no advertising network, tracking SDK, analytics backend, or media service. Optional sync and connected-service features are described below.</p>
+        </header>
+        <div class="document-grid">
+          <section>
+            <h2>Data on your device</h2>
+            <p>Profiles, library records, viewing progress, source configuration, downloads, and preferences are stored locally. Provider passwords, access tokens, and API keys are stored in the system Keychain rather than ordinary preferences. Removing a source or connected account removes Cedar’s stored credential reference. Deleting Cedar removes its app-container data; Keychain retention can also depend on operating-system behavior.</p>
+          </section>
+          <section>
+            <h2>Optional Apple sync</h2>
+            <p>If you enable iCloud sync, Cedar stores the profile, library, playback state, and preferences needed to keep your devices consistent in your private CloudKit container. A Cedar Household encrypts portable provider credentials on your device before placing them in a private CloudKit share. Invited household members can use supported portable values after accepting Apple’s invitation. Device-administration secrets stay local.</p>
+          </section>
+          <section>
+            <h2>Services you connect</h2>
+            <p>Cedar contacts only services needed for features you choose: configured media sources, metadata and artwork providers, optional tracking or watchlist accounts, subtitle or add-on endpoints, and public sports-data providers. Requests go directly from your device to those services and are governed by their privacy policies.</p>
+            <p>If you connect Trakt or Simkl, Cedar sends that service the connected account identifier and the title identifiers, progress, timestamps, history, watchlist changes, or ratings needed for the sync actions you enable.</p>
+          </section>
+          <section>
+            <h2>Optional Cedar Link</h2>
+            <p>Cedar Link bridges an Apple profile to linked Cedar devices and the browser companion through an end-to-end encrypted relay. The relay stores authenticated ciphertext plus random space and device identifiers, timestamps, authorization, and delivery state. It cannot read the full profile or provider credentials in plaintext. The browser’s derived companion key can manage presentation, Home shelves, linked devices, and playback controls, but cannot decrypt the full profile or provider credentials.</p>
+          </section>
+          <section>
+            <h2>Cedar Link retention and deletion</h2>
+            <p>The relay keeps encrypted journal records and limited routing metadata while a Cedar Link space is active. Revoking a device removes that installation’s relay authorization. To remove an active space’s relay records, delete its linked profile in Cedar before deleting the app. Copies already stored locally on another linked device remain until removed there.</p>
+          </section>
+          <section>
+            <h2>App Store privacy disclosures</h2>
+            <p>Cedar conservatively discloses User ID, Device ID, Product Interaction, Other Usage Data, and Other User Content because optional Cedar Link, Cedar Household, Trakt, and Simkl features can transmit those types. Each disclosed type is linked to the user, used only for App Functionality, and not used for tracking.</p>
+          </section>
+          <section>
+            <h2>Diagnostics</h2>
+            <p>Cedar does not automatically send diagnostics to a Cedar server. Optional reports are redacted, remain on the device, and leave it only when you explicitly export and share one. Apple may process App Store and device diagnostics according to your Apple privacy settings and Apple’s policies.</p>
+          </section>
+          <section>
+            <h2>Tracking and advertising</h2>
+            <p>Cedar does not track you across apps or websites, show advertising, sell personal information, share data with data brokers, or request App Tracking Transparency permission.</p>
+          </section>
+          <section>
+            <h2>Permissions</h2>
+            <p>On supported iPhone and iPad devices, camera access is requested only when you choose to scan a one-time Cedar device-link QR code; manual code entry is available. Cedar does not capture or upload photos or video. Local-network access is used to discover and connect to Cedar devices, remotes, DVRs, and media servers you configure.</p>
+          </section>
+          <section>
+            <h2>Network security</h2>
+            <p>Cedar prefers HTTPS. Some user-operated media servers support only HTTP, so Cedar can connect to an address you supply only after warning that cleartext connections can expose credentials, guide data, and viewing activity. Cedar refuses redirects from HTTPS to HTTP.</p>
+          </section>
+          <section>
+            <h2>Children and content</h2>
+            <p>Cedar is not directed to children under 13. The media visible in Cedar is determined by sources the user configures. Cedar provides no movies, shows, channels, playlists, add-ons, subscriptions, or provider credentials.</p>
+          </section>
+          <section>
+            <h2>Your choices and contact</h2>
+            <p>You can disconnect services, remove sources and profiles, disable optional sync features, revoke linked devices, export or delete local data, or delete the app. Cedar operates no user-account database, so there is no Cedar account to export or delete. Use the public support page for privacy questions and contact options.</p>
+            <a class="inline-document-link" href="/cedar-tv-updates/support/">Contact Cedar support</a>
+          </section>
+        </div>
+      </main>
+
+      <footer class="policy-footer">
+        <p>© 2026 Cedar. Material changes to this policy will be reflected here and in the app.</p>
+        <nav aria-label="Policy navigation">
+          <a href="/cedar-tv-updates/apple/">Apple apps</a>
+          <a href="/cedar-tv-updates/support/">Support</a>
+          <a href="/cedar-tv-updates/content-policy/">Content policy</a>
+          <a href="/cedar-tv-updates/accessibility/">Accessibility</a>
+          <a href="/cedar-tv-updates/cedar-link/">Cedar Link</a>
+        </nav>
+      </footer>
+    </div>
+  </body>
+</html>

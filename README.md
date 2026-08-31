@@ -1,12 +1,31 @@
-# Cedar Android TV updates
+# Cedar public site and Android TV updates
 
-This public repository contains Cedar Android TV's public product site, update metadata, and release APKs:
+This public repository contains Cedar's cross-platform public information, Cedar Link companion,
+Android TV product site, update metadata, and release APKs:
 
-- GitHub Pages serves Cedar's branded landing page and `update-v1.json`, its small, signed update manifest.
+- GitHub Pages serves Cedar's branded landing pages, Apple support and policy documents, Cedar Link,
+  and `update-v1.json`, its small, signed Android update manifest.
 - GitHub Releases serves versioned APK files.
 - The app verifies the manifest's ECDSA signature, the APK's SHA-256 and size, its package name and version, and its Android signing certificate before opening Android's installer.
 
 The Cedar source code, service credentials, Android signing keystore, and OTA manifest private key do not belong in this repository.
+
+## Apple support and App Store information
+
+The static Apple-facing routes are versioned alongside the Cedar Link site:
+
+- `public/apple/` — Apple-platform product information and marketing URL.
+- `public/support/` — public support and contact options.
+- `public/privacy/` — the hosted privacy policy used by App Store Connect and the app.
+- `public/accessibility/` — device-specific accessibility information.
+- `public/content-policy/` — authorized-content policy, attribution, and reviewer demo link.
+- `public/cedar-link/` — public Cedar Link privacy, retention, revocation, and deletion explanation.
+- `public/demo/cedar-review.m3u` — credential-free, lawfully licensed App Review sample playlist.
+
+Keep these pages consistent with the final Apple binaries, privacy manifests, App Store privacy
+answers, and review notes. Do not add personal contact information without the account holder's
+approval, and never publish production credentials, customer data, private media URLs, or pairing
+invitations.
 
 ## Cedar Link and encrypted sync relay
 
