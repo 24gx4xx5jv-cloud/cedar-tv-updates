@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "platforms": [
+    {
+      "id": "android-tv",
+      "name": "Cedar for Android TV",
+      "version": "1.2.75",
+      "build": "78",
+      "date": "2026-08-31",
+      "status": "released",
+      "summary": "Cedar 1.2.75 moves Android TV, Google TV, and Fire TV updates to the CedarTV release channel while preserving strict signed-update verification.",
+      "notesURL": "https://cedartv.github.io/cedar-tv-updates/releases/android-tv/",
+      "downloadURL": "https://github.com/CedarTV/cedar-tv-updates/releases/download/v1.2.75/Cedar-TV-1.2.75.apk"
+    },
+    {
+      "id": "iphone",
+      "name": "Cedar for iPhone",
+      "version": "1.0.0",
+      "build": "1",
+      "date": "2026-08-30",
+      "status": "release-candidate",
+      "summary": "The first Cedar release candidate for iPhone brings authorized personal media, Live TV, downloads, and private sync into a focused mobile player.",
+      "notesURL": "https://cedartv.github.io/cedar-tv-updates/apple/releases/iphone/"
+    },
+    {
+      "id": "ipad",
+      "name": "Cedar for iPad",
+      "version": "1.0.0",
+      "build": "1",
+      "date": "2026-08-30",
+      "status": "release-candidate",
+      "summary": "The first Cedar release candidate for iPad pairs a spacious browsing experience with authorized sources, downloads, Live TV, and private sync.",
+      "notesURL": "https://cedartv.github.io/cedar-tv-updates/apple/releases/ipad/"
+    },
+    {
+      "id": "apple-tv",
+      "name": "Cedar for Apple TV",
+      "version": "1.0.0",
+      "build": "1",
+      "date": "2026-08-30",
+      "status": "release-candidate",
+      "summary": "The first Cedar release candidate for Apple TV delivers a remote-first Home experience, Live TV guide, local pairing, and focused playback.",
+      "notesURL": "https://cedartv.github.io/cedar-tv-updates/apple/releases/apple-tv/"
+    },
+    {
+      "id": "mac",
+      "name": "Cedar for Mac",
+      "version": "1.0.0",
+      "build": "1",
+      "date": "2026-08-30",
+      "status": "release-candidate",
+      "summary": "The first Cedar release candidate for Mac combines native file imports, authorized sources, Live TV, and private sync in a desktop player.",
+      "notesURL": "https://cedartv.github.io/cedar-tv-updates/apple/releases/mac/"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { footerStylesheet, renderSiteFooter } from "./site_components.mjs";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const sourceCatalogPath = resolve(repositoryRoot, "release-notes/apple/releases.json");
@@ -194,6 +195,7 @@ function pageShell({ title, description, canonical, body }) {
     <link rel="icon" type="image/png" href="${projectBasePath}/assets/cedar-app-icon.png">
     <link rel="apple-touch-icon" href="${projectBasePath}/assets/cedar-app-icon.png">
     <link rel="stylesheet" href="${projectBasePath}/policy.css">
+${footerStylesheet}
   </head>
   <body>
     <div class="site-frame">
@@ -209,16 +211,7 @@ function pageShell({ title, description, canonical, body }) {
 
 ${body}
 
-      <footer class="policy-footer">
-        <p>© 2026 Cedar. Cedar is a media player and organizer. It does not provide, host, or sell media content.</p>
-        <nav aria-label="Policy navigation">
-          <a href="${projectBasePath}/apple/">Apple apps</a>
-          <a href="${projectBasePath}/support/">Support</a>
-          <a href="${projectBasePath}/privacy/">Privacy</a>
-          <a href="${projectBasePath}/content-policy/">Content policy</a>
-          <a href="${projectBasePath}/accessibility/">Accessibility</a>
-        </nav>
-      </footer>
+${renderSiteFooter()}
     </div>
   </body>
 </html>

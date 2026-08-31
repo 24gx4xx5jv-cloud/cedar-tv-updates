@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "releases": [
+    {
+      "platform": "android-tv",
+      "version": "1.2.75",
+      "build": "78",
+      "date": "2026-08-31",
+      "status": "released",
+      "summary": "Cedar 1.2.75 moves Android TV, Google TV, and Fire TV updates to the CedarTV release channel while preserving strict signed-update verification.",
+      "notes": "release-notes/android-tv/1.2.75.md"
+    }
+  ]
+}

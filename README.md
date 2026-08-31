@@ -3,8 +3,8 @@
 This public repository contains Cedar's cross-platform public information, Cedar Link companion,
 Android TV product site, update metadata, and release APKs:
 
-- GitHub Pages serves Cedar's branded landing pages, Apple support and policy documents, Cedar Link,
-  and `update-v1.json`, its small, signed Android update manifest.
+- GitHub Pages serves Cedar's branded landing pages, cross-platform release notes, Apple support and
+  policy documents, Cedar Link, and `update-v1.json`, its small, signed Android update manifest.
 - GitHub Releases serves versioned APK files.
 - The app verifies the manifest's ECDSA signature, the APK's SHA-256 and size, its package name and version, and its Android signing certificate before opening Android's installer.
 
@@ -27,16 +27,22 @@ answers, and review notes. Do not add personal contact information without the a
 approval, and never publish production credentials, customer data, private media URLs, or pairing
 invitations.
 
-### Publishing Apple release notes
+### Publishing cross-platform release notes
 
-Apple release notes use one versioned source for all four product records:
+Release notes use versioned sources for all five Cedar products:
 
+- `release-notes/android-tv/releases.json` records the Android TV version, build, date, status,
+  summary, and notes path. Its current entry must match the signed `public/update-v1.json` manifest.
 - `release-notes/apple/releases.json` records platform, version, build, date, status, and summary.
 - `release-notes/apple/<platform>/<version>.md` contains the full platform-specific notes.
 - `node scripts/render_apple_releases.mjs --write` renders the public overview, iPhone, iPad,
   Apple TV, Mac, and machine-readable JSON pages.
+- `node scripts/render_release_hub.mjs --write` renders the all-platform overview, Android TV
+  changelog, and a machine-readable five-platform release catalog.
+- `node scripts/render_site_footer.mjs --write` applies the same product, resource, community, and
+  Discord footer to every public route.
 - `node scripts/render_apple_releases.mjs --check` fails when generated pages do not match the
-  versioned sources and runs in the Pages deployment gate.
+  versioned sources. The release-hub and shared-footer renderers have matching `--check` gates.
 
 Use `release-candidate` while a build is still in release QA, `testflight` only after the matching
 build is available to testers, and `released` only after App Store availability is confirmed. Keep

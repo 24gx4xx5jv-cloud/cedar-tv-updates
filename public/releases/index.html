@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#08090b">
-    <meta name="description" content="Versioned release notes for Cedar on iPhone, iPad, Apple TV, and Mac.">
+    <meta name="description" content="Current version, build, status, and release notes for Cedar on Android TV, iPhone, iPad, Apple TV, and Mac.">
     <meta name="robots" content="index,follow">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
-    <title>Cedar Apple release notes</title>
-    <link rel="canonical" href="https://cedartv.github.io/cedar-tv-updates/apple/releases/">
+    <title>Cedar release notes</title>
+    <link rel="canonical" href="https://cedartv.github.io/cedar-tv-updates/releases/">
     <link rel="icon" type="image/png" href="/cedar-tv-updates/assets/cedar-app-icon.png">
     <link rel="apple-touch-icon" href="/cedar-tv-updates/assets/cedar-app-icon.png">
     <link rel="stylesheet" href="/cedar-tv-updates/policy.css">
@@ -23,7 +23,7 @@
         </a>
         <nav aria-label="Primary navigation">
           <a href="/cedar-tv-updates/apple/">Apple apps</a>
-          <a href="/cedar-tv-updates/apple/releases/" aria-current="page">Release notes</a>
+          <a href="/cedar-tv-updates/releases/" aria-current="page">Release notes</a>
           <a href="/cedar-tv-updates/support/">Support</a>
           <a href="/cedar-tv-updates/privacy/">Privacy</a>
           <a href="/cedar-tv-updates/cedar-link/">Cedar Link</a>
@@ -32,12 +32,24 @@
 
       <main class="document-page release-page">
         <header class="document-header release-header">
-          <p class="eyebrow">Release history</p>
-          <h1>What’s new on every Apple device.</h1>
-          <p>Each Cedar build has its own platform-specific notes. Release candidates and TestFlight builds are labeled separately from public App Store releases.</p>
+          <p class="eyebrow">All platforms</p>
+          <h1>One release view. Every Cedar platform.</h1>
+          <p>See the current version, build number, availability status, and notes for Android TV, iPhone, iPad, Apple TV, and Mac.</p>
         </header>
 
-        <section class="release-grid" aria-label="Apple platform release notes">
+        <section class="release-grid" aria-label="Current Cedar releases">
+          <article class="release-card">
+            <p class="eyebrow">Android TV</p>
+            <h2>Cedar for Android TV</h2>
+            <p>Cedar 1.2.75 moves Android TV, Google TV, and Fire TV updates to the CedarTV release channel while preserving strict signed-update verification.</p>
+            <div class="release-metadata">
+              <span class="release-status release-status-released">Released</span>
+              <span>Version 1.2.75</span>
+              <span>Build 78</span>
+              <time datetime="2026-08-31">August 31, 2026</time>
+            </div>
+            <a class="inline-document-link" href="/cedar-tv-updates/releases/android-tv/">View Android TV notes</a>
+          </article>
           <article class="release-card">
             <p class="eyebrow">iPhone</p>
             <h2>Cedar for iPhone</h2>
@@ -88,10 +100,10 @@
           </article>
         </section>
 
-        <section class="policy-callout compact-callout" aria-labelledby="release-process-title">
-          <p class="eyebrow">One source of truth</p>
-          <h2 id="release-process-title">Notes follow the build.</h2>
-          <p>The public changelog, App Store “What’s New” copy, and release evidence are versioned together. A candidate is never presented as released until its store status is confirmed.</p>
+        <section class="policy-callout compact-callout" aria-labelledby="release-status-title">
+          <p class="eyebrow">Clear status</p>
+          <h2 id="release-status-title">Candidates stay labeled as candidates.</h2>
+          <p>Android direct releases, Apple TestFlight builds, release candidates, and public App Store releases are identified separately. The status changes only when the matching build is actually available in that channel.</p>
         </section>
       </main>
 

@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#08090b">
-    <meta name="description" content="Living-room release notes for Cedar on Apple TV.">
+    <meta name="description" content="Android TV, Google TV, and Fire TV release notes.">
     <meta name="robots" content="index,follow">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
-    <title>Cedar for Apple TV release notes</title>
-    <link rel="canonical" href="https://cedartv.github.io/cedar-tv-updates/apple/releases/apple-tv/">
+    <title>Cedar for Android TV release notes</title>
+    <link rel="canonical" href="https://cedartv.github.io/cedar-tv-updates/releases/android-tv/">
     <link rel="icon" type="image/png" href="/cedar-tv-updates/assets/cedar-app-icon.png">
     <link rel="apple-touch-icon" href="/cedar-tv-updates/assets/cedar-app-icon.png">
     <link rel="stylesheet" href="/cedar-tv-updates/policy.css">
@@ -23,7 +23,7 @@
         </a>
         <nav aria-label="Primary navigation">
           <a href="/cedar-tv-updates/apple/">Apple apps</a>
-          <a href="/cedar-tv-updates/apple/releases/" aria-current="page">Release notes</a>
+          <a href="/cedar-tv-updates/releases/" aria-current="page">Release notes</a>
           <a href="/cedar-tv-updates/support/">Support</a>
           <a href="/cedar-tv-updates/privacy/">Privacy</a>
           <a href="/cedar-tv-updates/cedar-link/">Cedar Link</a>
@@ -31,45 +31,47 @@
       </header>
 
       <main class="document-page release-page">
-        <a class="release-back" href="/cedar-tv-updates/apple/releases/">All Apple release notes</a>
+        <a class="release-back" href="/cedar-tv-updates/releases/">All platform releases</a>
         <header class="document-header release-header">
-          <p class="eyebrow">Apple TV changelog</p>
-          <h1>Cedar for Apple TV release notes.</h1>
-          <p>Build-by-build changes, with public releases distinguished from TestFlight and release candidates.</p>
+          <p class="eyebrow">Android TV changelog</p>
+          <h1>Cedar for Android TV release notes.</h1>
+          <p>Current signed builds for Android TV, Google TV, and Fire TV, with their matching build numbers and notes.</p>
         </header>
 
-        <div class="release-stack">
-        <article class="release-entry" id="version-1-0-0-build-1">
+        <article class="release-entry" id="version-1-2-75-build-78">
           <header>
-            <p class="eyebrow">Apple TV</p>
-            <h2>Version 1.0.0</h2>
-            <p class="release-summary">The first Cedar release candidate for Apple TV delivers a remote-first Home experience, Live TV guide, local pairing, and focused playback.</p>
+            <p class="eyebrow">Android TV</p>
+            <h2>Version 1.2.75</h2>
+            <p class="release-summary">Cedar 1.2.75 moves Android TV, Google TV, and Fire TV updates to the CedarTV release channel while preserving strict signed-update verification.</p>
             <div class="release-metadata">
-              <span class="release-status release-status-release-candidate">Release candidate</span>
-              <span>Version 1.0.0</span>
-              <span>Build 1</span>
-              <time datetime="2026-08-30">August 30, 2026</time>
+              <span class="release-status release-status-released">Released</span>
+              <span>Version 1.2.75</span>
+              <span>Build 78</span>
+              <time datetime="2026-08-31">August 31, 2026</time>
+            </div>
+            <div class="apple-actions">
+              <a class="inline-action" href="https://github.com/CedarTV/cedar-tv-updates/releases/download/v1.2.75/Cedar-TV-1.2.75.apk">Download signed APK</a>
+              <a class="secondary-action" href="https://github.com/CedarTV/cedar-tv-updates/releases/tag/v1.2.75">GitHub release</a>
             </div>
           </header>
           <div class="release-notes-body">
-            <h3>Highlights</h3>
+            <p>Cedar 1.2.75 safely migrates the Android TV update channel to Cedar&#39;s new `CedarTV` GitHub namespace.</p>
+            <h3>What changed</h3>
             <ul>
-            <li>Browse authorized personal media through a remote-first, ten-foot Home experience.</li>
-            <li>Customize branches and shelves for favorites, next plays, live channels, guide data, and provider collections.</li>
-            <li>Add M3U, Xtream-compatible, and XMLTV sources, then navigate a focused Live TV guide.</li>
-            <li>Resume playback, choose audio and subtitle tracks, and use controls designed for television focus.</li>
+            <li>Cedar now prefers the branded `cedartv.github.io` update and Cedar Link host.</li>
+            <li>The previous Pages address remains a temporary, exact-host fallback during the account cutover.</li>
+            <li>Manifest failover is limited to endpoint availability failures such as DNS, connection, timeout, or HTTP errors.</li>
+            <li>Signed-manifest, schema, package, URL-policy, and cryptographic verification failures still fail closed and never fall back.</li>
+            <li>Both transition hosts remain restricted to HTTPS on the existing bounded OTA allowlist.</li>
             </ul>
-            <h3>Pair and sync</h3>
+            <h3>Migration validation</h3>
             <ul>
-            <li>Pair Cedar devices over the local network.</li>
-            <li>Optionally sync profiles through private iCloud data, Cedar Household, or end-to-end encrypted Cedar Link.</li>
-            <li>Use Cedar without advertising, cross-app tracking, or a required Cedar account.</li>
+            <li>The OTA unit suite covers fallback URL parsing, deduplication, and strict failure classification.</li>
+            <li>Cedar&#39;s permanent release signer and signed-manifest public key remain unchanged.</li>
+            <li>This bridge build was prepared before the GitHub username changed from `24gx4xx5jv-cloud` to `CedarTV`.</li>
             </ul>
-            <h3>Release status</h3>
-            <p>This is the version 1.0.0 build 1 release candidate. It is not yet an App Store release.</p>
           </div>
         </article>
-        </div>
       </main>
 
       <footer class="site-footer">

@@ -5,7 +5,12 @@ on:
     branches: [main]
     paths:
       - public/**
+      - release-notes/**
       - test/**
+      - scripts/render_apple_releases.mjs
+      - scripts/render_release_hub.mjs
+      - scripts/render_site_footer.mjs
+      - scripts/site_components.mjs
       - scripts/verify_public_site.mjs
       - .github/workflows/pages.yml
   workflow_dispatch:
@@ -39,6 +44,8 @@ jobs:
           node --check public/link/companion-ui.mjs
           node --test test/*.test.mjs
           node scripts/render_apple_releases.mjs --check
+          node scripts/render_release_hub.mjs --check
+          node scripts/render_site_footer.mjs --check
           node scripts/verify_public_site.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
